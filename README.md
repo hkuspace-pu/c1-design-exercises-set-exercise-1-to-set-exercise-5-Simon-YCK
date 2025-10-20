@@ -38,6 +38,13 @@ This project is developed for the COMP2003HK assessment — a mobile application
 
 ---
 
+## 🧪 Development Notes
+All experimental or non-functional code attempts are kept in the repository (either within
+`src/` or under `src/experiments/`) with comments explaining the issue and what was learned.
+These attempts are retained intentionally for assessment feedback and partial marks.
+
+---
+
 ## 🗓️ Week 1 Deliverables
 - [x] Create GitHub repo  
 - [x] Link Figma / FigJam to README (**this step**)  
