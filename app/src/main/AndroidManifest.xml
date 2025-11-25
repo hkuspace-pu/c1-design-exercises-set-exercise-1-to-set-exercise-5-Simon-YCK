@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.restaurantapp">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.RestaurantApp">
+
+        <!-- Main Activity (Login Screen) -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Guest Dashboard -->
+        <activity
+            android:name=".GuestDashboardActivity"
+            android:parentActivityName=".MainActivity" />
+
+        <!-- Guest Menu Browse -->
+        <activity
+            android:name=".GuestMenuBrowseActivity"
+            android:parentActivityName=".GuestDashboardActivity" />
+
+        <!-- Guest Reservation -->
+        <activity
+            android:name=".GuestReservationActivity"
+            android:parentActivityName=".GuestDashboardActivity" />
+
+        <!-- Staff Menu Editor -->
+        <activity
+            android:name=".StaffEditMenuItemActivity"
+            android:parentActivityName=".StaffMenuEditorActivity" />
+
+        <!-- STAFF ACTIVITIES -->
+        <activity
+            android:name=".StaffDashboardActivity"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".StaffMenuEditorActivity"
+            android:parentActivityName=".StaffDashboardActivity" />
+
+        <activity
+            android:name=".StaffEditMenuItemActivity"
+            android:parentActivityName=".StaffMenuEditorActivity" />
+
+        <activity
+            android:name=".StaffViewReservationsActivity"
+            android:parentActivityName=".StaffDashboardActivity" />
+    </application>
+
+</manifest>
