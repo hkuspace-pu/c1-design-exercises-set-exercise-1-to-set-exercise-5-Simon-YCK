@@ -16,75 +16,84 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <!-- Content Area -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="24dp">
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Welcome Message - HIGH VISIBILITY (Figma Ex4 Fix) -->
+            <!-- Welcome Message -->
             <TextView
                 android:id="@+id/welcomeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Welcome, Guest!"
+                android:text="Hello, Guest!"
                 android:textSize="28sp"
                 android:textStyle="bold"
                 android:textColor="#000000"
-                android:layout_marginBottom="32dp"
+                android:layout_marginBottom="24dp"
                 android:layout_gravity="center" />
 
-            <!-- Browse Menu Button - 48dp minimum height -->
+            <!-- Book Table Button-->
+            <Button
+                android:id="@+id/bookTableButton"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:text="Book Table\nReserve your dining experience"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#0066FF"
+                android:drawableTop="@android:drawable/ic_menu_my_calendar"
+                android:drawablePadding="8dp"
+                android:gravity="center"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp"
+                android:elevation="6dp" />
+
+            <!-- Browse Menu Button-->
             <Button
                 android:id="@+id/browseMenuButton"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:text="Browse Menu"
-                android:textSize="20sp"
+                android:layout_height="60dp"
+                android:text="🍽️  Browse Menu"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#FF6B35"
-                android:drawableLeft="@android:drawable/ic_menu_gallery"
-                android:drawablePadding="16dp"
+                android:textColor="#000000"
+                android:backgroundTint="#FFFFFF"
                 android:padding="16dp"
-                android:layout_marginBottom="24dp"
-                android:elevation="6dp" />
+                android:layout_marginBottom="32dp"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:background="@android:drawable/dialog_holo_light_frame" />
 
-            <!-- Make Reservation Button - 48dp minimum height -->
-            <Button
-                android:id="@+id/makeReservationButton"
+            <!-- Divider Line -->
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:text="Make Reservation"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#4CAF50"
-                android:drawableLeft="@android:drawable/ic_menu_add"
-                android:drawablePadding="16dp"
-                android:padding="16dp"
-                android:layout_marginBottom="24dp"
-                android:elevation="6dp" />
+                android:layout_height="1dp"
+                android:background="#E0E0E0"
+                android:layout_marginBottom="16dp" />
 
-            <!-- View Reservations Button - 48dp minimum height -->
-            <Button
-                android:id="@+id/viewReservationsButton"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:text="View My Reservations"
-                android:textSize="20sp"
+            <!-- My Reservations Header -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Reservations"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#2196F3"
-                android:drawableLeft="@android:drawable/ic_menu_my_calendar"
-                android:drawablePadding="16dp"
-                android:padding="16dp"
-                android:elevation="6dp" />
+                android:textColor="#000000"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Reservations Table-->
+            <LinearLayout
+                android:id="@+id/reservationsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#F5F5F5" />
 
         </LinearLayout>
     </ScrollView>

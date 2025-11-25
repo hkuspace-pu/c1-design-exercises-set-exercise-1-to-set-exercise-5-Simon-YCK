@@ -55,7 +55,7 @@ public class StaffMenuEditorActivity extends AppCompatActivity {
     }
 
     private void addMenuItemCard(String name, String price, String description) {
-        // Card container with proper spacing (Figma spec)
+        // Card container with proper spacing
         LinearLayout cardLayout = new LinearLayout(this);
         cardLayout.setOrientation(LinearLayout.VERTICAL);
         cardLayout.setPadding(24, 24, 24, 24);
@@ -106,27 +106,29 @@ public class StaffMenuEditorActivity extends AppCompatActivity {
         priceParams.setMargins(0, 0, 0, 16);
         priceText.setLayoutParams(priceParams);
 
-        // Button container with 48dp spacing (Fitts Law compliance)
+        // Button container with 48dp spacing
         LinearLayout buttonLayout = new LinearLayout(this);
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
+        buttonLayout.setGravity(android.view.Gravity.END); // Align buttons to right
         LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
         buttonLayout.setLayoutParams(buttonLayoutParams);
 
-        // Edit button (48dp minimum height, proper spacing)
+        // Edit button with PENCIL ICON (no text)
         Button editButton = new Button(this);
-        editButton.setText("Edit");
-        editButton.setTextSize(16);
-        editButton.setTextColor(getResources().getColor(android.R.color.white));
-        editButton.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
-        LinearLayout.LayoutParams editParams = new LinearLayout.LayoutParams(
-                0,
-                convertDpToPx(48), // Minimum 48dp touch target
-                1.0f
+        editButton.setText(""); // No text, icon only
+        editButton.setBackground(null); // Remove background
+        editButton.setCompoundDrawablesWithIntrinsicBounds(
+                android.R.drawable.ic_menu_edit, 0, 0, 0
         );
-        editParams.setMargins(0, 0, 24, 0); // 48dp spacing between buttons
+        editButton.setContentDescription("Edit item");
+        LinearLayout.LayoutParams editParams = new LinearLayout.LayoutParams(
+                convertDpToPx(48), // 48dp width
+                convertDpToPx(48)  // 48dp height
+        );
+        editParams.setMargins(0, 0, 24, 0); // 48dp spacing
         editButton.setLayoutParams(editParams);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,16 +141,17 @@ public class StaffMenuEditorActivity extends AppCompatActivity {
             }
         });
 
-        // Delete button (48dp minimum height, proper spacing)
+        // Delete button with RECYCLE BIN ICON (no text)
         Button deleteButton = new Button(this);
-        deleteButton.setText("Delete");
-        deleteButton.setTextSize(16);
-        deleteButton.setTextColor(getResources().getColor(android.R.color.white));
-        deleteButton.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
+        deleteButton.setText(""); // No text, icon only
+        deleteButton.setBackground(null); // Remove background
+        deleteButton.setCompoundDrawablesWithIntrinsicBounds(
+                android.R.drawable.ic_menu_delete, 0, 0, 0
+        );
+        deleteButton.setContentDescription("Delete item");
         LinearLayout.LayoutParams deleteParams = new LinearLayout.LayoutParams(
-                0,
-                convertDpToPx(48), // Minimum 48dp touch target
-                1.0f
+                convertDpToPx(48), // 48dp width
+                convertDpToPx(48)  // 48dp height
         );
         deleteParams.setMargins(24, 0, 0, 0); // 48dp spacing
         deleteButton.setLayoutParams(deleteParams);
@@ -168,9 +171,10 @@ public class StaffMenuEditorActivity extends AppCompatActivity {
         cardLayout.addView(buttonLayout);
 
         menuItemsContainer.addView(cardLayout);
+
     }
 
-    // Exact dialog text from Figma spec
+
     private void showDeleteConfirmationDialog(String itemName, LinearLayout cardLayout) {
         new AlertDialog.Builder(this)
                 .setTitle("Confirm Delete")
