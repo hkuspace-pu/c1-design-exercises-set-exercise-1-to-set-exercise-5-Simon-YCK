@@ -39,21 +39,48 @@
                 android:layout_gravity="center" />
 
             <!-- Book Table Button-->
-            <Button
+            <!-- Book Table Button (BIGGER - Like Figma) -->
+            <LinearLayout
                 android:id="@+id/bookTableButton"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:text="Book Table\nReserve your dining experience"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#0066FF"
-                android:drawableTop="@android:drawable/ic_menu_my_calendar"
-                android:drawablePadding="8dp"
+                android:layout_height="160dp"
+                android:orientation="vertical"
                 android:gravity="center"
-                android:padding="16dp"
+                android:background="#0066FF"
+                android:padding="24dp"
                 android:layout_marginBottom="16dp"
-                android:elevation="6dp" />
+                android:elevation="8dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <!-- Large Calendar Icon -->
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@android:drawable/ic_menu_my_calendar"
+                    android:tint="#FFFFFF"
+                    android:contentDescription="Calendar icon" />
+
+                <!-- Book Table Text -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Book Table"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="8dp" />
+
+                <!-- Subtitle -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reserve your dining experience"
+                    android:textSize="14sp"
+                    android:textColor="#FFFFFF"
+                    android:alpha="0.9" />
+
+            </LinearLayout>
 
             <!-- Browse Menu Button-->
             <Button

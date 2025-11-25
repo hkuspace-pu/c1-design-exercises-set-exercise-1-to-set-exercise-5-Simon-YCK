@@ -177,19 +177,20 @@ public class StaffMenuEditorActivity extends AppCompatActivity {
 
     private void showDeleteConfirmationDialog(String itemName, LinearLayout cardLayout) {
         new AlertDialog.Builder(this)
-                .setTitle("Confirm Delete")
-                .setMessage("Are you sure you want to delete \"" + itemName + "\"?")
+                .setTitle("Delete Item?")
+                .setMessage("Are you sure you want to delete this menu item? This action cannot be undone.")
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         menuItemsContainer.removeView(cardLayout);
                         Toast.makeText(StaffMenuEditorActivity.this,
-                                itemName + " deleted successfully", Toast.LENGTH_SHORT).show();
+                                "Menu item deleted", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
     }
+
 
     private void showAddMenuItemDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

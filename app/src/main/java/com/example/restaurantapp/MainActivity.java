@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize UI components
         usernameInput = findViewById(R.id.usernameInput);
         passwordInput = findViewById(R.id.passwordInput);
         userTypeRadioGroup = findViewById(R.id.userTypeRadioGroup);
@@ -32,10 +31,8 @@ public class MainActivity extends AppCompatActivity {
         staffRadio = findViewById(R.id.staffRadio);
         loginButton = findViewById(R.id.loginButton);
 
-        // Set default selection to Guest
         guestRadio.setChecked(true);
 
-        // Login button click listener
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,25 +45,23 @@ public class MainActivity extends AppCompatActivity {
         String username = usernameInput.getText().toString().trim();
         String password = passwordInput.getText().toString().trim();
 
-        // Basic validation (UI only, no actual authentication)
         if (username.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please enter username and password", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Check selected user type
         int selectedId = userTypeRadioGroup.getCheckedRadioButtonId();
 
         if (selectedId == R.id.guestRadio) {
-            // Navigate to Guest Dashboard
+            // Navigate to GUEST DASHBOARD
             Intent intent = new Intent(MainActivity.this, GuestDashboardActivity.class);
             intent.putExtra("USERNAME", username);
             startActivity(intent);
             Toast.makeText(this, "Welcome Guest: " + username, Toast.LENGTH_SHORT).show();
 
         } else if (selectedId == R.id.staffRadio) {
-            // Navigate to Staff Menu Editor
-            Intent intent = new Intent(MainActivity.this, StaffMenuEditorActivity.class);
+            // Navigate to STAFF DASHBOARD (NOT MenuEditor!)
+            Intent intent = new Intent(MainActivity.this, StaffDashboardActivity.class);
             intent.putExtra("USERNAME", username);
             startActivity(intent);
             Toast.makeText(this, "Welcome Staff: " + username, Toast.LENGTH_SHORT).show();

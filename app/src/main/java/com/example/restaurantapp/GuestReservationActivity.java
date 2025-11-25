@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +19,8 @@ public class GuestReservationActivity extends AppCompatActivity {
 
     private EditText dateInput;
     private EditText timeInput;
-    private EditText guestCountInput;
+    private SeekBar guestCountSlider;
+    private TextView guestCountLabel;
     private EditText specialRequestsInput;
     private Button submitButton;
 
@@ -28,20 +31,18 @@ public class GuestReservationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest_reservation);
 
-        // Setup toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Make Reservation");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Initialize UI components
         dateInput = findViewById(R.id.dateInput);
         timeInput = findViewById(R.id.timeInput);
-        guestCountInput = findViewById(R.id.guestCountInput);
+        guestCountSlider = findViewById(R.id.guestCountSlider);
+        guestCountLabel = findViewById(R.id.guestCountLabel);
         specialRequestsInput = findViewById(R.id.specialRequestsInput);
         submitButton = findViewById(R.id.submitButton);
 
-        // Get current date and time
         Calendar calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
@@ -49,7 +50,25 @@ public class GuestReservationActivity extends AppCompatActivity {
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
 
-        // Date picker dialog
+        // Setup SeekBar (Slider from 1 to 10)
+        guestCountSlider.setMax(9); // 0-9, representing 1-10 people
+        guestCountSlider.setProgress(1); // Default to 2 people
+        guestCountLabel.setText("Number of Guests: 2");
+
+        guestCountSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int guestCount = progress + 1; // Convert 0-9 to 1-10
+                guestCountLabel.setText("Number of Guests: " + guestCount);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
         dateInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +84,6 @@ public class GuestReservationActivity extends AppCompatActivity {
             }
         });
 
-        // Time picker dialog
         timeInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,7 +99,6 @@ public class GuestReservationActivity extends AppCompatActivity {
             }
         });
 
-        // Submit button
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,14 +110,14 @@ public class GuestReservationActivity extends AppCompatActivity {
     private void handleSubmit() {
         String date = dateInput.getText().toString().trim();
         String time = timeInput.getText().toString().trim();
-        String guestCount = guestCountInput.getText().toString().trim();
+        int guestCount = guestCountSlider.getProgress() + 1;
 
-        if (date.isEmpty() || time.isEmpty() || guestCount.isEmpty()) {
-            Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
+        if (date.isEmpty() || time.isEmpty()) {
+            Toast.makeText(this, "Please select date and time", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Toast.makeText(this, "Reservation created successfully!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Reservation created for " + guestCount + " guests!", Toast.LENGTH_LONG).show();
         finish();
     }
 }

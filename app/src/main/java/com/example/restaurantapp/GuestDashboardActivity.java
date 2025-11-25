@@ -16,7 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 public class GuestDashboardActivity extends AppCompatActivity {
 
     private TextView welcomeText;
-    private Button bookTableButton;
+    private LinearLayout bookTableButton;  // CHANGED FROM Button TO LinearLayout
     private Button browseMenuButton;
     private LinearLayout reservationsContainer;
     private String username;
@@ -34,7 +34,7 @@ public class GuestDashboardActivity extends AppCompatActivity {
         username = getIntent().getStringExtra("USERNAME");
 
         welcomeText = findViewById(R.id.welcomeText);
-        bookTableButton = findViewById(R.id.bookTableButton);
+        bookTableButton = findViewById(R.id.bookTableButton);  // Now LinearLayout
         browseMenuButton = findViewById(R.id.browseMenuButton);
         reservationsContainer = findViewById(R.id.reservationsContainer);
 
@@ -43,7 +43,7 @@ public class GuestDashboardActivity extends AppCompatActivity {
         welcomeText.setTextSize(28);
         welcomeText.setTextColor(getResources().getColor(android.R.color.black));
 
-        // Book Table Button
+        // Book Table Button (Now LinearLayout)
         bookTableButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
