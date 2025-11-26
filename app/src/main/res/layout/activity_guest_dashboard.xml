@@ -39,46 +39,45 @@
                 android:layout_gravity="center" />
 
             <!-- Book Table Button-->
-            <!-- Book Table Button (BIGGER - Like Figma) -->
             <LinearLayout
                 android:id="@+id/bookTableButton"
                 android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="#0066FF"
-                android:padding="24dp"
+                android:layout_height="186dp"
                 android:layout_marginBottom="16dp"
-                android:elevation="8dp"
+                android:background="#0066FF"
                 android:clickable="true"
-                android:focusable="true">
+                android:elevation="8dp"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="24dp">
 
                 <!-- Large Calendar Icon -->
                 <ImageView
                     android:layout_width="64dp"
                     android:layout_height="64dp"
+                    android:contentDescription="Calendar icon"
                     android:src="@android:drawable/ic_menu_my_calendar"
-                    android:tint="#FFFFFF"
-                    android:contentDescription="Calendar icon" />
+                    android:tint="#FFFFFF" />
 
                 <!-- Book Table Text -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="Book Table"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
                     android:textColor="#FFFFFF"
-                    android:layout_marginTop="8dp" />
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
                 <!-- Subtitle -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:alpha="0.9"
                     android:text="Reserve your dining experience"
-                    android:textSize="14sp"
                     android:textColor="#FFFFFF"
-                    android:alpha="0.9" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 

@@ -4,11 +4,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +38,6 @@ public class StaffMenuEditorActivity extends AppCompatActivity {
 
         loadSampleMenuItems();
 
-
         fabAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,89 +47,34 @@ public class StaffMenuEditorActivity extends AppCompatActivity {
     }
 
     private void loadSampleMenuItems() {
-        addMenuItemCard("Margherita Pizza", "$12.99", "Classic cheese and tomato pizza");
+        addMenuItemCard("Margherita Pizza", "$12.99", "Classic cheese and tomato pizza with fresh basil");
         addMenuItemCard("Caesar Salad", "$8.99", "Fresh romaine lettuce with caesar dressing");
         addMenuItemCard("Grilled Salmon", "$18.99", "Atlantic salmon with seasonal vegetables");
-        addMenuItemCard("Beef Burger", "$14.99", "Angus beef patty with fries");
-        addMenuItemCard("Pasta Carbonara", "$13.99", "Creamy pasta with bacon");
+        addMenuItemCard("Beef Burger", "$14.99", "Angus beef patty with fries and coleslaw");
+        addMenuItemCard("Pasta Carbonara", "$13.99", "Creamy pasta with bacon and parmesan");
+        addMenuItemCard("Chocolate Cake", "$6.99", "Rich chocolate dessert with vanilla ice cream");
     }
 
     private void addMenuItemCard(String name, String price, String description) {
-        // Card container with proper spacing
-        LinearLayout cardLayout = new LinearLayout(this);
-        cardLayout.setOrientation(LinearLayout.VERTICAL);
-        cardLayout.setPadding(24, 24, 24, 24);
-        cardLayout.setBackgroundColor(getResources().getColor(android.R.color.white));
-        cardLayout.setElevation(4);
-        LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        cardParams.setMargins(0, 0, 0, 24); // 24dp spacing between cards
-        cardLayout.setLayoutParams(cardParams);
+        // INFLATE XML LAYOUT
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View cardView = inflater.inflate(R.layout.item_menu_card_staff, menuItemsContainer, false);
 
-        // Item name (Large, bold, high contrast)
-        TextView nameText = new TextView(this);
-        nameText.setText(name);
-        nameText.setTextSize(20);
-        nameText.setTextColor(getResources().getColor(android.R.color.black));
-        nameText.setTypeface(null, android.graphics.Typeface.BOLD);
-        LinearLayout.LayoutParams nameParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        nameParams.setMargins(0, 0, 0, 8);
-        nameText.setLayoutParams(nameParams);
+        // Find views
+        ImageView itemImage = cardView.findViewById(R.id.itemImage);
+        TextView itemName = cardView.findViewById(R.id.itemName);
+        TextView itemDescription = cardView.findViewById(R.id.itemDescription);
+        TextView itemPrice = cardView.findViewById(R.id.itemPrice);
+        LinearLayout editButton = cardView.findViewById(R.id.editButton);     // Changed to LinearLayout
+        LinearLayout deleteButton = cardView.findViewById(R.id.deleteButton); // Changed to LinearLayout
 
-        // Item description
-        TextView descText = new TextView(this);
-        descText.setText(description);
-        descText.setTextSize(16);
-        descText.setTextColor(getResources().getColor(android.R.color.darker_gray));
-        LinearLayout.LayoutParams descParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        descParams.setMargins(0, 0, 0, 8);
-        descText.setLayoutParams(descParams);
+        // Set data
+        itemName.setText(name);
+        itemDescription.setText(description);
+        itemPrice.setText(price);
+        itemImage.setImageResource(android.R.drawable.ic_menu_gallery);
 
-        // Item price (Orange, bold)
-        TextView priceText = new TextView(this);
-        priceText.setText(price);
-        priceText.setTextSize(18);
-        priceText.setTextColor(getResources().getColor(android.R.color.holo_orange_dark));
-        priceText.setTypeface(null, android.graphics.Typeface.BOLD);
-        LinearLayout.LayoutParams priceParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        priceParams.setMargins(0, 0, 0, 16);
-        priceText.setLayoutParams(priceParams);
-
-        // Button container with 48dp spacing
-        LinearLayout buttonLayout = new LinearLayout(this);
-        buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-        buttonLayout.setGravity(android.view.Gravity.END); // Align buttons to right
-        LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        buttonLayout.setLayoutParams(buttonLayoutParams);
-
-        // Edit button with PENCIL ICON (no text)
-        Button editButton = new Button(this);
-        editButton.setText(""); // No text, icon only
-        editButton.setBackground(null); // Remove background
-        editButton.setCompoundDrawablesWithIntrinsicBounds(
-                android.R.drawable.ic_menu_edit, 0, 0, 0
-        );
-        editButton.setContentDescription("Edit item");
-        LinearLayout.LayoutParams editParams = new LinearLayout.LayoutParams(
-                convertDpToPx(48), // 48dp width
-                convertDpToPx(48)  // 48dp height
-        );
-        editParams.setMargins(0, 0, 24, 0); // 48dp spacing
-        editButton.setLayoutParams(editParams);
+        // Edit button
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,56 +86,32 @@ public class StaffMenuEditorActivity extends AppCompatActivity {
             }
         });
 
-        // Delete button with RECYCLE BIN ICON (no text)
-        Button deleteButton = new Button(this);
-        deleteButton.setText(""); // No text, icon only
-        deleteButton.setBackground(null); // Remove background
-        deleteButton.setCompoundDrawablesWithIntrinsicBounds(
-                android.R.drawable.ic_menu_delete, 0, 0, 0
-        );
-        deleteButton.setContentDescription("Delete item");
-        LinearLayout.LayoutParams deleteParams = new LinearLayout.LayoutParams(
-                convertDpToPx(48), // 48dp width
-                convertDpToPx(48)  // 48dp height
-        );
-        deleteParams.setMargins(24, 0, 0, 0); // 48dp spacing
-        deleteButton.setLayoutParams(deleteParams);
+        // Delete button
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDeleteConfirmationDialog(name, cardLayout);
+                showDeleteConfirmationDialog(name, cardView);
             }
         });
 
-        buttonLayout.addView(editButton);
-        buttonLayout.addView(deleteButton);
-
-        cardLayout.addView(nameText);
-        cardLayout.addView(descText);
-        cardLayout.addView(priceText);
-        cardLayout.addView(buttonLayout);
-
-        menuItemsContainer.addView(cardLayout);
-
+        menuItemsContainer.addView(cardView);
     }
 
-
-    private void showDeleteConfirmationDialog(String itemName, LinearLayout cardLayout) {
+    private void showDeleteConfirmationDialog(String itemName, View cardView) {
         new AlertDialog.Builder(this)
-                .setTitle("Delete Item?")
+                .setTitle("Delete '" + itemName + "'?")
                 .setMessage("Are you sure you want to delete this menu item? This action cannot be undone.")
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        menuItemsContainer.removeView(cardLayout);
+                        menuItemsContainer.removeView(cardView);
                         Toast.makeText(StaffMenuEditorActivity.this,
-                                "Menu item deleted", Toast.LENGTH_SHORT).show();
+                                itemName + " deleted", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
     }
-
 
     private void showAddMenuItemDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -241,12 +162,6 @@ public class StaffMenuEditorActivity extends AppCompatActivity {
 
         builder.setNegativeButton("Cancel", null);
         builder.show();
-    }
-
-    // Helper method to convert dp to pixels
-    private int convertDpToPx(int dp) {
-        float density = getResources().getDisplayMetrics().density;
-        return Math.round(dp * density);
     }
 
     @Override

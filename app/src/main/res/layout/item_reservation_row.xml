@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:background="@drawable/reservation_row_border"
+    android:layout_marginBottom="8dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- Date Column -->
+    <TextView
+        android:id="@+id/dateText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="2025-11-25"
+        android:textSize="14sp"
+        android:textColor="#000000" />
+
+    <!-- Time Column -->
+    <TextView
+        android:id="@+id/timeText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="19:00"
+        android:textSize="14sp"
+        android:textColor="#000000" />
+
+    <!-- Guests Column -->
+    <TextView
+        android:id="@+id/guestsText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="2 guests"
+        android:textSize="14sp"
+        android:textColor="#000000" />
+
+</LinearLayout>

@@ -13,6 +13,7 @@
         <!-- Main Activity (Login Screen) -->
         <activity
             android:name=".MainActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,6 +34,11 @@
         <!-- Guest Reservation -->
         <activity
             android:name=".GuestReservationActivity"
+            android:parentActivityName=".GuestDashboardActivity" />
+
+        <!-- Guest Edit Reservation -->
+        <activity
+            android:name=".GuestEditReservationActivity"
             android:parentActivityName=".GuestDashboardActivity" />
 
         <!-- Staff Menu Editor -->

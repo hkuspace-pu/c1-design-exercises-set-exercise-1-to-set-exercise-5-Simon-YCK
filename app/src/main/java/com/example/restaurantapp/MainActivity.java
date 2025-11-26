@@ -53,18 +53,19 @@ public class MainActivity extends AppCompatActivity {
         int selectedId = userTypeRadioGroup.getCheckedRadioButtonId();
 
         if (selectedId == R.id.guestRadio) {
-            // Navigate to GUEST DASHBOARD
             Intent intent = new Intent(MainActivity.this, GuestDashboardActivity.class);
             intent.putExtra("USERNAME", username);
             startActivity(intent);
             Toast.makeText(this, "Welcome Guest: " + username, Toast.LENGTH_SHORT).show();
 
         } else if (selectedId == R.id.staffRadio) {
-            // Navigate to STAFF DASHBOARD (NOT MenuEditor!)
             Intent intent = new Intent(MainActivity.this, StaffDashboardActivity.class);
             intent.putExtra("USERNAME", username);
             startActivity(intent);
             Toast.makeText(this, "Welcome Staff: " + username, Toast.LENGTH_SHORT).show();
         }
     }
+
+    // NO onCreateOptionsMenu() method!
+    // NO onOptionsItemSelected() method!
 }

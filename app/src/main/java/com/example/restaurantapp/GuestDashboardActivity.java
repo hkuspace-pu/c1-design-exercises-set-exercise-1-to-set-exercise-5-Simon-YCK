@@ -2,6 +2,7 @@ package com.example.restaurantapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 public class GuestDashboardActivity extends AppCompatActivity {
 
     private TextView welcomeText;
-    private LinearLayout bookTableButton;  // CHANGED FROM Button TO LinearLayout
+    private LinearLayout bookTableButton;
     private Button browseMenuButton;
     private LinearLayout reservationsContainer;
     private String username;
@@ -43,7 +44,7 @@ public class GuestDashboardActivity extends AppCompatActivity {
         welcomeText.setTextSize(28);
         welcomeText.setTextColor(getResources().getColor(android.R.color.black));
 
-        // Book Table Button (Now LinearLayout)
+        // Book Table Button
         bookTableButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,58 +74,33 @@ public class GuestDashboardActivity extends AppCompatActivity {
     }
 
     private void addInlineReservation(String date, String time, String guests) {
-        LinearLayout reservationRow = new LinearLayout(this);
-        reservationRow.setOrientation(LinearLayout.HORIZONTAL);
-        reservationRow.setPadding(16, 12, 16, 12);
-        reservationRow.setBackgroundColor(getResources().getColor(android.R.color.white));
-        LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        rowParams.setMargins(0, 0, 0, 1); // 1px divider
-        reservationRow.setLayoutParams(rowParams);
+        // INFLATE XML LAYOUT
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View rowView = inflater.inflate(R.layout.item_reservation_row, reservationsContainer, false);
 
-        // Date Column
-        TextView dateText = new TextView(this);
+        // Find views
+        TextView dateText = rowView.findViewById(R.id.dateText);
+        TextView timeText = rowView.findViewById(R.id.timeText);
+        TextView guestsText = rowView.findViewById(R.id.guestsText);
+
+        // Set data
         dateText.setText(date);
-        dateText.setTextSize(14);
-        dateText.setTextColor(getResources().getColor(android.R.color.black));
-        LinearLayout.LayoutParams dateParams = new LinearLayout.LayoutParams(
-                0,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                1.0f
-        );
-        dateText.setLayoutParams(dateParams);
-
-        // Time Column
-        TextView timeText = new TextView(this);
         timeText.setText(time);
-        timeText.setTextSize(14);
-        timeText.setTextColor(getResources().getColor(android.R.color.black));
-        LinearLayout.LayoutParams timeParams = new LinearLayout.LayoutParams(
-                0,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                1.0f
-        );
-        timeText.setLayoutParams(timeParams);
-
-        // Guests Column
-        TextView guestsText = new TextView(this);
         guestsText.setText(guests);
-        guestsText.setTextSize(14);
-        guestsText.setTextColor(getResources().getColor(android.R.color.black));
-        LinearLayout.LayoutParams guestsParams = new LinearLayout.LayoutParams(
-                0,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                1.0f
-        );
-        guestsText.setLayoutParams(guestsParams);
 
-        reservationRow.addView(dateText);
-        reservationRow.addView(timeText);
-        reservationRow.addView(guestsText);
+        // MAKE THE ENTIRE ROW CLICKABLE → Opens edit page
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GuestDashboardActivity.this, GuestEditReservationActivity.class);
+                intent.putExtra("DATE", date);
+                intent.putExtra("TIME", time);
+                intent.putExtra("GUESTS", guests);
+                startActivity(intent);
+            }
+        });
 
-        reservationsContainer.addView(reservationRow);
+        reservationsContainer.addView(rowView);
     }
 
     @Override
