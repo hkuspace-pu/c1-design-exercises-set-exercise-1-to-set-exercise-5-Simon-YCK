@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Image Area -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:background="#EDF2F7">
+
+            <TextView
+                android:id="@+id/menuItemImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="🍔"
+                android:textSize="50sp"/>
+
+            <TextView
+                android:id="@+id/menuItemPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$15.00"
+                android:background="@drawable/bg_button_gradient_pill"
+                android:textColor="#FFFFFF"
+                android:padding="8dp"
+                android:layout_gravity="top|end"
+                android:layout_margin="12dp"/>
+        </FrameLayout>
+
+        <!-- Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/menuItemName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cheeseburger"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/menuItemDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Juicy beef patty with cheddar"
+                android:textSize="14sp"
+                android:textColor="#718096"
+                android:layout_marginTop="4dp"/>
+
+            <!-- Action Buttons Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:gravity="center">
+
+                <!-- Edit Button -->
+                <Button
+                    android:id="@+id/btnEdit"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="48dp"
+                    android:text="Edit"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#667EEA"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="8dp"/>
+
+                <!-- Delete Button -->
+                <Button
+                    android:id="@+id/btnDelete"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="48dp"
+                    android:text="Delete"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#E53E3E"
+                    android:textStyle="bold"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

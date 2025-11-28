@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Colored Shadow Layer (Bottom) -->
+    <item
+        android:top="4dp"
+        android:left="2dp"
+        android:right="2dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#4D667EEA"/> <!-- Semi-transparent blue -->
+            <corners android:radius="50dp"/>
+        </shape>
+    </item>
+
+    <!-- Main Gradient Button (Top) -->
+    <item
+        android:bottom="6dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#667EEA"
+                android:endColor="#764BA2"
+                android:angle="135"/>
+            <corners android:radius="50dp"/>
+        </shape>
+    </item>
+
+</layer-list>

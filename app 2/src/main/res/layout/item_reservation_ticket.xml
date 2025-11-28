@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_reservation_ticket"
+    android:padding="20dp"
+    android:layout_marginBottom="16dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:elevation="2dp">
+
+    <!-- Top Section: Date & Time -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="12dp">
+
+        <!-- Status Dot -->
+        <View
+            android:id="@+id/statusDot"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/bg_status_dot"
+            android:layout_marginEnd="12dp"/>
+
+        <!-- Date & Time -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/reservationDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Friday, Nov 29"
+                android:textSize="16sp"
+                android:textColor="#2D3748"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"/>
+
+            <TextView
+                android:id="@+id/reservationTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7:00 PM"
+                android:textSize="14sp"
+                android:textColor="#718096"
+                android:layout_marginTop="2dp"/>
+
+        </LinearLayout>
+
+        <!-- Guest Count Badge -->
+        <TextView
+            android:id="@+id/guestCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4 guests"
+            android:textSize="12sp"
+            android:textColor="#667EEA"
+            android:background="@drawable/bg_guest_badge"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:fontFamily="sans-serif-medium"/>
+
+    </LinearLayout>
+
+    <!-- Dashed Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E2E8F0"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="12dp"
+        android:layerType="software"
+        android:alpha="0.6"/>
+
+    <!-- Bottom Section: Name & Action -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/guestName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="John Doe"
+            android:textSize="14sp"
+            android:textColor="#4A5568"
+            android:fontFamily="sans-serif"/>
+
+        <!-- Edit Arrow Icon -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✏️"
+            android:textSize="18sp"
+            android:alpha="0.6"/>
+
+    </LinearLayout>
+
+</LinearLayout>
