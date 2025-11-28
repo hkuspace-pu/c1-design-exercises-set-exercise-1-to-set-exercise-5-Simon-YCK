@@ -59,7 +59,7 @@ app/src/main/
 ├── dialog_delete_confirm.xml # Custom "Are you sure?" popup
 └── item_reservation_ticket.xml # Reservation card layout
 
-text
+
 
 ---
 
