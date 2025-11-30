@@ -11,9 +11,9 @@ The **Restaurant Management App** is a native Android application featuring a **
 
 ---
 
-## ✨ "New UI" Features & Redesign (Exercise 5)
+## ✨ Features & Redesign
 
-### 🎨 Modern Guest Dashboard (`activity_guest_dashboard.xml`)
+### 🎨 Guest Dashboard (`activity_guest_dashboard.xml`)
 *   **Visual Hierarchy:** Implemented a **Huge (160dp) "Book Table" Button** with a vibrant blue/purple gradient background to make the primary action unmistakable (solving Visibility issues).
 *   **Secondary Actions:** "Browse Menu" is styled as a clean **Outline Button** (70dp) to differentiate it from the primary call-to-action.
 *   **Notifications:** Added a **Notification Bell with Red Badge** icon in the top-right corner to simulate real-time alerts.
@@ -63,11 +63,4 @@ app/src/main/
 
 ---
 
-## 🚀 How to Run
-1.  Clone this repository.
-2.  Open in **Android Studio**.
-3.  Sync Gradle.
-4.  Run on an emulator (Pixel 6 recommended for best UI rendering).
 
----
-**Note:** This project demonstrates a significant UI iteration from the initial low-fidelity sketches, moving towards a polished, market-ready visual style.
