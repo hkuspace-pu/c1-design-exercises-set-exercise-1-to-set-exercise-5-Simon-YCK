@@ -5,7 +5,17 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.restaurantapp.model.User;
+import com.example.restaurantapp.network.VolleySingleton;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,21 +23,23 @@ public class MainActivity extends AppCompatActivity {
     private EditText passwordInput;
     private Button loginButton;
 
+    private static final String STUDENT_ID = "YangChunKit_20177089";
+    private static final String API_BASE_URL = "http://10.240.72.69/comp2000/coursework/read_user/" + STUDENT_ID + "/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize views
+        // Initialize views using XML IDs
         usernameInput = findViewById(R.id.usernameInput);
         passwordInput = findViewById(R.id.passwordInput);
         loginButton = findViewById(R.id.loginButton);
 
-        // Login button click
-        loginButton.setOnClickListener(v -> handleLogin());
+        loginButton.setOnClickListener(v -> handleApiLogin());
     }
 
-    private void handleLogin() {
+    private void handleApiLogin() {
         String username = usernameInput.getText().toString().trim();
         String password = passwordInput.getText().toString().trim();
 
@@ -36,33 +48,65 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        // Staff login
-        if (username.equalsIgnoreCase("staff") || username.equalsIgnoreCase("admin")) {
-            if (password.equals("staff123") || password.equals("admin")) {
-                Intent intent = new Intent(MainActivity.this, StaffDashboardActivity.class);
-                startActivity(intent);
-                Toast.makeText(this, "Welcome, Staff!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Invalid staff password", Toast.LENGTH_SHORT).show();
-            }
+        // 1. Construct API URL
+        String url = API_BASE_URL + username;
+
+        // 2. Create Volley Request
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        // The API returns: { "user": { ... } }
+                        if (response.has("user")) {
+                            JSONObject userJson = response.getJSONObject("user");
+
+                            // Parse JSON
+                            Gson gson = new Gson();
+                            User user = gson.fromJson(userJson.toString(), User.class);
+
+                            // Verify Password
+                            if (user.getPassword().equals(password)) {
+                                navigateToDashboard(user.getUsertype(), user.getUsername());
+                            } else {
+                                Toast.makeText(this, "Invalid Password", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "Parsing Error", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    // Check logic: if error is 404, user doesn't exist
+                    if (error.networkResponse != null && error.networkResponse.statusCode == 404) {
+                        Toast.makeText(this, "User does not exist", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Connection Error. Check VPN/Wifi.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        // 3. Add to Singleton Queue
+        request.setRetryPolicy(new com.android.volley.DefaultRetryPolicy(
+                10000, // 10 seconds timeout
+                com.android.volley.DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                com.android.volley.DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        VolleySingleton.getInstance(this).addToRequestQueue(request);
+    }
+
+    private void navigateToDashboard(String userType, String userName) {
+        Intent intent;
+        if ("staff".equalsIgnoreCase(userType) || "admin".equalsIgnoreCase(userType)) {
+            intent = new Intent(this, StaffDashboardActivity.class);
+            Toast.makeText(this, "Login Successful: Staff", Toast.LENGTH_SHORT).show();
+        } else {
+            intent = new Intent(this, GuestDashboardActivity.class);
+            // Pass guest name to dashboard
+            intent.putExtra("guestName", userName);
+            Toast.makeText(this, "Login Successful: Guest", Toast.LENGTH_SHORT).show();
         }
-        // Guest login
-        else if (username.equalsIgnoreCase("guest")) {
-            if (password.equals("guest123")) {
-                Intent intent = new Intent(MainActivity.this, GuestDashboardActivity.class);
-                intent.putExtra("guestName", "Guest User");
-                startActivity(intent);
-                Toast.makeText(this, "Welcome, Guest!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Invalid guest password", Toast.LENGTH_SHORT).show();
-            }
-        }
-        // Any other username = guest (for flexibility)
-        else {
-            Intent intent = new Intent(MainActivity.this, GuestDashboardActivity.class);
-            intent.putExtra("guestName", username);
-            startActivity(intent);
-            Toast.makeText(this, "Welcome, " + username + "!", Toast.LENGTH_SHORT).show();
-        }
+        startActivity(intent);
     }
 }
