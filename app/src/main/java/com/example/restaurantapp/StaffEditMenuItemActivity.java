@@ -7,77 +7,91 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.restaurantapp.database.DatabaseHelper;
+import com.example.restaurantapp.model.MenuItem;
 
 public class StaffEditMenuItemActivity extends AppCompatActivity {
 
-    private EditText nameInput;
-    private EditText priceInput;
-    private EditText descriptionInput;
+    private EditText nameInput, priceInput, descriptionInput;
     private TextView imagePreview;
-    private View uploadImageButton; // Changed from Button to View
+    private View uploadImageButton;
     private Button saveButton;
+
+    private DatabaseHelper dbHelper;
+    private int menuItemId = -1; // Default to -1 (New Item)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_staff_edit_menu_item);
 
-        // Initialize views
+        dbHelper = new DatabaseHelper(this);
+
+        // Initialize views (IDs from activity_staff_edit_menu_item.xml)
         nameInput = findViewById(R.id.nameInput);
         priceInput = findViewById(R.id.priceInput);
         descriptionInput = findViewById(R.id.descriptionInput);
         imagePreview = findViewById(R.id.imagePreview);
-        uploadImageButton = findViewById(R.id.uploadImageButton); // View, not Button
+        uploadImageButton = findViewById(R.id.uploadImageButton);
         saveButton = findViewById(R.id.saveButton);
 
-        // Get data from intent (if editing existing item)
-        String itemName = getIntent().getStringExtra("itemName");
-        String itemPrice = getIntent().getStringExtra("itemPrice");
-        String itemDesc = getIntent().getStringExtra("itemDescription");
-
-        // Pre-fill fields if editing
-        if (itemName != null) {
-            nameInput.setText(itemName);
-            priceInput.setText(itemPrice);
-            descriptionInput.setText(itemDesc);
+        // Check if we are Editing or Adding
+        if (getIntent().hasExtra("menuId")) {
+            menuItemId = getIntent().getIntExtra("menuId", -1);
+            if (menuItemId != -1) {
+                // We are editing! Pre-fill data.
+                nameInput.setText(getIntent().getStringExtra("name"));
+                descriptionInput.setText(getIntent().getStringExtra("description"));
+                double price = getIntent().getDoubleExtra("price", 0.0);
+                priceInput.setText(String.valueOf(price));
+                saveButton.setText("Update Item");
+            }
         }
 
-        // Upload image button (For now, just cycle through emojis)
+        // Image Picker Logic (Cycling Emojis)
         uploadImageButton.setOnClickListener(v -> {
-            // Simple emoji picker
             String[] emojis = {"🍕", "🍔", "🍗", "🥗", "🍰", "☕", "🍝", "🌮", "🍜", "🥘"};
-            String currentEmoji = imagePreview.getText().toString();
-            int currentIndex = 0;
-
+            String current = imagePreview.getText().toString();
+            int nextIndex = 0;
             for (int i = 0; i < emojis.length; i++) {
-                if (emojis[i].equals(currentEmoji)) {
-                    currentIndex = i;
+                if (emojis[i].equals(current)) {
+                    nextIndex = (i + 1) % emojis.length;
                     break;
                 }
             }
-
-            int nextIndex = (currentIndex + 1) % emojis.length;
             imagePreview.setText(emojis[nextIndex]);
-            Toast.makeText(this, "Image selected: " + emojis[nextIndex], Toast.LENGTH_SHORT).show();
         });
 
-        // Save button
         saveButton.setOnClickListener(v -> saveMenuItem());
     }
 
     private void saveMenuItem() {
         String name = nameInput.getText().toString().trim();
-        String price = priceInput.getText().toString().trim();
-        String description = descriptionInput.getText().toString().trim();
+        String priceStr = priceInput.getText().toString().trim();
+        String desc = descriptionInput.getText().toString().trim();
         String emoji = imagePreview.getText().toString();
 
-        if (name.isEmpty() || price.isEmpty()) {
-            Toast.makeText(this, "Please fill in Name and Price", Toast.LENGTH_SHORT).show();
+        if (name.isEmpty() || priceStr.isEmpty()) {
+            Toast.makeText(this, "Name and Price are required", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // TODO: Save to database or pass back to previous activity
-        Toast.makeText(this, "Item saved successfully!", Toast.LENGTH_SHORT).show();
-        finish(); // Close this activity and go back
+        double price = Double.parseDouble(priceStr);
+
+        boolean success;
+        if (menuItemId == -1) {
+            // INSERT NEW
+            success = dbHelper.addMenuItem(name, desc, price, "Main"); // 'Main' is default category
+        } else {
+            // UPDATE EXISTING (We need to add updateMenuItem to DatabaseHelper!)
+            success = dbHelper.updateMenuItem(menuItemId, name, desc, price, "Main");
+        }
+
+        if (success) {
+            Toast.makeText(this, "Saved Successfully!", Toast.LENGTH_SHORT).show();
+            finish(); // Go back to list
+        } else {
+            Toast.makeText(this, "Database Error", Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -5,34 +5,42 @@
     android:orientation="vertical"
     android:background="#F7FAFC">
 
-    <!-- Custom Header -->
+    <!-- Header Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="24dp"
         android:background="#FFFFFF"
-        android:elevation="4dp">
+        android:elevation="4dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Manage Menu"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#2D3748"/>
+
+        <Button
+            android:id="@+id/btnAddNew"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+ Add"
+            android:backgroundTint="#48BB78"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"/>
     </LinearLayout>
 
-    <!-- List Container -->
-    <ScrollView
+    <!-- RECYCLERVIEW REPLACEMENT (Week 7 Requirement) -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="20dp">
-
-        <LinearLayout
-            android:id="@+id/menuContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"/>
-    </ScrollView>
+        android:padding="16dp"
+        android:clipToPadding="false"/>
 
 </LinearLayout>
+
