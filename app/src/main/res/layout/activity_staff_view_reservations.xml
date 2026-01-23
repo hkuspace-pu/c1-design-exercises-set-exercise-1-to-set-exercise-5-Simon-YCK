@@ -22,16 +22,12 @@
             android:textColor="#2D3748"/>
     </LinearLayout>
 
-    <ScrollView
+    <!-- REPLACED SCROLLVIEW WITH RECYCLERVIEW -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerReservations"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="20dp">
-
-        <LinearLayout
-            android:id="@+id/reservationsContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"/>
-    </ScrollView>
+        android:padding="16dp"
+        android:clipToPadding="false"/>
 
 </LinearLayout>
