@@ -142,6 +142,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long result = db.insert(TABLE_RESERVATION, null, cv);
         return result != -1;
     }
+    // UPDATE RESERVATION
+    public boolean updateReservation(int id, String date, String time, int guests) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_RES_DATE, date);
+        cv.put(COL_RES_TIME, time);
+        cv.put(COL_RES_COUNT, guests);
+        int rows = db.update(TABLE_RESERVATION, cv, COL_RES_ID + "=?", new String[]{String.valueOf(id)});
+        return rows > 0;
+    }
 
     // READ RESERVATIONS
     // (We return Cursor for now, or List<Reservation> if you create that model class)

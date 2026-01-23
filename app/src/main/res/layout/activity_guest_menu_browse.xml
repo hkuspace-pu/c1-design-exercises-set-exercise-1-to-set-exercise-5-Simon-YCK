@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:background="#F7FAFC">
 
-    <!-- Header  -->
+    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,17 +22,13 @@
             android:textColor="#2D3748"/>
     </LinearLayout>
 
-    <!-- List Container -->
-    <ScrollView
+    <!-- RECYCLERVIEW (Fixes the warning and sync issue) -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewMenuGuest"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="20dp">
-
-        <LinearLayout
-            android:id="@+id/menuContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"/>
-    </ScrollView>
+        android:padding="16dp"
+        android:clipToPadding="false"/>
 
 </LinearLayout>
+

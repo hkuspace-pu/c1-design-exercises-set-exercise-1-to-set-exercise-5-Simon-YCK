@@ -12,6 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.restaurantapp.database.DatabaseHelper;
+import com.example.restaurantapp.utils.NotificationHelper;
+import com.example.restaurantapp.utils.ReservationFacade;
+
 import java.util.Calendar;
 
 public class GuestReservationActivity extends AppCompatActivity {
@@ -22,6 +25,7 @@ public class GuestReservationActivity extends AppCompatActivity {
     private TextView guestsLabel;
     private Button confirmButton;
     private DatabaseHelper dbHelper;
+    private ReservationFacade reservationFacade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,11 +113,14 @@ public class GuestReservationActivity extends AppCompatActivity {
 
         if (!isValid) return;
 
-        // Save to Database
-        boolean success = dbHelper.addReservation(name, date, time, guestCount);
+        // In onCreate:
+        reservationFacade = new ReservationFacade(this);
 
+        // In handleSubmit (Replace the dbHelper call):
+        boolean success = reservationFacade.placeReservation(name, date, time, guestCount);
+        // (The facade handles both saving AND notification now)
         if (success) {
-            Toast.makeText(this, "Booking Confirmed! See you on " + date, Toast.LENGTH_LONG).show();
+            new NotificationHelper(this).sendNotification("Booking Confirmed", "See you on " + date);
             finish();
         } else {
             Toast.makeText(this, "Booking Failed. Try again.", Toast.LENGTH_SHORT).show();
