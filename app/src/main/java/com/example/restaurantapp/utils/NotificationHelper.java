@@ -45,6 +45,9 @@ public class NotificationHelper {
         }
     }
 
+    // --- SPECIFIC NOTIFICATION TYPES ---
+
+    // 1. NEW BOOKING
     public void sendBookingNotification(String name, String date, String time) {
         SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
         if (prefs.getBoolean("notif_booking", true)) {
@@ -52,6 +55,23 @@ public class NotificationHelper {
         }
     }
 
+    // 2. BOOKING UPDATED
+    public void sendUpdateNotification(String date, String time) {
+        SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        if (prefs.getBoolean("notif_booking", true)) {
+            sendNotification("Reservation Updated", "Your booking has been changed to " + date + " at " + time);
+        }
+    }
+
+    // 3. BOOKING CANCELLED
+    public void sendCancelNotification() {
+        SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        if (prefs.getBoolean("notif_booking", true)) {
+            sendNotification("Booking Cancelled", "Your reservation has been cancelled");
+        }
+    }
+
+    // 4. PROMO
     public void sendPromoNotification(String message) {
         SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
         if (prefs.getBoolean("notif_promo", false)) {

@@ -2,7 +2,6 @@ package com.example.restaurantapp;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,10 +10,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.restaurantapp.database.DatabaseHelper;
-import com.example.restaurantapp.utils.NotificationHelper;
 import com.example.restaurantapp.utils.ReservationFacade;
-
 import java.util.Calendar;
 
 public class GuestReservationActivity extends AppCompatActivity {
@@ -24,7 +20,6 @@ public class GuestReservationActivity extends AppCompatActivity {
     private SeekBar guestsSeekBar;
     private TextView guestsLabel;
     private Button confirmButton;
-    private DatabaseHelper dbHelper;
     private ReservationFacade reservationFacade;
 
     @Override
@@ -32,9 +27,10 @@ public class GuestReservationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest_reservation);
 
-        dbHelper = new DatabaseHelper(this);
+        // Initialize Facade (Handles DB + Notifications)
+        reservationFacade = new ReservationFacade(this);
 
-        // Initialize Views
+        // Find Views
         nameInput = findViewById(R.id.nameInput);
         dateInput = findViewById(R.id.dateInput);
         timeSpinner = findViewById(R.id.timeSpinner);
@@ -42,88 +38,67 @@ public class GuestReservationActivity extends AppCompatActivity {
         guestsLabel = findViewById(R.id.guestsLabel);
         confirmButton = findViewById(R.id.confirmButton);
 
-        // 1. SETUP DATE PICKER (Fixes "date calendar not shown")
-        dateInput.setOnClickListener(v -> showDatePicker());
+        // Setup Time Spinner
+        String[] timeSlots = {"5:00 PM", "5:30 PM", "6:00 PM", "6:30 PM", "7:00 PM", "7:30 PM", "8:00 PM", "8:30 PM"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, timeSlots);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        timeSpinner.setAdapter(adapter);
 
-        // 2. SETUP TIME SPINNER (Fixes "box cannot fill in")
-        setupTimeSpinner();
+        // Setup Seekbar
+        if (guestsSeekBar != null) {
+            guestsSeekBar.setMax(10);
+            guestsSeekBar.setProgress(2);
+            guestsLabel.setText("2 People");
 
-        // 3. SETUP SEEKBAR
-        guestsSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                int count = Math.max(1, progress); // Min 1 guest
-                guestsLabel.setText(count + " People");
-            }
-            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
+            guestsSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    int guests = Math.max(1, progress);
+                    guestsLabel.setText(guests + " People");
+                }
+                @Override public void onStartTrackingTouch(SeekBar seekBar) {}
+                @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+            });
+        }
 
-        // 4. CONFIRM BUTTON
-        confirmButton.setOnClickListener(v -> handleSubmit());
+        // Date Picker
+        if (dateInput != null) {
+            dateInput.setOnClickListener(v -> showDatePicker());
+        }
+
+        // Confirm Button
+        if (confirmButton != null) {
+            confirmButton.setOnClickListener(v -> handleSubmit());
+        }
     }
 
     private void showDatePicker() {
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                (view, year1, monthOfYear, dayOfMonth) -> {
-                    // Format: DD/MM/YYYY
-                    String date = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year1;
-                    dateInput.setText(date);
-                }, year, month, day);
-        datePickerDialog.show();
-    }
-
-    private void setupTimeSpinner() {
-        // Create a list of available times
-        String[] times = new String[]{
-                "12:00 PM", "1:00 PM", "2:00 PM",
-                "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM"
-        };
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, times);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        timeSpinner.setAdapter(adapter);
+        Calendar c = Calendar.getInstance();
+        new DatePickerDialog(this, (view, year, month, day) ->
+                dateInput.setText(day + "/" + (month + 1) + "/" + year),
+                c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     private void handleSubmit() {
         String name = nameInput.getText().toString().trim();
         String date = dateInput.getText().toString().trim();
-        String time = timeSpinner.getSelectedItem() != null ?
-                timeSpinner.getSelectedItem().toString() : "";
-        int guestCount = Math.max(1, guestsSeekBar.getProgress());
+        String time = timeSpinner.getSelectedItem().toString();
+        int guests = Math.max(1, guestsSeekBar.getProgress());
 
-        // --- VALIDATION (Fixes "missing required alert") ---
-        boolean isValid = true;
-
-        if (name.isEmpty()) {
-            nameInput.setError("Name is required*");
-            isValid = false;
-        }
-        if (date.isEmpty()) {
-            dateInput.setError("Date is required*");
-            Toast.makeText(this, "Please select a date", Toast.LENGTH_SHORT).show();
-            isValid = false;
+        // Validation
+        if (name.isEmpty() || date.isEmpty()) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        if (!isValid) return;
+        // Use Facade (Handles DB + Notification automatically)
+        boolean success = reservationFacade.createReservation(name, date, time, guests);
 
-        // In onCreate:
-        reservationFacade = new ReservationFacade(this);
-
-        // In handleSubmit (Replace the dbHelper call):
-        boolean success = reservationFacade.placeReservation(name, date, time, guestCount);
-        // (The facade handles both saving AND notification now)
         if (success) {
-            new NotificationHelper(this).sendBookingNotification(name, date, time);
-            finish();
+            Toast.makeText(this, "Booking Confirmed!", Toast.LENGTH_SHORT).show();
+            finish(); // Close and return to dashboard
         } else {
-            Toast.makeText(this, "Booking Failed. Try again.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Booking Failed", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -2,7 +2,6 @@ package com.example.restaurantapp;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,17 +11,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.restaurantapp.database.DatabaseHelper;
+import com.example.restaurantapp.utils.ReservationFacade;
 import java.util.Calendar;
 
 public class GuestEditReservationActivity extends AppCompatActivity {
 
-    private EditText nameInput, dateInput; // Added nameInput just in case
+    private EditText dateInput;
     private Spinner timeSpinner;
     private SeekBar guestsSeekBar;
     private TextView guestsLabel;
     private Button saveButton, cancelBookingButton;
-    private DatabaseHelper dbHelper;
+    private ReservationFacade reservationFacade;
 
     private int resId = -1;
 
@@ -31,53 +30,38 @@ public class GuestEditReservationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest_edit_reservation);
 
-        dbHelper = new DatabaseHelper(this);
+        // Initialize Facade
+        reservationFacade = new ReservationFacade(this);
 
-        // --- FIXING THE IDs ---
-        // 1. Try finding 'confirmButton' first (common name in your XMLs)
-        saveButton = findViewById(R.id.confirmButton);
-        if (saveButton == null) {
-            // 2. If null, try finding 'saveButton'
-            saveButton = findViewById(R.id.saveButton);
-        }
-
-        // 3. Find Cancel Button
-        cancelBookingButton = findViewById(R.id.cancelBookingButton);
-
-        // Other Inputs
+        // Initialize Views
         dateInput = findViewById(R.id.dateInput);
         timeSpinner = findViewById(R.id.timeSpinner);
         guestsSeekBar = findViewById(R.id.guestsSeekBar);
         guestsLabel = findViewById(R.id.guestsLabel);
 
-        // Setup Spinner
+        saveButton = findViewById(R.id.confirmButton);
+        if (saveButton == null) saveButton = findViewById(R.id.saveButton);
+        cancelBookingButton = findViewById(R.id.cancelBookingButton);
+
         setupTimeSpinner();
 
         // Get Intent Data
         if (getIntent().hasExtra("resId")) {
             resId = getIntent().getIntExtra("resId", -1);
-            if (dateInput != null) dateInput.setText(getIntent().getStringExtra("date"));
-            if (guestsSeekBar != null) guestsSeekBar.setProgress(getIntent().getIntExtra("guests", 1));
+            String existingDate = getIntent().getStringExtra("date");
+            int existingGuests = getIntent().getIntExtra("guests", 2);
+
+            if (dateInput != null && existingDate != null) dateInput.setText(existingDate);
+            if (guestsSeekBar != null) guestsSeekBar.setProgress(existingGuests);
+            if (guestsLabel != null) guestsLabel.setText(existingGuests + " People");
         }
 
-        // --- NULL SAFETY CHECK BEFORE LISTENER ---
-        if (saveButton != null) {
-            saveButton.setOnClickListener(v -> handleSave());
-        } else {
-            // DEBUG: Log error if button is missing
-            System.err.println("ERROR: Confirm/Save Button NOT FOUND in layout!");
-        }
-
-        if (cancelBookingButton != null) {
-            cancelBookingButton.setOnClickListener(v -> showCancelDialog());
-        }
-
-        // Date Picker Listener
+        // Date Picker
         if (dateInput != null) {
             dateInput.setOnClickListener(v -> showDatePicker());
         }
 
-        // Seekbar Listener
+        // SeekBar
         if (guestsSeekBar != null) {
             guestsSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
@@ -88,30 +72,42 @@ public class GuestEditReservationActivity extends AppCompatActivity {
                 @Override public void onStopTrackingTouch(SeekBar seekBar) {}
             });
         }
+
+        // Save Button
+        if (saveButton != null) saveButton.setOnClickListener(v -> handleSave());
+
+        // Cancel Button
+        if (cancelBookingButton != null) cancelBookingButton.setOnClickListener(v -> showCancelDialog());
     }
 
     private void setupTimeSpinner() {
         if (timeSpinner == null) return;
-        String[] times = {"12:00 PM", "1:00 PM", "6:00 PM", "7:00 PM", "8:00 PM"};
+        String[] times = {"5:00 PM", "5:30 PM", "6:00 PM", "6:30 PM", "7:00 PM", "7:30 PM", "8:00 PM"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, times);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         timeSpinner.setAdapter(adapter);
     }
 
     private void showDatePicker() {
         Calendar c = Calendar.getInstance();
-        new DatePickerDialog(this, (view, y, m, d) ->
-                dateInput.setText(d + "/" + (m + 1) + "/" + y),
+        new DatePickerDialog(this, (view, year, month, day) ->
+                dateInput.setText(day + "/" + (month + 1) + "/" + year),
                 c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     private void handleSave() {
-        if (dateInput == null || timeSpinner == null || guestsSeekBar == null) return;
+        String newDate = (dateInput != null) ? dateInput.getText().toString().trim() : "";
+        String newTime = (timeSpinner != null) ? timeSpinner.getSelectedItem().toString() : "";
+        int newGuests = (guestsSeekBar != null) ? Math.max(1, guestsSeekBar.getProgress()) : 1;
 
-        String newDate = dateInput.getText().toString().trim();
-        String newTime = timeSpinner.getSelectedItem().toString();
-        int newGuests = Math.max(1, guestsSeekBar.getProgress());
+        if (newDate.isEmpty()) {
+            Toast.makeText(this, "Please select a date", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        boolean success = dbHelper.updateReservation(resId, newDate, newTime, newGuests);
+        // Use Facade (Handles DB + Notification)
+        boolean success = reservationFacade.updateReservation(resId, newDate, newTime, newGuests);
+
         if (success) {
             Toast.makeText(this, "Reservation Updated!", Toast.LENGTH_SHORT).show();
             finish();
@@ -122,16 +118,21 @@ public class GuestEditReservationActivity extends AppCompatActivity {
 
     private void showCancelDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        // Ensure you have dialog_delete_confirm.xml or use a simple message
         builder.setTitle("Cancel Reservation");
         builder.setMessage("Are you sure you want to cancel this booking?");
-        builder.setPositiveButton("Yes", (dialog, which) -> {
-            boolean success = dbHelper.deleteReservation(resId);
+
+        builder.setPositiveButton("Yes, Cancel", (dialog, which) -> {
+            // Use Facade (Handles DB + Notification)
+            boolean success = reservationFacade.cancelReservation(resId);
+
             if (success) {
                 Toast.makeText(this, "Booking Cancelled", Toast.LENGTH_SHORT).show();
                 finish();
+            } else {
+                Toast.makeText(this, "Error cancelling", Toast.LENGTH_SHORT).show();
             }
         });
+
         builder.setNegativeButton("No", null);
         builder.show();
     }

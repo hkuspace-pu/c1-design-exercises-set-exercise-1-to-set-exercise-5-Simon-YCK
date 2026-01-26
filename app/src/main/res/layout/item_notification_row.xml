@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:background="@drawable/bg_input_rounded"
+    android:layout_marginBottom="8dp">
+
+    <!-- Icon -->
+    <TextView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:text="🔔"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:background="@drawable/bg_guest_badge"
+        android:layout_marginEnd="16dp"/>
+
+    <!-- Content -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/notifTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Booking Confirmed"
+            android:textStyle="bold"
+            android:textColor="#2D3748"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/notifMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your table for 2 is ready."
+            android:textColor="#718096"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/notifDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Just now"
+            android:textSize="12sp"
+            android:textColor="#A0AEC0"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+</LinearLayout>
