@@ -7,17 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.restaurantapp.model.MenuItem;
-// Note: You will need a Reservation model later, I'll provide it in next step.
-// For now this helper supports the raw SQL logic.
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    // Database Info
     private static final String DATABASE_NAME = "Restaurant.db";
-    private static final int DATABASE_VERSION = 2; // Incremented version to add Reservation table
+    // INCREMENT VERSION TO 3 TO TRIGGER UPGRADE
+    private static final int DATABASE_VERSION = 3;
 
     // --- TABLE: MENU ---
     private static final String TABLE_MENU = "menu_items";
@@ -35,6 +32,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_RES_TIME = "res_time";
     private static final String COL_RES_COUNT = "guest_count";
 
+    // --- TABLE: NOTIFICATIONS (NEW) ---
+    private static final String TABLE_NOTIF = "notifications";
+    private static final String COL_NOTIF_ID = "id";
+    private static final String COL_NOTIF_TITLE = "title";
+    private static final String COL_NOTIF_MSG = "message";
+    private static final String COL_NOTIF_DATE = "date_created";
+    private static final String COL_NOTIF_READ = "is_read";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -42,38 +47,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create Menu Table
-        String createMenuTable = "CREATE TABLE " + TABLE_MENU + " (" +
+        String createMenu = "CREATE TABLE " + TABLE_MENU + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_NAME + " TEXT, " +
                 COL_DESC + " TEXT, " +
                 COL_PRICE + " REAL, " +
                 COL_CATEGORY + " TEXT)";
-        db.execSQL(createMenuTable);
+        db.execSQL(createMenu);
 
         // Create Reservation Table
-        String createResTable = "CREATE TABLE " + TABLE_RESERVATION + " (" +
+        String createRes = "CREATE TABLE " + TABLE_RESERVATION + " (" +
                 COL_RES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_RES_GUEST + " TEXT, " +
                 COL_RES_DATE + " TEXT, " +
                 COL_RES_TIME + " TEXT, " +
                 COL_RES_COUNT + " INTEGER)";
-        db.execSQL(createResTable);
+        db.execSQL(createRes);
+
+        // Create Notification Table
+        String createNotif = "CREATE TABLE " + TABLE_NOTIF + " (" +
+                COL_NOTIF_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_NOTIF_TITLE + " TEXT, " +
+                COL_NOTIF_MSG + " TEXT, " +
+                COL_NOTIF_DATE + " TEXT, " +
+                COL_NOTIF_READ + " INTEGER)";
+        db.execSQL(createNotif);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop older tables if they exist
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MENU);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RESERVATION);
-        // Create tables again
-        onCreate(db);
+        if (oldVersion < 3) {
+            // Add notification table if upgrading from v2
+            String createNotif = "CREATE TABLE " + TABLE_NOTIF + " (" +
+                    COL_NOTIF_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COL_NOTIF_TITLE + " TEXT, " +
+                    COL_NOTIF_MSG + " TEXT, " +
+                    COL_NOTIF_DATE + " TEXT, " +
+                    COL_NOTIF_READ + " INTEGER)";
+            db.execSQL(createNotif);
+        }
+        // Ideally handle other upgrades properly, but for assessment drop/create is often okay
+        // db.execSQL("DROP TABLE IF EXISTS " + TABLE_MENU);
+        // onCreate(db);
     }
 
-    // ==========================================
-    //              MENU OPERATIONS
-    // ==========================================
-
-    // CREATE (Add Item)
+    // --- MENU OPS ---
     public boolean addMenuItem(String name, String desc, double price, String category) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -81,89 +99,84 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COL_DESC, desc);
         cv.put(COL_PRICE, price);
         cv.put(COL_CATEGORY, category);
-
-        long result = db.insert(TABLE_MENU, null, cv);
-        return result != -1;
+        return db.insert(TABLE_MENU, null, cv) != -1;
     }
 
-    // READ (Get All Items)
     public List<MenuItem> getAllMenuItems() {
-        List<MenuItem> menuList = new ArrayList<>();
+        List<MenuItem> list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MENU, null);
-
         if (cursor.moveToFirst()) {
             do {
-                int id = cursor.getInt(0);
-                String name = cursor.getString(1);
-                String desc = cursor.getString(2);
-                double price = cursor.getDouble(3);
-                String cat = cursor.getString(4);
-                menuList.add(new MenuItem(id, name, desc, price, cat));
+                list.add(new MenuItem(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getDouble(3), cursor.getString(4)));
             } while (cursor.moveToNext());
         }
         cursor.close();
-        return menuList;
+        return list;
     }
 
-    // UPDATE
     public boolean updateMenuItem(int id, String name, String desc, double price, String category) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(COL_NAME, name);
-        cv.put(COL_DESC, desc);
-        cv.put(COL_PRICE, price);
-        cv.put(COL_CATEGORY, category);
-
-        int rows = db.update(TABLE_MENU, cv, COL_ID + "=?", new String[]{String.valueOf(id)});
-        return rows > 0;
+        cv.put(COL_NAME, name); cv.put(COL_DESC, desc); cv.put(COL_PRICE, price); cv.put(COL_CATEGORY, category);
+        return db.update(TABLE_MENU, cv, COL_ID + "=?", new String[]{String.valueOf(id)}) > 0;
     }
 
-    // DELETE
     public boolean deleteMenuItem(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        int rows = db.delete(TABLE_MENU, COL_ID + "=?", new String[]{String.valueOf(id)});
-        return rows > 0;
+        return db.delete(TABLE_MENU, COL_ID + "=?", new String[]{String.valueOf(id)}) > 0;
     }
 
-    // ==========================================
-    //           RESERVATION OPERATIONS
-    // ==========================================
-
-    // CREATE RESERVATION
-    public boolean addReservation(String guestName, String date, String time, int guests) {
+    // --- RESERVATION OPS ---
+    public boolean addReservation(String name, String date, String time, int guests) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(COL_RES_GUEST, guestName);
-        cv.put(COL_RES_DATE, date);
-        cv.put(COL_RES_TIME, time);
-        cv.put(COL_RES_COUNT, guests);
-
-        long result = db.insert(TABLE_RESERVATION, null, cv);
-        return result != -1;
+        cv.put(COL_RES_GUEST, name); cv.put(COL_RES_DATE, date); cv.put(COL_RES_TIME, time); cv.put(COL_RES_COUNT, guests);
+        return db.insert(TABLE_RESERVATION, null, cv) != -1;
     }
-    // UPDATE RESERVATION
+
+    public Cursor getAllReservations() {
+        return this.getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_RESERVATION + " ORDER BY " + COL_RES_ID + " DESC", null);
+    }
+
     public boolean updateReservation(int id, String date, String time, int guests) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(COL_RES_DATE, date);
-        cv.put(COL_RES_TIME, time);
-        cv.put(COL_RES_COUNT, guests);
-        int rows = db.update(TABLE_RESERVATION, cv, COL_RES_ID + "=?", new String[]{String.valueOf(id)});
-        return rows > 0;
+        cv.put(COL_RES_DATE, date); cv.put(COL_RES_TIME, time); cv.put(COL_RES_COUNT, guests);
+        return db.update(TABLE_RESERVATION, cv, COL_RES_ID + "=?", new String[]{String.valueOf(id)}) > 0;
     }
 
-    // READ RESERVATIONS
-    // (We return Cursor for now, or List<Reservation> if you create that model class)
-    public Cursor getAllReservations() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_RESERVATION, null);
-    }
-
-    // DELETE RESERVATION
     public boolean deleteReservation(int id) {
+        return this.getWritableDatabase().delete(TABLE_RESERVATION, COL_RES_ID + "=?", new String[]{String.valueOf(id)}) > 0;
+    }
+
+    // --- NOTIFICATION OPS (NEW) ---
+    public void addNotification(String title, String message) {
         SQLiteDatabase db = this.getWritableDatabase();
-        int rows = db.delete(TABLE_RESERVATION, COL_RES_ID + "=?", new String[]{String.valueOf(id)});
-        return rows > 0;
+        ContentValues cv = new ContentValues();
+        cv.put(COL_NOTIF_TITLE, title);
+        cv.put(COL_NOTIF_MSG, message);
+        cv.put(COL_NOTIF_DATE, String.valueOf(System.currentTimeMillis()));
+        cv.put(COL_NOTIF_READ, 0); // 0 = unread
+        db.insert(TABLE_NOTIF, null, cv);
+    }
+
+    public Cursor getAllNotifications() {
+        return this.getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_NOTIF + " ORDER BY " + COL_NOTIF_ID + " DESC", null);
+    }
+
+    public int getUnreadCount() {
+        Cursor c = this.getReadableDatabase().rawQuery("SELECT COUNT(*) FROM " + TABLE_NOTIF + " WHERE " + COL_NOTIF_READ + " = 0", null);
+        c.moveToFirst();
+        int count = c.getInt(0);
+        c.close();
+        return count;
+    }
+
+    public void markAllAsRead() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_NOTIF_READ, 1);
+        db.update(TABLE_NOTIF, cv, null, null);
     }
 }

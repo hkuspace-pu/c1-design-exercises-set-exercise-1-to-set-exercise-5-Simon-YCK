@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import androidx.core.app.NotificationCompat;
+import com.example.restaurantapp.database.DatabaseHelper;
 
 public class NotificationHelper {
     private static final String CHANNEL_ID = "restaurant_app_channel";
@@ -25,8 +26,12 @@ public class NotificationHelper {
         }
     }
 
-    // INTERNAL HELPER to actually build/show the notification
     private void sendNotification(String title, String message) {
+        // 1. Save to Database (History)
+        DatabaseHelper db = new DatabaseHelper(context);
+        db.addNotification(title, message);
+
+        // 2. Build System Notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setContentTitle(title)
@@ -40,24 +45,16 @@ public class NotificationHelper {
         }
     }
 
-    // --- PUBLIC METHODS CALLED BY YOUR APP ---
-
-    // 1. Send Booking Notification (Checks 'notif_booking' pref)
     public void sendBookingNotification(String name, String date, String time) {
         SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
-        boolean allowBooking = prefs.getBoolean("notif_booking", true);
-
-        if (allowBooking) {
+        if (prefs.getBoolean("notif_booking", true)) {
             sendNotification("Booking Confirmed!", "Table for " + name + " on " + date + " at " + time);
         }
     }
 
-    // 2. Send Promo Notification (Checks 'notif_promo' pref)
     public void sendPromoNotification(String message) {
         SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
-        boolean allowPromo = prefs.getBoolean("notif_promo", false);
-
-        if (allowPromo) {
+        if (prefs.getBoolean("notif_promo", false)) {
             sendNotification("Special Offer!", message);
         }
     }

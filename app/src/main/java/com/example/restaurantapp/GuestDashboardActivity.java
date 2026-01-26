@@ -12,7 +12,8 @@ import com.example.restaurantapp.database.DatabaseHelper;
 public class GuestDashboardActivity extends AppCompatActivity {
 
     private DatabaseHelper dbHelper;
-    private LinearLayout upcomingContainer;
+    private LinearLayout reservationsContainer; // Changed variable name to match ID for clarity
+    private TextView notificationBadge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,68 +21,106 @@ public class GuestDashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_guest_dashboard);
 
         dbHelper = new DatabaseHelper(this);
-        upcomingContainer = findViewById(R.id.reservationsContainer); // Ensure this ID exists in XML
 
-        // Navigation Buttons
-        findViewById(R.id.bookTableButton).setOnClickListener(v ->
-                startActivity(new Intent(this, GuestReservationActivity.class)));
+        // FIX: Match the XML ID 'reservationsContainer'
+        reservationsContainer = findViewById(R.id.reservationsContainer);
 
-        findViewById(R.id.browseMenuButton).setOnClickListener(v ->
-                startActivity(new Intent(this, GuestMenuBrowseActivity.class)));
+        // Find notification badge (Ensure ID exists in XML)
+        notificationBadge = findViewById(R.id.notificationBadge);
 
-        findViewById(R.id.profileAvatar).setOnClickListener(v ->
-                startActivity(new Intent(this, UserProfileActivity.class)));
+        // 1. BOOK TABLE BUTTON
+        // Note: XML ID is 'bookTableButton' (LinearLayout), so we attach click listener to that
+        View btnBookTable = findViewById(R.id.bookTableButton);
+        if (btnBookTable != null) {
+            btnBookTable.setOnClickListener(v ->
+                    startActivity(new Intent(this, GuestReservationActivity.class)));
+        }
 
+        // 2. BROWSE MENU BUTTON
+        View btnViewMenu = findViewById(R.id.browseMenuButton);
+        if (btnViewMenu != null) {
+            btnViewMenu.setOnClickListener(v ->
+                    startActivity(new Intent(this, GuestMenuBrowseActivity.class)));
+        }
+
+        // 3. PROFILE SETTINGS (Avatar)
+        View btnProfile = findViewById(R.id.profileAvatar);
+        if(btnProfile != null) {
+            btnProfile.setOnClickListener(v ->
+                    startActivity(new Intent(this, UserProfileActivity.class)));
+        }
+
+        // 4. NOTIFICATION BELL (Open History)
+        View btnBell = findViewById(R.id.notificationButton);
+        if (btnBell != null) {
+            btnBell.setOnClickListener(v ->
+                    startActivity(new Intent(this, NotificationListActivity.class)));
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loadUpcomingReservations(); // Refresh list every time we return
+        loadUpcomingReservations();
+        updateBadgeCount();
+    }
+
+    private void updateBadgeCount() {
+        int count = dbHelper.getUnreadCount();
+        if (notificationBadge != null) {
+            if (count > 0) {
+                notificationBadge.setVisibility(View.VISIBLE);
+                notificationBadge.setText(String.valueOf(count));
+            } else {
+                notificationBadge.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void loadUpcomingReservations() {
-        upcomingContainer.removeAllViews(); // Clear old list
+        if (reservationsContainer == null) return;
+
+        reservationsContainer.removeAllViews();
         Cursor cursor = dbHelper.getAllReservations();
 
+        // Toggle Empty State if you have one
+        View emptyState = findViewById(R.id.emptyState);
+
         if (cursor.getCount() == 0) {
-            TextView emptyView = new TextView(this);
-            emptyView.setText("No upcoming bookings.");
-            emptyView.setPadding(16, 16, 16, 16);
-            upcomingContainer.addView(emptyView);
+            if (emptyState != null) emptyState.setVisibility(View.VISIBLE);
             return;
+        } else {
+            if (emptyState != null) emptyState.setVisibility(View.GONE);
         }
 
         while (cursor.moveToNext()) {
-            // Get data
             int id = cursor.getInt(0);
             String date = cursor.getString(2);
             String time = cursor.getString(3);
             int guests = cursor.getInt(4);
 
             // Inflate your ticket layout dynamically
-            View ticket = getLayoutInflater().inflate(R.layout.item_reservation_ticket, upcomingContainer, false);
+            View ticket = getLayoutInflater().inflate(R.layout.item_reservation_ticket, reservationsContainer, false);
 
-            // Populate Ticket UI
-            TextView tvDate = ticket.findViewById(R.id.reservationDate);
-            TextView tvTime = ticket.findViewById(R.id.reservationTime);
-            TextView tvGuests = ticket.findViewById(R.id.guestCount);
+            // Populate Ticket Data
+            TextView tDate = ticket.findViewById(R.id.reservationDate);
+            TextView tTime = ticket.findViewById(R.id.reservationTime);
+            TextView tGuests = ticket.findViewById(R.id.guestCount);
 
-            if (tvDate != null) tvDate.setText(date);
-            if (tvTime != null) tvTime.setText(time);
-            if (tvGuests != null) tvGuests.setText(guests + " Guests");
+            if(tDate != null) tDate.setText(date);
+            if(tTime != null) tTime.setText(time);
+            if(tGuests != null) tGuests.setText(guests + " Guests");
 
-            // Handle Edit Click
+            // Handle Click (Edit)
             ticket.setOnClickListener(v -> {
-                Intent intent = new Intent(GuestDashboardActivity.this, GuestEditReservationActivity.class);
-                intent.putExtra("resId", id);
-                intent.putExtra("date", date);
-                intent.putExtra("time", time);
-                intent.putExtra("guests", guests);
-                startActivity(intent);
+                Intent i = new Intent(this, GuestEditReservationActivity.class);
+                i.putExtra("resId", id);
+                i.putExtra("date", date);
+                i.putExtra("guests", guests);
+                startActivity(i);
             });
 
-            upcomingContainer.addView(ticket);
+            reservationsContainer.addView(ticket);
         }
         cursor.close();
     }

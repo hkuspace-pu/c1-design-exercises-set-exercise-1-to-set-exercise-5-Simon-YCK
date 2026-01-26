@@ -72,6 +72,9 @@
 
         <activity
             android:name=".UserProfileActivity" />
+
+        <activity
+            android:name=".NotificationListActivity" />
     </application>
 
 </manifest>
