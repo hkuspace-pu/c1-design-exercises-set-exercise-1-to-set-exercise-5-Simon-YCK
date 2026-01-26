@@ -28,6 +28,10 @@ public class GuestDashboardActivity extends AppCompatActivity {
 
         findViewById(R.id.browseMenuButton).setOnClickListener(v ->
                 startActivity(new Intent(this, GuestMenuBrowseActivity.class)));
+
+        findViewById(R.id.profileAvatar).setOnClickListener(v ->
+                startActivity(new Intent(this, UserProfileActivity.class)));
+
     }
 
     @Override

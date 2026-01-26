@@ -66,6 +66,12 @@
         <activity
             android:name=".StaffViewReservationsActivity"
             android:parentActivityName=".StaffDashboardActivity" />
+
+        <activity
+            android:name=".StaffProfileActivity" />
+
+        <activity
+            android:name=".UserProfileActivity" />
     </application>
 
 </manifest>

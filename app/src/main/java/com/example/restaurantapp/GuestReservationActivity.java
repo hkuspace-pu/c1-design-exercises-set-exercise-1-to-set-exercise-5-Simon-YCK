@@ -120,7 +120,7 @@ public class GuestReservationActivity extends AppCompatActivity {
         boolean success = reservationFacade.placeReservation(name, date, time, guestCount);
         // (The facade handles both saving AND notification now)
         if (success) {
-            new NotificationHelper(this).sendNotification("Booking Confirmed", "See you on " + date);
+            new NotificationHelper(this).sendBookingNotification(name, date, time);
             finish();
         } else {
             Toast.makeText(this, "Booking Failed. Try again.", Toast.LENGTH_SHORT).show();

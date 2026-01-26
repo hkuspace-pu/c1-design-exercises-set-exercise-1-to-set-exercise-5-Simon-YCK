@@ -3,6 +3,7 @@ package com.example.restaurantapp.utils;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import androidx.core.app.NotificationCompat;
 
@@ -24,8 +25,8 @@ public class NotificationHelper {
         }
     }
 
-    // GENERAL METHOD
-    public void sendNotification(String title, String message) {
+    // INTERNAL HELPER to actually build/show the notification
+    private void sendNotification(String title, String message) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setContentTitle(title)
@@ -39,8 +40,25 @@ public class NotificationHelper {
         }
     }
 
-    // SPECIFIC METHOD FOR RESERVATIONS (Fixes Facade Error)
+    // --- PUBLIC METHODS CALLED BY YOUR APP ---
+
+    // 1. Send Booking Notification (Checks 'notif_booking' pref)
     public void sendBookingNotification(String name, String date, String time) {
-        sendNotification("Booking Confirmed!", "Table for " + name + " on " + date + " at " + time);
+        SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        boolean allowBooking = prefs.getBoolean("notif_booking", true);
+
+        if (allowBooking) {
+            sendNotification("Booking Confirmed!", "Table for " + name + " on " + date + " at " + time);
+        }
+    }
+
+    // 2. Send Promo Notification (Checks 'notif_promo' pref)
+    public void sendPromoNotification(String message) {
+        SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        boolean allowPromo = prefs.getBoolean("notif_promo", false);
+
+        if (allowPromo) {
+            sendNotification("Special Offer!", message);
+        }
     }
 }
