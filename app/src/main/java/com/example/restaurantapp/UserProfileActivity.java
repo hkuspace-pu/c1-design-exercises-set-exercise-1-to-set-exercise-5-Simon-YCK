@@ -7,14 +7,13 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class UserProfileActivity extends AppCompatActivity {
 
-    private Switch switchBooking, switchPromo;
+    private Switch switchCreated, switchUpdated, switchCancelled, switchPromo;
     private TextView tvName, tvEmail;
-    private Button btnLogout;
+    private Button btnLogout, btnBack;
     private SharedPreferences prefs;
 
     @Override
@@ -27,35 +26,60 @@ public class UserProfileActivity extends AppCompatActivity {
         // Initialize Views
         tvName = findViewById(R.id.tvProfileName);
         tvEmail = findViewById(R.id.tvProfileEmail);
-        switchBooking = findViewById(R.id.switchBookingNotif);
+        switchCreated = findViewById(R.id.switchBookingCreated);
+        switchUpdated = findViewById(R.id.switchBookingUpdated);
+        switchCancelled = findViewById(R.id.switchBookingCancelled);
         switchPromo = findViewById(R.id.switchPromoNotif);
         btnLogout = findViewById(R.id.btnLogout);
+        btnBack = findViewById(R.id.btnBack);
 
-        // 1. SET DYNAMIC PROFILE INFO (Guest)
-        tvName.setText("Guest User");
-        // In a real app, you'd get this from Intent extras or a Session Manager
-        // For now, hardcoding "Guest" is fine for the guest side, or pass it via intent
-        tvEmail.setText("guest@restaurant.com");
+        // Get username from Intent (passed from MainActivity)
+        String guestName = getIntent().getStringExtra("guestName");
 
-        // 2. LOAD SAVED PREFERENCES
-        switchBooking.setChecked(prefs.getBoolean("notif_booking", true));
-        switchPromo.setChecked(prefs.getBoolean("notif_promo", false));
+        // Set Profile Info (Guest)
+        if (tvName != null) {
+            tvName.setText(guestName != null ? guestName : "Guest User");
+        }
+        if (tvEmail != null) {
+            tvEmail.setText(guestName != null ? guestName + "@guest.com" : "guest@restaurant.com");
+        }
 
-        // 3. SAVE LISTENERS
-        switchBooking.setOnCheckedChangeListener((v, isChecked) -> {
-            prefs.edit().putBoolean("notif_booking", isChecked).apply();
-            // Don't toast on every click, annoying UX. Just save silently.
-        });
+        // Load Saved Preferences
+        if (switchCreated != null) switchCreated.setChecked(prefs.getBoolean("notif_booking_created", true));
+        if (switchUpdated != null) switchUpdated.setChecked(prefs.getBoolean("notif_booking_updated", true));
+        if (switchCancelled != null) switchCancelled.setChecked(prefs.getBoolean("notif_booking_cancelled", true));
+        if (switchPromo != null) switchPromo.setChecked(prefs.getBoolean("notif_promo", false));
 
-        switchPromo.setOnCheckedChangeListener((v, isChecked) -> {
-            prefs.edit().putBoolean("notif_promo", isChecked).apply();
-        });
+        // Save Listeners
+        if (switchCreated != null) {
+            switchCreated.setOnCheckedChangeListener((v, isChecked) ->
+                    prefs.edit().putBoolean("notif_booking_created", isChecked).apply());
+        }
+        if (switchUpdated != null) {
+            switchUpdated.setOnCheckedChangeListener((v, isChecked) ->
+                    prefs.edit().putBoolean("notif_booking_updated", isChecked).apply());
+        }
+        if (switchCancelled != null) {
+            switchCancelled.setOnCheckedChangeListener((v, isChecked) ->
+                    prefs.edit().putBoolean("notif_booking_cancelled", isChecked).apply());
+        }
+        if (switchPromo != null) {
+            switchPromo.setOnCheckedChangeListener((v, isChecked) ->
+                    prefs.edit().putBoolean("notif_promo", isChecked).apply());
+        }
 
-        // 4. LOGOUT
-        btnLogout.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        });
+        // Logout Button
+        if (btnLogout != null) {
+            btnLogout.setOnClickListener(v -> {
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            });
+        }
+
+        // Back Button
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
     }
 }

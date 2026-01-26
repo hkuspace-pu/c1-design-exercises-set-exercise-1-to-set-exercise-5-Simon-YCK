@@ -46,8 +46,12 @@ public class GuestDashboardActivity extends AppCompatActivity {
         // 3. PROFILE SETTINGS (Avatar)
         View btnProfile = findViewById(R.id.profileAvatar);
         if(btnProfile != null) {
-            btnProfile.setOnClickListener(v ->
-                    startActivity(new Intent(this, UserProfileActivity.class)));
+            btnProfile.setOnClickListener(v -> {
+                Intent intent = new Intent(this, UserProfileActivity.class);
+                // Pass guest name if you have it stored, otherwise just open without it
+                intent.putExtra("guestName", getIntent().getStringExtra("guestName"));
+                startActivity(intent);
+            });
         }
 
         // 4. NOTIFICATION BELL (Open History)

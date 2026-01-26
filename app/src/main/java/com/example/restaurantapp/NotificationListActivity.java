@@ -2,13 +2,16 @@ package com.example.restaurantapp;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +26,7 @@ public class NotificationListActivity extends AppCompatActivity {
 
     private DatabaseHelper dbHelper;
     private ListView listView;
+    private Button btnClearAll, btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +35,30 @@ public class NotificationListActivity extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
         listView = findViewById(R.id.listViewNotifications);
+        btnClearAll = findViewById(R.id.btnClearAll);
+        btnBack = findViewById(R.id.btnBack);
 
         loadNotifications();
         dbHelper.markAllAsRead();
+
+        // Clear All Button
+        if (btnClearAll != null) {
+            btnClearAll.setOnClickListener(v -> {
+                clearAllNotifications();
+                Toast.makeText(this, "All notifications cleared", Toast.LENGTH_SHORT).show();
+                loadNotifications();
+            });
+        }
+
+        // Back Button
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
+    }
+
+    private void clearAllNotifications() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.execSQL("DELETE FROM notifications");
     }
 
     private void loadNotifications() {
@@ -50,17 +75,19 @@ public class NotificationListActivity extends AppCompatActivity {
             cursor.close();
         }
 
+        if (items.isEmpty()) {
+            items.add(new NotificationItem("No notifications", "You're all caught up!", ""));
+        }
+
         NotificationAdapter adapter = new NotificationAdapter(this, items);
         listView.setAdapter(adapter);
     }
 
-    // --- INNER CLASS: MODEL ---
     static class NotificationItem {
         String title, message, date;
         public NotificationItem(String t, String m, String d) { title=t; message=m; date=d; }
     }
 
-    // --- INNER CLASS: ADAPTER ---
     class NotificationAdapter extends ArrayAdapter<NotificationItem> {
         public NotificationAdapter(Context context, List<NotificationItem> items) {
             super(context, 0, items);
@@ -81,7 +108,6 @@ public class NotificationListActivity extends AppCompatActivity {
             title.setText(item.title);
             msg.setText(item.message);
 
-            // Format Timestamp
             try {
                 long timeMillis = Long.parseLong(item.date);
                 SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, HH:mm", Locale.getDefault());

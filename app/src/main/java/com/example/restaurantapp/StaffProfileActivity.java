@@ -11,9 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class StaffProfileActivity extends AppCompatActivity {
 
-    private Switch switchBooking, switchPromo;
+    private Switch switchCreated, switchUpdated, switchCancelled, switchPromo;
     private TextView tvName, tvEmail;
-    private Button btnLogout;
+    private Button btnLogout, btnBack;
     private SharedPreferences prefs;
 
     @Override
@@ -23,32 +23,56 @@ public class StaffProfileActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
 
+        // Initialize Views
         tvName = findViewById(R.id.tvProfileName);
         tvEmail = findViewById(R.id.tvProfileEmail);
-        switchBooking = findViewById(R.id.switchBookingNotif);
+        switchCreated = findViewById(R.id.switchBookingCreated);
+        switchUpdated = findViewById(R.id.switchBookingUpdated);
+        switchCancelled = findViewById(R.id.switchBookingCancelled);
         switchPromo = findViewById(R.id.switchPromoNotif);
         btnLogout = findViewById(R.id.btnLogout);
+        btnBack = findViewById(R.id.btnBack);
 
-        // 1. SET DYNAMIC PROFILE INFO (Staff)
-        tvName.setText("Staff Administrator");
-        tvEmail.setText("admin@restaurant.com");
+        // Set Profile Info (Staff)
+        if (tvName != null) tvName.setText("Staff Administrator");
+        if (tvEmail != null) tvEmail.setText("admin@restaurant.com");
 
-        // 2. LOAD SAVED PREFERENCES (Share same keys or use different ones if you prefer)
-        switchBooking.setChecked(prefs.getBoolean("notif_booking", true));
-        switchPromo.setChecked(prefs.getBoolean("notif_promo", false));
+        // Load Saved Preferences
+        if (switchCreated != null) switchCreated.setChecked(prefs.getBoolean("notif_booking_created", true));
+        if (switchUpdated != null) switchUpdated.setChecked(prefs.getBoolean("notif_booking_updated", true));
+        if (switchCancelled != null) switchCancelled.setChecked(prefs.getBoolean("notif_booking_cancelled", true));
+        if (switchPromo != null) switchPromo.setChecked(prefs.getBoolean("notif_promo", false));
 
-        // 3. LISTENERS
-        switchBooking.setOnCheckedChangeListener((v, isChecked) ->
-                prefs.edit().putBoolean("notif_booking", isChecked).apply());
+        // Save Listeners
+        if (switchCreated != null) {
+            switchCreated.setOnCheckedChangeListener((v, isChecked) ->
+                    prefs.edit().putBoolean("notif_booking_created", isChecked).apply());
+        }
+        if (switchUpdated != null) {
+            switchUpdated.setOnCheckedChangeListener((v, isChecked) ->
+                    prefs.edit().putBoolean("notif_booking_updated", isChecked).apply());
+        }
+        if (switchCancelled != null) {
+            switchCancelled.setOnCheckedChangeListener((v, isChecked) ->
+                    prefs.edit().putBoolean("notif_booking_cancelled", isChecked).apply());
+        }
+        if (switchPromo != null) {
+            switchPromo.setOnCheckedChangeListener((v, isChecked) ->
+                    prefs.edit().putBoolean("notif_promo", isChecked).apply());
+        }
 
-        switchPromo.setOnCheckedChangeListener((v, isChecked) ->
-                prefs.edit().putBoolean("notif_promo", isChecked).apply());
+        // Logout Button
+        if (btnLogout != null) {
+            btnLogout.setOnClickListener(v -> {
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            });
+        }
 
-        // 4. LOGOUT
-        btnLogout.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        });
+        // Back Button
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
     }
 }

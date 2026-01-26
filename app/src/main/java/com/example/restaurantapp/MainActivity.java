@@ -2,6 +2,8 @@ package com.example.restaurantapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -31,12 +33,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize views using XML IDs
+        // Initialize views
         usernameInput = findViewById(R.id.usernameInput);
         passwordInput = findViewById(R.id.passwordInput);
         loginButton = findViewById(R.id.loginButton);
 
+        // Login Button Click
         loginButton.setOnClickListener(v -> handleApiLogin());
+
+        // ENTER KEY LOGIN (NEW FEATURE)
+        if (passwordInput != null) {
+            passwordInput.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_DONE ||
+                        (event != null && event.getAction() == KeyEvent.ACTION_DOWN &&
+                                event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    handleApiLogin(); // Trigger same login method
+                    return true;
+                }
+                return false;
+            });
+        }
     }
 
     private void handleApiLogin() {
@@ -87,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-        // 3. Add to Singleton Queue
+        // 3. Add retry policy and send request
         request.setRetryPolicy(new com.android.volley.DefaultRetryPolicy(
                 10000, // 10 seconds timeout
                 com.android.volley.DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -108,5 +124,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Login Successful: Guest", Toast.LENGTH_SHORT).show();
         }
         startActivity(intent);
+        finish(); // Close login screen
     }
 }

@@ -3,124 +3,210 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp"
     android:background="#FFFFFF">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Account Settings"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:textColor="#2D3748"
-        android:layout_marginBottom="32dp"/>
-
-    <!-- Profile Section -->
-    <LinearLayout
+    <!-- Header with Back Button -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="40dp">
+        android:padding="16dp"
+        android:background="#F7FAFC"
+        android:elevation="2dp">
 
-        <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@android:drawable/sym_def_app_icon"
-            android:background="@drawable/bg_input_rounded"
-            android:padding="12dp"/>
+        <!-- Back Button (Top Left) -->
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="←"
+            android:textSize="24sp"
+            android:textColor="#667EEA"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
-        <LinearLayout
+        <!-- Title -->
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="16dp">
+            android:layout_centerInParent="true"
+            android:text="Account Settings"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#2D3748"/>
+    </RelativeLayout>
 
-            <!-- Added ID -->
+    <!-- Scrollable Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Profile Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="32dp">
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@android:drawable/sym_def_app_icon"
+                    android:background="@drawable/bg_input_rounded"
+                    android:padding="12dp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp">
+
+                    <TextView
+                        android:id="@+id/tvProfileName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Loading..."
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="#2D3748"/>
+
+                    <TextView
+                        android:id="@+id/tvProfileEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="..."
+                        android:textColor="#718096"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Notification Preferences -->
             <TextView
-                android:id="@+id/tvProfileName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Loading..."
+                android:text="Notification Preferences"
                 android:textStyle="bold"
-                android:textSize="18sp"/>
+                android:textSize="16sp"
+                android:textColor="#2D3748"
+                android:layout_marginBottom="16dp"/>
 
-            <!-- Added ID -->
-            <TextView
-                android:id="@+id/tvProfileEmail"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="..."
-                android:textColor="#718096"/>
+                android:orientation="vertical"
+                android:background="@drawable/bg_input_rounded"
+                android:padding="8dp"
+                android:layout_marginBottom="32dp">
+
+                <!-- 1. Booking Created -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Booking Confirmed"
+                        android:textColor="#2D3748"
+                        android:textSize="15sp"/>
+                    <Switch
+                        android:id="@+id/switchBookingCreated"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"/>
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E2E8F0"/>
+
+                <!-- 2. Booking Updated -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Booking Updates"
+                        android:textColor="#2D3748"
+                        android:textSize="15sp"/>
+                    <Switch
+                        android:id="@+id/switchBookingUpdated"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"/>
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E2E8F0"/>
+
+                <!-- 3. Booking Cancelled -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Booking Cancellations"
+                        android:textColor="#2D3748"
+                        android:textSize="15sp"/>
+                    <Switch
+                        android:id="@+id/switchBookingCancelled"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"/>
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E2E8F0"/>
+
+                <!-- 4. Promotions -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Special Offers &amp; Menu"
+                        android:textColor="#2D3748"
+                        android:textSize="15sp"/>
+                    <Switch
+                        android:id="@+id/switchPromoNotif"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Logout Button -->
+            <Button
+                android:id="@+id/btnLogout"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Log Out"
+                android:backgroundTint="#E53E3E"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
         </LinearLayout>
-    </LinearLayout>
-
-    <!-- Notification Preferences -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Notification Preferences"
-        android:textStyle="bold"
-        android:textColor="#718096"
-        android:layout_marginBottom="16dp"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/bg_input_rounded"
-        android:padding="8dp"
-        android:layout_marginBottom="16dp">
-
-        <!-- Booking Updates Toggle -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="12dp">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Booking Updates"
-                android:textColor="#2D3748"/>
-            <Switch
-                android:id="@+id/switchBookingNotif"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"/>
-        </LinearLayout>
-
-        <!-- Divider -->
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E2E8F0"/>
-
-        <!-- Promotional Toggle -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="12dp">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Special Offers &amp; Menu"
-                android:textColor="#2D3748"/>
-            <Switch
-                android:id="@+id/switchPromoNotif"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Log Out"
-        android:backgroundTint="#E53E3E"
-        android:textColor="#FFFFFF"
-        android:layout_marginTop="24dp"/>
+    </ScrollView>
 
 </LinearLayout>
