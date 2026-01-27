@@ -20,6 +20,8 @@ import java.util.Locale;
 
 public class GuestEditReservationActivity extends AppCompatActivity {
 
+    private static final String TAG = "GuestEditReservation";
+
     private EditText nameInput, dateInput, specialRequestsInput;
     private Button btnSelectTime, saveButton, cancelBookingButton, btnBack;
     private TextView tvSelectedTime, guestsLabel;
@@ -37,6 +39,8 @@ public class GuestEditReservationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest_edit_reservation);
 
+        Log.d(TAG, "onCreate started");
+
         dbHelper = new DatabaseHelper(this);
 
         // Initialize views
@@ -51,50 +55,90 @@ public class GuestEditReservationActivity extends AppCompatActivity {
         cancelBookingButton = findViewById(R.id.cancelBookingButton);
         btnBack = findViewById(R.id.btnBack);
 
-        // ✅ Load existing reservation data
+        // ✅ CHECK which views are null
+        Log.d(TAG, "nameInput: " + (nameInput != null));
+        Log.d(TAG, "dateInput: " + (dateInput != null));
+        Log.d(TAG, "specialRequestsInput: " + (specialRequestsInput != null));
+        Log.d(TAG, "btnSelectTime: " + (btnSelectTime != null));
+        Log.d(TAG, "tvSelectedTime: " + (tvSelectedTime != null));
+        Log.d(TAG, "guestsSeekBar: " + (guestsSeekBar != null));
+        Log.d(TAG, "guestsLabel: " + (guestsLabel != null));
+        Log.d(TAG, "saveButton: " + (saveButton != null));
+        Log.d(TAG, "cancelBookingButton: " + (cancelBookingButton != null));
+        Log.d(TAG, "btnBack: " + (btnBack != null));
+
+        // Load existing reservation data
         loadReservationData();
 
         // Date Picker
-        dateInput.setOnClickListener(v -> showDatePicker());
+        if (dateInput != null) {
+            dateInput.setOnClickListener(v -> showDatePicker());
+        }
 
         // Time Picker
-        btnSelectTime.setOnClickListener(v -> showTimePicker());
+        if (btnSelectTime != null) {
+            btnSelectTime.setOnClickListener(v -> showTimePicker());
+        }
 
         // Guests SeekBar
-        guestsSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                guestCount = progress < 1 ? 1 : progress;
-                guestsLabel.setText(guestCount + " " + (guestCount == 1 ? "Person" : "People"));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
+        if (guestsSeekBar != null) {
+            guestsSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    guestCount = progress < 1 ? 1 : progress;
+                    if (guestsLabel != null) {
+                        guestsLabel.setText(guestCount + " " + (guestCount == 1 ? "Person" : "People"));
+                    }
+                }
+                @Override public void onStartTrackingTouch(SeekBar seekBar) {}
+                @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+            });
+        }
 
         // Save Button
         if (saveButton != null) {
-            saveButton.setOnClickListener(v -> handleSave());
+            Log.d(TAG, "Setting up Save button listener");
+            saveButton.setOnClickListener(v -> {
+                Log.d(TAG, "Save button clicked");
+                handleSave();
+            });
+        } else {
+            Log.e(TAG, "saveButton (confirmButton) is NULL! Check XML ID");
         }
 
-        // Cancel Button
+        // ✅ Cancel Button with extensive logging
         if (cancelBookingButton != null) {
-            cancelBookingButton.setOnClickListener(v -> showCancelDialog());
+            Log.d(TAG, "Setting up Cancel button listener");
+            cancelBookingButton.setOnClickListener(v -> {
+                Log.d(TAG, "Cancel button CLICKED!");
+                showCancelDialog();
+            });
+
+            // Also check if button is clickable
+            Log.d(TAG, "cancelBookingButton clickable: " + cancelBookingButton.isClickable());
+            Log.d(TAG, "cancelBookingButton enabled: " + cancelBookingButton.isEnabled());
+            Log.d(TAG, "cancelBookingButton visibility: " + cancelBookingButton.getVisibility());
         } else {
-            Log.e("EDIT_RESERVATION", "cancelBookingButton is NULL - check XML ID");
+            Log.e(TAG, "❌ cancelBookingButton is NULL! Check XML ID: 'cancelBookingButton'");
         }
+
         // Back Button
         if (btnBack != null) {
-            btnBack.setOnClickListener(v -> finish());
+            Log.d(TAG, "Setting up Back button listener");
+            btnBack.setOnClickListener(v -> {
+                Log.d(TAG, "Back button clicked");
+                finish();
+            });
+        } else {
+            Log.e(TAG, "btnBack is NULL");
         }
+
+        Log.d(TAG, "onCreate finished");
     }
 
     private void loadReservationData() {
+        Log.d(TAG, "loadReservationData started");
+
         if (getIntent().hasExtra("resId")) {
             resId = getIntent().getIntExtra("resId", -1);
             String date = getIntent().getStringExtra("date");
@@ -102,6 +146,8 @@ public class GuestEditReservationActivity extends AppCompatActivity {
             int guests = getIntent().getIntExtra("guests", 2);
             String name = getIntent().getStringExtra("name");
             String specialReq = getIntent().getStringExtra("specialRequests");
+
+            Log.d(TAG, "Loaded reservation - ID: " + resId + ", Name: " + name + ", Date: " + date);
 
             // Set data
             if (nameInput != null && name != null) nameInput.setText(name);
@@ -111,21 +157,25 @@ public class GuestEditReservationActivity extends AppCompatActivity {
             }
             if (tvSelectedTime != null && time != null) {
                 tvSelectedTime.setText(time);
-                // Parse time to set selectedHour/selectedMinute
                 parseTime(time);
             }
             if (guestsSeekBar != null) {
                 guestsSeekBar.setProgress(guests);
                 guestCount = guests;
             }
-            if (specialRequestsInput != null && specialReq != null) {
-                specialRequestsInput.setText(specialReq);
+            if (guestsLabel != null) {
+                guestsLabel.setText(guests + " " + (guests == 1 ? "Person" : "People"));
             }
+            if (specialRequestsInput != null && specialReq != null && !specialReq.isEmpty()) {
+                specialRequestsInput.setText(specialReq);
+                Log.d(TAG, "Special requests loaded: " + specialReq);
+            }
+        } else {
+            Log.e(TAG, "No resId found in Intent!");
         }
     }
 
     private void parseTime(String time) {
-        // Parse "07:30 PM" format
         try {
             String[] parts = time.split(" ");
             String[] timeParts = parts[0].split(":");
@@ -138,12 +188,15 @@ public class GuestEditReservationActivity extends AppCompatActivity {
 
             selectedHour = hour;
             selectedMinute = minute;
+            Log.d(TAG, "Parsed time: " + selectedHour + ":" + selectedMinute);
         } catch (Exception e) {
+            Log.e(TAG, "Error parsing time: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     private void showDatePicker() {
+        Log.d(TAG, "showDatePicker called");
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this,
@@ -152,6 +205,7 @@ public class GuestEditReservationActivity extends AppCompatActivity {
                     selectedCal.set(year, month, dayOfMonth);
                     selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedCal.getTime());
                     dateInput.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(selectedCal.getTime()));
+                    Log.d(TAG, "Date selected: " + selectedDate);
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
@@ -162,6 +216,7 @@ public class GuestEditReservationActivity extends AppCompatActivity {
     }
 
     private void showTimePicker() {
+        Log.d(TAG, "showTimePicker called");
         Calendar currentTime = Calendar.getInstance();
         int hour = selectedHour != -1 ? selectedHour : currentTime.get(Calendar.HOUR_OF_DAY);
         int minute = selectedMinute != -1 ? selectedMinute : currentTime.get(Calendar.MINUTE);
@@ -176,6 +231,7 @@ public class GuestEditReservationActivity extends AppCompatActivity {
                     int displayHour = hourOfDay > 12 ? hourOfDay - 12 : (hourOfDay == 0 ? 12 : hourOfDay);
                     String timeDisplay = String.format(Locale.getDefault(), "%02d:%02d %s", displayHour, minute1, amPm);
                     tvSelectedTime.setText(timeDisplay);
+                    Log.d(TAG, "Time selected: " + timeDisplay);
                 },
                 hour,
                 minute,
@@ -185,8 +241,10 @@ public class GuestEditReservationActivity extends AppCompatActivity {
     }
 
     private void handleSave() {
+        Log.d(TAG, "handleSave called");
+
         String name = nameInput.getText().toString().trim();
-        String specialReq = specialRequestsInput.getText().toString().trim(); // ✅ GET THIS
+        String specialReq = specialRequestsInput.getText().toString().trim();
 
         if (name.isEmpty()) {
             Toast.makeText(this, "Please enter name", Toast.LENGTH_SHORT).show();
@@ -206,7 +264,8 @@ public class GuestEditReservationActivity extends AppCompatActivity {
         int displayHour = selectedHour > 12 ? selectedHour - 12 : (selectedHour == 0 ? 12 : selectedHour);
         String time = String.format(Locale.getDefault(), "%02d:%02d %s", displayHour, selectedMinute, amPm);
 
-        // ✅ UPDATED: Pass specialRequests as 5th parameter
+        Log.d(TAG, "Updating reservation - ID: " + resId + ", Date: " + selectedDate + ", Time: " + time);
+
         boolean success = dbHelper.updateReservation(resId, selectedDate, time, guestCount, specialReq);
 
         if (success) {
@@ -214,16 +273,20 @@ public class GuestEditReservationActivity extends AppCompatActivity {
             notificationHelper.sendUpdateNotification(selectedDate, time);
 
             Toast.makeText(this, "Reservation Updated!", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Reservation updated successfully");
             finish();
         } else {
             Toast.makeText(this, "Update Failed", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Failed to update reservation");
         }
     }
 
     private void showCancelDialog() {
+        Log.d(TAG, "showCancelDialog called");
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        // ✅ Inflate custom dialog layout
+        // Inflate custom dialog layout
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_delete_confirm, null);
         builder.setView(dialogView);
 
@@ -238,5 +301,45 @@ public class GuestEditReservationActivity extends AppCompatActivity {
         if (dialogTitle != null) {
             dialogTitle.setText("Cancel Reservation?");
         }
+        if (confirmMessage != null) {
+            String name = nameInput != null ? nameInput.getText().toString().trim() : "";
+            if (name.isEmpty()) name = "this";
+            confirmMessage.setText("Cancel " + name + "'s booking?\nThis cannot be undone.");
+        }
+
+        Button btnConfirm = dialogView.findViewById(R.id.btnConfirmDelete);
+        Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+
+        Log.d(TAG, "Dialog buttons - Confirm: " + (btnConfirm != null) + ", Cancel: " + (btnCancel != null));
+
+        if (btnConfirm != null) {
+            btnConfirm.setText("Cancel Booking");
+            btnConfirm.setOnClickListener(v -> {
+                Log.d(TAG, "Confirm cancel clicked - deleting reservation ID: " + resId);
+                boolean success = dbHelper.deleteReservation(resId);
+                if (success) {
+                    NotificationHelper notificationHelper = new NotificationHelper(this);
+                    notificationHelper.sendCancelNotification();
+
+                    Toast.makeText(this, "Reservation Cancelled", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "Reservation deleted successfully");
+                    dialog.dismiss();
+                    finish();
+                } else {
+                    Toast.makeText(this, "Error cancelling reservation", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Failed to delete reservation");
+                }
+            });
+        }
+
+        if (btnCancel != null) {
+            btnCancel.setOnClickListener(v -> {
+                Log.d(TAG, "Cancel dialog dismissed");
+                dialog.dismiss();
+            });
+        }
+
+        dialog.show();
+        Log.d(TAG, "Dialog shown");
     }
 }
