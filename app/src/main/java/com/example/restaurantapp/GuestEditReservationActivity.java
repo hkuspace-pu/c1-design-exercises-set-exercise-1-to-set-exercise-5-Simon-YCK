@@ -3,6 +3,7 @@ package com.example.restaurantapp;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -84,8 +85,9 @@ public class GuestEditReservationActivity extends AppCompatActivity {
         // Cancel Button
         if (cancelBookingButton != null) {
             cancelBookingButton.setOnClickListener(v -> showCancelDialog());
+        } else {
+            Log.e("EDIT_RESERVATION", "cancelBookingButton is NULL - check XML ID");
         }
-
         // Back Button
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());

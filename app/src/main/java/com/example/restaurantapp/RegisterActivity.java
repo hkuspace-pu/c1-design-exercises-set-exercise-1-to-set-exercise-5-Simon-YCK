@@ -19,7 +19,8 @@ public class RegisterActivity extends AppCompatActivity {
     private Button btnRegister, btnBack;
 
     private static final String STUDENT_ID = "YangChunKit_20177089";
-    private static final String API_BASE_URL = "http://10.240.72.69/comp2000/coursework/create_user/" + STUDENT_ID + "/";
+    // ✅ FIXED: URL does NOT include username - it's only student_id
+    private static final String API_BASE_URL = "http://10.240.72.69/comp2000/coursework/create_user/" + STUDENT_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +77,11 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        // URL format: base_url/username
-        String url = API_BASE_URL + username;
+        // ✅ FIXED: URL is just the base URL (student_id only)
+        String url = API_BASE_URL;
         Log.d("REGISTER_URL", "URL: " + url);
 
-        // Create JSON body
+        // ✅ Username goes in the JSON body
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("username", username);
@@ -118,7 +119,7 @@ public class RegisterActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                    Toast.makeText(this, "Registration failed. Please try again.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Registration failed. Username may already exist.", Toast.LENGTH_LONG).show();
                 }
         );
 
