@@ -193,7 +193,7 @@ public class GuestReservationActivity extends AppCompatActivity {
 
         if (success) {
             // Send notification
-            NotificationHelper notificationHelper = new NotificationHelper(this);
+            NotificationHelper notificationHelper = new NotificationHelper(this, name);
             notificationHelper.sendBookingNotification(name, selectedDate, time);
 
             Toast.makeText(this, "Booking Confirmed!", Toast.LENGTH_SHORT).show();

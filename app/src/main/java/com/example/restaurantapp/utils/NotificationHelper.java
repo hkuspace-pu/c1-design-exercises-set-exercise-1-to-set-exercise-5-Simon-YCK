@@ -11,9 +11,12 @@ import com.example.restaurantapp.database.DatabaseHelper;
 public class NotificationHelper {
     private static final String CHANNEL_ID = "restaurant_app_channel";
     private Context context;
+    private String currentUsername;
 
-    public NotificationHelper(Context context) {
+    // ✅ UPDATE constructor to accept username
+    public NotificationHelper(Context context, String username) {
         this.context = context;
+        this.currentUsername = username;
         createChannel();
     }
 
@@ -28,11 +31,10 @@ public class NotificationHelper {
 
     // ✅ PRIVATE - saves to DB and shows notification
     private void sendNotification(String title, String message, String type) {
-        // 1. Save to Database
         DatabaseHelper db = new DatabaseHelper(context);
-        db.addNotification(title, message, type);
+        db.addNotification(title, message, type, currentUsername); // ✅ Pass username
 
-        // 2. Show System Notification
+        // Show system notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setContentTitle(title)
@@ -49,7 +51,7 @@ public class NotificationHelper {
     // ✅ Get unread count from DATABASE (not SharedPreferences)
     public int getUnreadCount() {
         DatabaseHelper dbHelper = new DatabaseHelper(context);
-        return dbHelper.getUnreadNotificationCount();
+        return dbHelper.getUnreadNotificationCountByUser(currentUsername);
     }
 
     // ==================== PUBLIC NOTIFICATION METHODS ====================

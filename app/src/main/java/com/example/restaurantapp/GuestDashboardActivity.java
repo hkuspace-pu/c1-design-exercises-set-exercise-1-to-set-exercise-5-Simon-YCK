@@ -57,10 +57,11 @@ public class GuestDashboardActivity extends AppCompatActivity {
         if (btnBell != null) {
             btnBell.setOnClickListener(v -> {
                 Intent intent = new Intent(this, NotificationListActivity.class);
+                intent.putExtra("username", getIntent().getStringExtra("guestName")); // ✅ Pass username
+                intent.putExtra("isStaff", false); // ✅ Pass role
                 startActivityForResult(intent, 100);
             });
         }
-
         // Initial load
         refreshDashboard();
     }
@@ -135,7 +136,8 @@ public class GuestDashboardActivity extends AppCompatActivity {
     }
 
     private void updateNotificationBadge() {
-        NotificationHelper notificationHelper = new NotificationHelper(this);
+        String guestName = getIntent().getStringExtra("guestName");
+        NotificationHelper notificationHelper = new NotificationHelper(this, guestName);
         int unreadCount = notificationHelper.getUnreadCount();
 
         if (notificationBadge != null) {

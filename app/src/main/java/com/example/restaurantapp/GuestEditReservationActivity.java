@@ -269,7 +269,7 @@ public class GuestEditReservationActivity extends AppCompatActivity {
         boolean success = dbHelper.updateReservation(resId, selectedDate, time, guestCount, specialReq);
 
         if (success) {
-            NotificationHelper notificationHelper = new NotificationHelper(this);
+            NotificationHelper notificationHelper = new NotificationHelper(this, name);
             notificationHelper.sendUpdateNotification(selectedDate, time);
 
             Toast.makeText(this, "Reservation Updated!", Toast.LENGTH_SHORT).show();
@@ -318,7 +318,8 @@ public class GuestEditReservationActivity extends AppCompatActivity {
                 Log.d(TAG, "Confirm cancel clicked - deleting reservation ID: " + resId);
                 boolean success = dbHelper.deleteReservation(resId);
                 if (success) {
-                    NotificationHelper notificationHelper = new NotificationHelper(this);
+                    String name = nameInput.getText().toString().trim();
+                    NotificationHelper notificationHelper = new NotificationHelper(this, name);
                     notificationHelper.sendCancelNotification();
 
                     Toast.makeText(this, "Reservation Cancelled", Toast.LENGTH_SHORT).show();

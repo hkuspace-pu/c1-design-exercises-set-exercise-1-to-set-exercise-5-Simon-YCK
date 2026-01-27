@@ -44,7 +44,9 @@ public class StaffDashboardActivity extends AppCompatActivity {
         if (btnNotifications != null) {
             btnNotifications.setOnClickListener(v -> {
                 Intent intent = new Intent(this, NotificationListActivity.class);
-                startActivityForResult(intent, 100); // ✅ Use startActivityForResult to refresh badge
+                intent.putExtra("username", "staff"); // ✅ Pass "staff"
+                intent.putExtra("isStaff", true); // ✅ Pass role
+                startActivityForResult(intent, 100);
             });
         }
 
@@ -70,7 +72,7 @@ public class StaffDashboardActivity extends AppCompatActivity {
 
     private void updateBadgeCount() {
         // ✅ FIXED: Use NotificationHelper instead of DatabaseHelper
-        NotificationHelper notificationHelper = new NotificationHelper(this);
+        NotificationHelper notificationHelper = new NotificationHelper(this, "staff");
         int count = notificationHelper.getUnreadCount();
 
         if (notificationBadge != null) {

@@ -8,9 +8,10 @@ public class ReservationFacade {
     private DatabaseHelper dbHelper;
     private NotificationHelper notificationHelper;
 
-    public ReservationFacade(Context context) {
+    // ✅ UPDATED: Accept username parameter
+    public ReservationFacade(Context context, String username) {
         this.dbHelper = new DatabaseHelper(context);
-        this.notificationHelper = new NotificationHelper(context);
+        this.notificationHelper = new NotificationHelper(context, username); // ✅ Pass username
     }
 
     // ✅ UPDATED: Add specialRequests parameter

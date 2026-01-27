@@ -13,7 +13,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Restaurant.db";
-    private static final int DATABASE_VERSION = 5; // ✅ Version 5 for special_requests
+    private static final int DATABASE_VERSION = 6; // ✅ Version 5 for special_requests
 
     // --- TABLE: MENU ---
     private static final String TABLE_MENU = "menu_items";
@@ -40,6 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_NOTIF_TYPE = "type";
     private static final String COL_NOTIF_DATE = "timestamp";
     private static final String COL_NOTIF_READ = "is_read";
+    private static final String COL_NOTIF_USER = "username"; 
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -73,7 +74,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_NOTIF_MSG + " TEXT, " +
                 COL_NOTIF_TYPE + " TEXT, " +
                 COL_NOTIF_DATE + " TEXT, " +
-                COL_NOTIF_READ + " INTEGER DEFAULT 0)";
+                COL_NOTIF_READ + " INTEGER DEFAULT 0, " +
+                COL_NOTIF_USER + " TEXT)";
         db.execSQL(createNotif);
     }
 
@@ -92,13 +94,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         // ✅ Add special_requests column if upgrading from version < 5
-        if (oldVersion < 5) {
-            try {
-                db.execSQL("ALTER TABLE " + TABLE_RESERVATION + " ADD COLUMN " + COL_RES_SPECIAL + " TEXT");
-            } catch (Exception e) {
-                e.printStackTrace();
+        if (oldVersion < 6) {
+                try {
+                    db.execSQL("ALTER TABLE " + TABLE_NOTIF + " ADD COLUMN " + COL_NOTIF_USER + " TEXT");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        }
     }
 
     // ==================== MENU OPERATIONS ====================
@@ -184,7 +186,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // ==================== NOTIFICATION OPERATIONS ====================
 
-    public void addNotification(String title, String message, String type) {
+    public void addNotification(String title, String message, String type, String username) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_NOTIF_TITLE, title);
@@ -192,12 +194,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COL_NOTIF_TYPE, type);
         cv.put(COL_NOTIF_DATE, String.valueOf(System.currentTimeMillis()));
         cv.put(COL_NOTIF_READ, 0);
+        cv.put(COL_NOTIF_USER, username);
         db.insert(TABLE_NOTIF, null, cv);
     }
 
-    public int getUnreadNotificationCount() {
+    // ✅ ADD: Get notifications by username
+    public Cursor getNotificationsByUser(String username) {
+         SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_NOTIF +
+                           " WHERE " + COL_NOTIF_USER + " = ? " +
+                           " ORDER BY " + COL_NOTIF_DATE + " DESC",
+                           new String[]{username});
+    }
+
+    // ✅ UPDATE: Get unread count by username
+    public int getUnreadNotificationCountByUser(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NOTIF + " WHERE " + COL_NOTIF_READ + " = 0", null);
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NOTIF +
+                                   " WHERE " + COL_NOTIF_READ + " = 0 AND " +
+                                   COL_NOTIF_USER + " = ?",
+                                   new String[]{username});
         int count = 0;
         if (cursor.moveToFirst()) {
             count = cursor.getInt(0);
@@ -206,11 +222,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return count;
     }
 
+    // ✅ ADD this method to DatabaseHelper.java (for staff to mark ALL notifications as read)
     public void markAllAsRead() {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_NOTIF_READ, 1);
         db.update(TABLE_NOTIF, cv, COL_NOTIF_READ + " = 0", null);
+    }
+
+    // ✅ UPDATE: Mark all as read for specific user
+    public void markAllAsReadForUser(String username) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_NOTIF_READ, 1);
+        db.update(TABLE_NOTIF, cv, COL_NOTIF_READ + " = 0 AND " + COL_NOTIF_USER + " = ?",
+                 new String[]{username});
     }
 
     public Cursor getAllNotifications() {
