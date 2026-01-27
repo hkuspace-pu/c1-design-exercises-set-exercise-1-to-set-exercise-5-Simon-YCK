@@ -13,7 +13,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Restaurant.db";
-    private static final int DATABASE_VERSION = 4; // ✅ Version 3 for notification table
+    private static final int DATABASE_VERSION = 5; // ✅ Version 5 for special_requests
 
     // --- TABLE: MENU ---
     private static final String TABLE_MENU = "menu_items";
@@ -30,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_RES_DATE = "res_date";
     private static final String COL_RES_TIME = "res_time";
     private static final String COL_RES_COUNT = "guest_count";
+    private static final String COL_RES_SPECIAL = "special_requests"; // ✅ ADD THIS
 
     // --- TABLE: NOTIFICATIONS ---
     private static final String TABLE_NOTIF = "notifications";
@@ -37,7 +38,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_NOTIF_TITLE = "title";
     private static final String COL_NOTIF_MSG = "message";
     private static final String COL_NOTIF_TYPE = "type";
-    private static final String COL_NOTIF_DATE = "timestamp"; // ✅ Changed to timestamp
+    private static final String COL_NOTIF_DATE = "timestamp";
     private static final String COL_NOTIF_READ = "is_read";
 
     public DatabaseHelper(Context context) {
@@ -55,16 +56,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_CATEGORY + " TEXT)";
         db.execSQL(createMenu);
 
-        // Create Reservation Table
+        // ✅ Create Reservation Table WITH special_requests
         String createRes = "CREATE TABLE " + TABLE_RESERVATION + " (" +
                 COL_RES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_RES_GUEST + " TEXT, " +
                 COL_RES_DATE + " TEXT, " +
                 COL_RES_TIME + " TEXT, " +
-                COL_RES_COUNT + " INTEGER)";
+                COL_RES_COUNT + " INTEGER, " +
+                COL_RES_SPECIAL + " TEXT)";
         db.execSQL(createRes);
 
-        // ✅ Create Notification Table
+        // Create Notification Table
         String createNotif = "CREATE TABLE " + TABLE_NOTIF + " (" +
                 COL_NOTIF_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_NOTIF_TITLE + " TEXT, " +
@@ -77,8 +79,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Add notification table if upgrading from version < 3
         if (oldVersion < 3) {
-            // Add notification table if upgrading from v2
             String createNotif = "CREATE TABLE IF NOT EXISTS " + TABLE_NOTIF + " (" +
                     COL_NOTIF_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COL_NOTIF_TITLE + " TEXT, " +
@@ -89,20 +91,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL(createNotif);
         }
 
-        // ✅ ADD THIS: Fix column name from date_created to timestamp
-        if (oldVersion < 4) {
-            // Drop old table and recreate with correct schema
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTIF);
-            String createNotif = "CREATE TABLE " + TABLE_NOTIF + " (" +
-                    COL_NOTIF_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COL_NOTIF_TITLE + " TEXT, " +
-                    COL_NOTIF_MSG + " TEXT, " +
-                    COL_NOTIF_TYPE + " TEXT, " +
-                    COL_NOTIF_DATE + " TEXT, " +
-                    COL_NOTIF_READ + " INTEGER DEFAULT 0)";
-            db.execSQL(createNotif);
+        // ✅ Add special_requests column if upgrading from version < 5
+        if (oldVersion < 5) {
+            try {
+                db.execSQL("ALTER TABLE " + TABLE_RESERVATION + " ADD COLUMN " + COL_RES_SPECIAL + " TEXT");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
+
     // ==================== MENU OPERATIONS ====================
 
     public boolean addMenuItem(String name, String desc, double price, String category) {
@@ -151,13 +149,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // ==================== RESERVATION OPERATIONS ====================
 
-    public boolean addReservation(String name, String date, String time, int guests) {
+    // ✅ UPDATED: 5 parameters including specialRequests
+    public boolean addReservation(String name, String date, String time, int guests, String specialRequests) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_RES_GUEST, name);
         cv.put(COL_RES_DATE, date);
         cv.put(COL_RES_TIME, time);
         cv.put(COL_RES_COUNT, guests);
+        cv.put(COL_RES_SPECIAL, specialRequests);
         return db.insert(TABLE_RESERVATION, null, cv) != -1;
     }
 
@@ -166,12 +166,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + TABLE_RESERVATION + " ORDER BY " + COL_RES_ID + " DESC", null);
     }
 
-    public boolean updateReservation(int id, String date, String time, int guests) {
+    // ✅ UPDATED: 5 parameters including specialRequests
+    public boolean updateReservation(int id, String date, String time, int guests, String specialRequests) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_RES_DATE, date);
         cv.put(COL_RES_TIME, time);
         cv.put(COL_RES_COUNT, guests);
+        cv.put(COL_RES_SPECIAL, specialRequests);
         return db.update(TABLE_RESERVATION, cv, COL_RES_ID + "=?", new String[]{String.valueOf(id)}) > 0;
     }
 
@@ -189,9 +191,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COL_NOTIF_MSG, message);
         cv.put(COL_NOTIF_TYPE, type);
         cv.put(COL_NOTIF_DATE, String.valueOf(System.currentTimeMillis()));
-        cv.put(COL_NOTIF_READ, 0); // 0 = unread
+        cv.put(COL_NOTIF_READ, 0);
         db.insert(TABLE_NOTIF, null, cv);
-        db.close();
     }
 
     public int getUnreadNotificationCount() {
@@ -210,7 +211,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put(COL_NOTIF_READ, 1);
         db.update(TABLE_NOTIF, cv, COL_NOTIF_READ + " = 0", null);
-        db.close();
     }
 
     public Cursor getAllNotifications() {

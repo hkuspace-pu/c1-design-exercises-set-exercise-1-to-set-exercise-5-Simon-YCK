@@ -166,21 +166,7 @@ public class GuestReservationActivity extends AppCompatActivity {
 
     private void handleSubmit() {
         String name = nameInput.getText().toString().trim();
-        String specialRequests = specialRequestsInput.getText().toString().trim();
-
-        // ✅ FIX 1: Validate time was selected
-        if (selectedHour == -1 || selectedMinute == -1) {
-            Toast.makeText(this, "Please select a time", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // ✅ FIX 2: Format the time from selectedHour/selectedMinute
-        String amPm = selectedHour >= 12 ? "PM" : "AM";
-        int displayHour = selectedHour > 12 ? selectedHour - 12 : (selectedHour == 0 ? 12 : selectedHour);
-        String time = String.format(Locale.getDefault(), "%02d:%02d %s", displayHour, selectedMinute, amPm);
-
-        // ✅ FIX 3: Use guestsSeekBar (or just use the guestCount variable you already have)
-        // guestCount is already updated by the SeekBar listener
+        String specialReq = specialRequestsInput.getText().toString().trim();
 
         // Validation
         if (name.isEmpty()) {
@@ -191,17 +177,26 @@ public class GuestReservationActivity extends AppCompatActivity {
             Toast.makeText(this, "Please select a date", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (selectedHour == -1 || selectedMinute == -1) {
+            Toast.makeText(this, "Please select a time", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        // Save to database
+        // ✅ FORMAT TIME from selectedHour and selectedMinute
+        String amPm = selectedHour >= 12 ? "PM" : "AM";
+        int displayHour = selectedHour > 12 ? selectedHour - 12 : (selectedHour == 0 ? 12 : selectedHour);
+        String time = String.format(Locale.getDefault(), "%02d:%02d %s", displayHour, selectedMinute, amPm);
+
+        // ✅ Save to database with special requests
         DatabaseHelper dbHelper = new DatabaseHelper(this);
-        boolean success = dbHelper.addReservation(name, selectedDate, time, guestCount);
+        boolean success = dbHelper.addReservation(name, selectedDate, time, guestCount, specialReq);
 
         if (success) {
-            // ✅ Use the PUBLIC method
+            // Send notification
             NotificationHelper notificationHelper = new NotificationHelper(this);
             notificationHelper.sendBookingNotification(name, selectedDate, time);
 
-            Toast.makeText(this, "Reservation created for " + guestCount + " guests at " + time, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Booking Confirmed!", Toast.LENGTH_SHORT).show();
 
             // Return to dashboard
             Intent intent = new Intent(this, GuestDashboardActivity.class);
@@ -212,6 +207,4 @@ public class GuestReservationActivity extends AppCompatActivity {
             Toast.makeText(this, "Booking failed. Please try again.", Toast.LENGTH_SHORT).show();
         }
     }
-
-
 }

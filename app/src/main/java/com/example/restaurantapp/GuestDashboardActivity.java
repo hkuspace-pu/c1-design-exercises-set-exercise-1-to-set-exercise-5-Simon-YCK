@@ -106,6 +106,7 @@ public class GuestDashboardActivity extends AppCompatActivity {
             String date = cursor.getString(2);
             String time = cursor.getString(3);
             int guests = cursor.getInt(4);
+            String specialReq = cursor.getString(5);
 
             View ticket = getLayoutInflater().inflate(R.layout.item_reservation_ticket, reservationsContainer, false);
 
@@ -124,6 +125,7 @@ public class GuestDashboardActivity extends AppCompatActivity {
                 i.putExtra("date", date);
                 i.putExtra("time", time);
                 i.putExtra("guests", guests);
+                i.putExtra("specialRequests", specialReq);
                 startActivity(i);
             });
 

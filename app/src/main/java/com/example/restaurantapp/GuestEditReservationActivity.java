@@ -3,6 +3,7 @@ package com.example.restaurantapp;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -65,8 +66,14 @@ public class GuestEditReservationActivity extends AppCompatActivity {
                 guestCount = progress < 1 ? 1 : progress;
                 guestsLabel.setText(guestCount + " " + (guestCount == 1 ? "Person" : "People"));
             }
-            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         // Save Button
@@ -177,7 +184,7 @@ public class GuestEditReservationActivity extends AppCompatActivity {
 
     private void handleSave() {
         String name = nameInput.getText().toString().trim();
-        String specialReq = specialRequestsInput.getText().toString().trim();
+        String specialReq = specialRequestsInput.getText().toString().trim(); // ✅ GET THIS
 
         if (name.isEmpty()) {
             Toast.makeText(this, "Please enter name", Toast.LENGTH_SHORT).show();
@@ -197,7 +204,8 @@ public class GuestEditReservationActivity extends AppCompatActivity {
         int displayHour = selectedHour > 12 ? selectedHour - 12 : (selectedHour == 0 ? 12 : selectedHour);
         String time = String.format(Locale.getDefault(), "%02d:%02d %s", displayHour, selectedMinute, amPm);
 
-        boolean success = dbHelper.updateReservation(resId, selectedDate, time, guestCount);
+        // ✅ UPDATED: Pass specialRequests as 5th parameter
+        boolean success = dbHelper.updateReservation(resId, selectedDate, time, guestCount, specialReq);
 
         if (success) {
             NotificationHelper notificationHelper = new NotificationHelper(this);
@@ -211,20 +219,22 @@ public class GuestEditReservationActivity extends AppCompatActivity {
     }
 
     private void showCancelDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Cancel Reservation?")
-                .setMessage("Are you sure you want to cancel this booking?")
-                .setPositiveButton("Yes", (dialog, which) -> {
-                    boolean success = dbHelper.deleteReservation(resId);
-                    if (success) {
-                        NotificationHelper notificationHelper = new NotificationHelper(this);
-                        notificationHelper.sendCancelNotification();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-                        Toast.makeText(this, "Reservation Cancelled", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                })
-                .setNegativeButton("No", null)
-                .show();
+        // ✅ Inflate custom dialog layout
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_delete_confirm, null);
+        builder.setView(dialogView);
+
+        AlertDialog dialog = builder.create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        TextView dialogTitle = dialogView.findViewById(R.id.dialogTitle);
+        TextView confirmMessage = dialogView.findViewById(R.id.confirmMessage);
+
+        if (dialogTitle != null) {
+            dialogTitle.setText("Cancel Reservation?");
+        }
     }
 }

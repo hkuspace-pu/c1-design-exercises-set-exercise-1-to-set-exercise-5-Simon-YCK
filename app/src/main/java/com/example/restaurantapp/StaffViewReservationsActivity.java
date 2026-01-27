@@ -43,12 +43,14 @@ public class StaffViewReservationsActivity extends AppCompatActivity {
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                int id = cursor.getInt(0); // COL_RES_ID
+                int id = cursor.getInt(0);
                 String name = cursor.getString(1);
                 String date = cursor.getString(2);
                 String time = cursor.getString(3);
                 int guests = cursor.getInt(4);
-                resList.add(new Reservation(id, name, date, time, guests));
+                String specialReq = cursor.getString(5); // ✅ GET special_requests (column 5)
+
+                resList.add(new Reservation(id, name, date, time, guests, specialReq)); // ✅ Pass it
             } while (cursor.moveToNext());
             cursor.close();
         }
@@ -60,6 +62,7 @@ public class StaffViewReservationsActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(adapter);
     }
+
 
     // --- YOUR CUSTOM DIALOG LOGIC RESTORED ---
     private void showCancelDialog(Reservation res) {

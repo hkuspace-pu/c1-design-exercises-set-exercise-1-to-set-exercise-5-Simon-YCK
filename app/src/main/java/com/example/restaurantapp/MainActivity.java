@@ -2,7 +2,6 @@ package com.example.restaurantapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,18 +41,15 @@ public class MainActivity extends AppCompatActivity {
         // Login Button Click
         loginButton.setOnClickListener(v -> handleApiLogin());
 
-        // ENTER KEY LOGIN (NEW FEATURE)
-        //if (passwordInput != null) {
-        //    passwordInput.setOnEditorActionListener((v, actionId, event) -> {
-        //        if (actionId == EditorInfo.IME_ACTION_DONE ||
-        //                (event != null && event.getAction() == KeyEvent.ACTION_DOWN &&
-        //                        event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-        //            handleApiLogin(); // Trigger same login method
-        //            return true;
-        //        }
-        //        return false;
-        //    });
-        //}
+        // ✅ ENTER KEY LOGIN - ADD THIS
+        passwordInput.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                handleApiLogin(); // Call your existing login method
+                return true;
+            }
+            return false;
+        });
+
         // Sign Up Click
         TextView tvSignUp = findViewById(R.id.tvSignUp);
         if (tvSignUp != null) {

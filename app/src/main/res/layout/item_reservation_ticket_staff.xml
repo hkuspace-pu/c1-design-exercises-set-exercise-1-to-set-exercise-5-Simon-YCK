@@ -67,7 +67,36 @@
         android:text="John Doe"
         android:textSize="16sp"
         android:textColor="#718096"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="8dp"/>
+
+    <!-- ✅ ADD: Special Requests Section -->
+    <LinearLayout
+        android:id="@+id/specialRequestsSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📝 Special Requests:"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#667EEA"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/specialRequests"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No dietary restrictions"
+            android:textSize="14sp"
+            android:textColor="#4A5568"
+            android:fontFamily="sans-serif"
+            android:paddingStart="8dp"/>
+    </LinearLayout>
 
     <!-- Delete Button -->
     <Button

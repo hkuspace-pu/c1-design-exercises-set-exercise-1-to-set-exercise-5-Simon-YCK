@@ -1,9 +1,7 @@
 package com.example.restaurantapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,18 +10,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.restaurantapp.network.VolleySingleton;
-import com.google.gson.Gson;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText etUsername, etPassword, etPasswordConfirm, etEmail;
+    private EditText etUsername, etFirstName, etLastName, etEmail, etContact, etPassword, etPasswordConfirm;
     private Button btnRegister, btnBack;
 
     private static final String STUDENT_ID = "YangChunKit_20177089";
-    private static final String API_BASE_URL = "http://10.240.72.69/comp2000/coursework/create_user/YangChunKit_20177089/";
+    private static final String API_BASE_URL = "http://10.240.72.69/comp2000/coursework/create_user/" + STUDENT_ID + "/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +28,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Initialize views
         etUsername = findViewById(R.id.etUsername);
+        etFirstName = findViewById(R.id.etFirstName);
+        etLastName = findViewById(R.id.etLastName);
+        etEmail = findViewById(R.id.etEmail);
+        etContact = findViewById(R.id.etContact);
         etPassword = findViewById(R.id.etPassword);
         etPasswordConfirm = findViewById(R.id.etPasswordConfirm);
-        etEmail = findViewById(R.id.etEmail);
         btnRegister = findViewById(R.id.btnRegister);
         btnBack = findViewById(R.id.btnBack);
 
@@ -58,12 +57,16 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void handleRegistration() {
         String username = etUsername.getText().toString().trim();
+        String firstname = etFirstName.getText().toString().trim();
+        String lastname = etLastName.getText().toString().trim();
+        String email = etEmail.getText().toString().trim();
+        String contact = etContact.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
         String passwordConfirm = etPasswordConfirm.getText().toString().trim();
-        String email = etEmail.getText().toString().trim();
 
         // Validation
-        if (username.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty() || email.isEmpty()) {
+        if (username.isEmpty() || firstname.isEmpty() || lastname.isEmpty() ||
+                email.isEmpty() || contact.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -73,30 +76,36 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        // ✅ FIX: Correct URL format (add username to path)
+        // URL format: base_url/username
         String url = API_BASE_URL + username;
+        Log.d("REGISTER_URL", "URL: " + url);
 
         // Create JSON body
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("username", username);
             jsonBody.put("password", password);
+            jsonBody.put("firstname", firstname);
+            jsonBody.put("lastname", lastname);
             jsonBody.put("email", email);
-            jsonBody.put("usertype", "guest"); // Default to guest
+            jsonBody.put("contact", contact);
+            jsonBody.put("usertype", "guest");
+
+            Log.d("REGISTER_BODY", jsonBody.toString());
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(this, "Error creating request", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // ✅ Make POST request with COMPLETE URL
+        // Make POST request
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                url,  // Now: http://10.240.72.69/comp2000/coursework/create_user/YangChunKit_20177089/john_doe
+                url,
                 jsonBody,
                 response -> {
                     Toast.makeText(this, "Registration successful! Please login.", Toast.LENGTH_LONG).show();
-                    finish(); // Go back to login screen
+                    finish();
                 },
                 error -> {
                     Log.e("REGISTER_ERROR", "Error: " + error.toString());
@@ -109,11 +118,10 @@ public class RegisterActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                    Toast.makeText(this, "Registration failed. Username may already exist.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Registration failed. Please try again.", Toast.LENGTH_LONG).show();
                 }
         );
 
         VolleySingleton.getInstance(this).addToRequestQueue(request);
     }
-
 }
