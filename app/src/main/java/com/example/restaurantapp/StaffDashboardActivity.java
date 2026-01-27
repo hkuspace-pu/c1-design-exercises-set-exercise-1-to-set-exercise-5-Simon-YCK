@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.restaurantapp.database.DatabaseHelper;
+import com.example.restaurantapp.utils.NotificationHelper; // ✅ ADD THIS IMPORT
 
 public class StaffDashboardActivity extends AppCompatActivity {
 
@@ -41,9 +42,14 @@ public class StaffDashboardActivity extends AppCompatActivity {
         // 4. NOTIFICATION BELL - OPEN HISTORY
         View btnNotifications = findViewById(R.id.notificationButton);
         if (btnNotifications != null) {
-            btnNotifications.setOnClickListener(v ->
-                    startActivity(new Intent(this, NotificationListActivity.class)));
+            btnNotifications.setOnClickListener(v -> {
+                Intent intent = new Intent(this, NotificationListActivity.class);
+                startActivityForResult(intent, 100); // ✅ Use startActivityForResult to refresh badge
+            });
         }
+
+        // Initial badge update
+        updateBadgeCount();
     }
 
     @Override
@@ -52,8 +58,21 @@ public class StaffDashboardActivity extends AppCompatActivity {
         updateBadgeCount();
     }
 
+    // ✅ Handle return from NotificationListActivity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100) {
+            // Refresh badge after returning from notifications
+            updateBadgeCount();
+        }
+    }
+
     private void updateBadgeCount() {
-        int count = dbHelper.getUnreadCount();
+        // ✅ FIXED: Use NotificationHelper instead of DatabaseHelper
+        NotificationHelper notificationHelper = new NotificationHelper(this);
+        int count = notificationHelper.getUnreadCount();
+
         if (notificationBadge != null) {
             if (count > 0) {
                 notificationBadge.setVisibility(View.VISIBLE);

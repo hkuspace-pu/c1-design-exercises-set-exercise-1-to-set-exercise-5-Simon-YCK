@@ -22,8 +22,10 @@
             android:layout_centerVertical="true"
             android:text="←"
             android:textSize="24sp"
-            android:textColor="#667EEA"
-            android:background="?attr/selectableItemBackgroundBorderless"/>
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:backgroundTint="#667EEA"
+            android:elevation="2dp"/>
 
         <!-- Title -->
         <TextView

@@ -39,7 +39,7 @@ public class NotificationListActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
 
         loadNotifications();
-        dbHelper.markAllAsRead();
+        dbHelper.markAllAsRead(); // ✅ This is already here - perfect!
 
         // Clear All Button
         if (btnClearAll != null) {
@@ -52,7 +52,11 @@ public class NotificationListActivity extends AppCompatActivity {
 
         // Back Button
         if (btnBack != null) {
-            btnBack.setOnClickListener(v -> finish());
+            btnBack.setOnClickListener(v -> {
+                // ✅ Set result to refresh dashboard badge
+                setResult(RESULT_OK);
+                finish();
+            });
         }
     }
 

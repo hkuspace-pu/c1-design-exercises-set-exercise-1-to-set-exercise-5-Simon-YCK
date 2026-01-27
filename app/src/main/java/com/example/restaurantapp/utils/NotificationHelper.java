@@ -26,12 +26,13 @@ public class NotificationHelper {
         }
     }
 
-    private void sendNotification(String title, String message) {
-        // 1. Save to Database (History)
+    // ✅ PRIVATE - saves to DB and shows notification
+    private void sendNotification(String title, String message, String type) {
+        // 1. Save to Database
         DatabaseHelper db = new DatabaseHelper(context);
-        db.addNotification(title, message);
+        db.addNotification(title, message, type);
 
-        // 2. Build System Notification
+        // 2. Show System Notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setContentTitle(title)
@@ -45,13 +46,21 @@ public class NotificationHelper {
         }
     }
 
-    // --- SPECIFIC NOTIFICATION TYPES ---
+    // ✅ Get unread count from DATABASE (not SharedPreferences)
+    public int getUnreadCount() {
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
+        return dbHelper.getUnreadNotificationCount();
+    }
+
+    // ==================== PUBLIC NOTIFICATION METHODS ====================
 
     // 1. NEW BOOKING
     public void sendBookingNotification(String name, String date, String time) {
         SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
         if (prefs.getBoolean("notif_booking", true)) {
-            sendNotification("Booking Confirmed!", "Table for " + name + " on " + date + " at " + time);
+            sendNotification("Booking Confirmed!",
+                    "Table for " + name + " on " + date + " at " + time,
+                    "booking");
         }
     }
 
@@ -59,7 +68,9 @@ public class NotificationHelper {
     public void sendUpdateNotification(String date, String time) {
         SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
         if (prefs.getBoolean("notif_booking", true)) {
-            sendNotification("Reservation Updated", "Your booking has been changed to " + date + " at " + time);
+            sendNotification("Reservation Updated",
+                    "Your booking has been changed to " + date + " at " + time,
+                    "update");
         }
     }
 
@@ -67,7 +78,9 @@ public class NotificationHelper {
     public void sendCancelNotification() {
         SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
         if (prefs.getBoolean("notif_booking", true)) {
-            sendNotification("Booking Cancelled", "Your reservation has been cancelled");
+            sendNotification("Booking Cancelled",
+                    "Your reservation has been cancelled",
+                    "cancel");
         }
     }
 
@@ -75,7 +88,7 @@ public class NotificationHelper {
     public void sendPromoNotification(String message) {
         SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
         if (prefs.getBoolean("notif_promo", false)) {
-            sendNotification("Special Offer!", message);
+            sendNotification("Special Offer!", message, "promo");
         }
     }
 }

@@ -8,11 +8,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.restaurantapp.database.DatabaseHelper;
+import com.example.restaurantapp.utils.NotificationHelper;
 
 public class GuestDashboardActivity extends AppCompatActivity {
 
     private DatabaseHelper dbHelper;
-    private LinearLayout reservationsContainer; // Changed variable name to match ID for clarity
+    private LinearLayout reservationsContainer;
     private TextView notificationBadge;
 
     @Override
@@ -21,19 +22,17 @@ public class GuestDashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_guest_dashboard);
 
         dbHelper = new DatabaseHelper(this);
-
-        // FIX: Match the XML ID 'reservationsContainer'
         reservationsContainer = findViewById(R.id.reservationsContainer);
-
-        // Find notification badge (Ensure ID exists in XML)
         notificationBadge = findViewById(R.id.notificationBadge);
 
         // 1. BOOK TABLE BUTTON
-        // Note: XML ID is 'bookTableButton' (LinearLayout), so we attach click listener to that
         View btnBookTable = findViewById(R.id.bookTableButton);
         if (btnBookTable != null) {
-            btnBookTable.setOnClickListener(v ->
-                    startActivity(new Intent(this, GuestReservationActivity.class)));
+            btnBookTable.setOnClickListener(v -> {
+                Intent intent = new Intent(this, GuestReservationActivity.class);
+                intent.putExtra("guestName", getIntent().getStringExtra("guestName")); // ✅ Pass name
+                startActivity(intent);
+            });
         }
 
         // 2. BROWSE MENU BUTTON
@@ -48,7 +47,6 @@ public class GuestDashboardActivity extends AppCompatActivity {
         if(btnProfile != null) {
             btnProfile.setOnClickListener(v -> {
                 Intent intent = new Intent(this, UserProfileActivity.class);
-                // Pass guest name if you have it stored, otherwise just open without it
                 intent.putExtra("guestName", getIntent().getStringExtra("guestName"));
                 startActivity(intent);
             });
@@ -57,28 +55,33 @@ public class GuestDashboardActivity extends AppCompatActivity {
         // 4. NOTIFICATION BELL (Open History)
         View btnBell = findViewById(R.id.notificationButton);
         if (btnBell != null) {
-            btnBell.setOnClickListener(v ->
-                    startActivity(new Intent(this, NotificationListActivity.class)));
+            btnBell.setOnClickListener(v -> {
+                Intent intent = new Intent(this, NotificationListActivity.class);
+                startActivityForResult(intent, 100);
+            });
         }
+
+        // Initial load
+        refreshDashboard();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loadUpcomingReservations();
-        updateBadgeCount();
+        refreshDashboard();
     }
 
-    private void updateBadgeCount() {
-        int count = dbHelper.getUnreadCount();
-        if (notificationBadge != null) {
-            if (count > 0) {
-                notificationBadge.setVisibility(View.VISIBLE);
-                notificationBadge.setText(String.valueOf(count));
-            } else {
-                notificationBadge.setVisibility(View.GONE);
-            }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100) {
+            updateNotificationBadge();
         }
+    }
+
+    private void refreshDashboard() {
+        loadUpcomingReservations();
+        updateNotificationBadge();
     }
 
     private void loadUpcomingReservations() {
@@ -87,11 +90,11 @@ public class GuestDashboardActivity extends AppCompatActivity {
         reservationsContainer.removeAllViews();
         Cursor cursor = dbHelper.getAllReservations();
 
-        // Toggle Empty State if you have one
         View emptyState = findViewById(R.id.emptyState);
 
         if (cursor.getCount() == 0) {
             if (emptyState != null) emptyState.setVisibility(View.VISIBLE);
+            cursor.close();
             return;
         } else {
             if (emptyState != null) emptyState.setVisibility(View.GONE);
@@ -99,14 +102,13 @@ public class GuestDashboardActivity extends AppCompatActivity {
 
         while (cursor.moveToNext()) {
             int id = cursor.getInt(0);
+            String guestName = cursor.getString(1);
             String date = cursor.getString(2);
             String time = cursor.getString(3);
             int guests = cursor.getInt(4);
 
-            // Inflate your ticket layout dynamically
             View ticket = getLayoutInflater().inflate(R.layout.item_reservation_ticket, reservationsContainer, false);
 
-            // Populate Ticket Data
             TextView tDate = ticket.findViewById(R.id.reservationDate);
             TextView tTime = ticket.findViewById(R.id.reservationTime);
             TextView tGuests = ticket.findViewById(R.id.guestCount);
@@ -115,11 +117,12 @@ public class GuestDashboardActivity extends AppCompatActivity {
             if(tTime != null) tTime.setText(time);
             if(tGuests != null) tGuests.setText(guests + " Guests");
 
-            // Handle Click (Edit)
             ticket.setOnClickListener(v -> {
                 Intent i = new Intent(this, GuestEditReservationActivity.class);
                 i.putExtra("resId", id);
+                i.putExtra("name", guestName); // ✅ Pass name
                 i.putExtra("date", date);
+                i.putExtra("time", time);
                 i.putExtra("guests", guests);
                 startActivity(i);
             });
@@ -127,5 +130,19 @@ public class GuestDashboardActivity extends AppCompatActivity {
             reservationsContainer.addView(ticket);
         }
         cursor.close();
+    }
+
+    private void updateNotificationBadge() {
+        NotificationHelper notificationHelper = new NotificationHelper(this);
+        int unreadCount = notificationHelper.getUnreadCount();
+
+        if (notificationBadge != null) {
+            if (unreadCount > 0) {
+                notificationBadge.setVisibility(View.VISIBLE);
+                notificationBadge.setText(String.valueOf(unreadCount));
+            } else {
+                notificationBadge.setVisibility(View.GONE);
+            }
+        }
     }
 }

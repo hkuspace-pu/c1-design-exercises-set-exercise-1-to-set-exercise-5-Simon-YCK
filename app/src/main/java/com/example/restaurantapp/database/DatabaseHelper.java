@@ -13,8 +13,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Restaurant.db";
-    // INCREMENT VERSION TO 3 TO TRIGGER UPGRADE
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4; // ✅ Version 3 for notification table
 
     // --- TABLE: MENU ---
     private static final String TABLE_MENU = "menu_items";
@@ -32,12 +31,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_RES_TIME = "res_time";
     private static final String COL_RES_COUNT = "guest_count";
 
-    // --- TABLE: NOTIFICATIONS (NEW) ---
+    // --- TABLE: NOTIFICATIONS ---
     private static final String TABLE_NOTIF = "notifications";
     private static final String COL_NOTIF_ID = "id";
     private static final String COL_NOTIF_TITLE = "title";
     private static final String COL_NOTIF_MSG = "message";
-    private static final String COL_NOTIF_DATE = "date_created";
+    private static final String COL_NOTIF_TYPE = "type";
+    private static final String COL_NOTIF_DATE = "timestamp"; // ✅ Changed to timestamp
     private static final String COL_NOTIF_READ = "is_read";
 
     public DatabaseHelper(Context context) {
@@ -64,13 +64,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_RES_COUNT + " INTEGER)";
         db.execSQL(createRes);
 
-        // Create Notification Table
+        // ✅ Create Notification Table
         String createNotif = "CREATE TABLE " + TABLE_NOTIF + " (" +
                 COL_NOTIF_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_NOTIF_TITLE + " TEXT, " +
                 COL_NOTIF_MSG + " TEXT, " +
+                COL_NOTIF_TYPE + " TEXT, " +
                 COL_NOTIF_DATE + " TEXT, " +
-                COL_NOTIF_READ + " INTEGER)";
+                COL_NOTIF_READ + " INTEGER DEFAULT 0)";
         db.execSQL(createNotif);
     }
 
@@ -78,20 +79,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < 3) {
             // Add notification table if upgrading from v2
+            String createNotif = "CREATE TABLE IF NOT EXISTS " + TABLE_NOTIF + " (" +
+                    COL_NOTIF_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COL_NOTIF_TITLE + " TEXT, " +
+                    COL_NOTIF_MSG + " TEXT, " +
+                    COL_NOTIF_TYPE + " TEXT, " +
+                    COL_NOTIF_DATE + " TEXT, " +
+                    COL_NOTIF_READ + " INTEGER DEFAULT 0)";
+            db.execSQL(createNotif);
+        }
+
+        // ✅ ADD THIS: Fix column name from date_created to timestamp
+        if (oldVersion < 4) {
+            // Drop old table and recreate with correct schema
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTIF);
             String createNotif = "CREATE TABLE " + TABLE_NOTIF + " (" +
                     COL_NOTIF_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COL_NOTIF_TITLE + " TEXT, " +
                     COL_NOTIF_MSG + " TEXT, " +
+                    COL_NOTIF_TYPE + " TEXT, " +
                     COL_NOTIF_DATE + " TEXT, " +
-                    COL_NOTIF_READ + " INTEGER)";
+                    COL_NOTIF_READ + " INTEGER DEFAULT 0)";
             db.execSQL(createNotif);
         }
-        // Ideally handle other upgrades properly, but for assessment drop/create is often okay
-        // db.execSQL("DROP TABLE IF EXISTS " + TABLE_MENU);
-        // onCreate(db);
     }
+    // ==================== MENU OPERATIONS ====================
 
-    // --- MENU OPS ---
     public boolean addMenuItem(String name, String desc, double price, String category) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -108,7 +121,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MENU, null);
         if (cursor.moveToFirst()) {
             do {
-                list.add(new MenuItem(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getDouble(3), cursor.getString(4)));
+                list.add(new MenuItem(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getDouble(3),
+                        cursor.getString(4)
+                ));
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -118,7 +137,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean updateMenuItem(int id, String name, String desc, double price, String category) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(COL_NAME, name); cv.put(COL_DESC, desc); cv.put(COL_PRICE, price); cv.put(COL_CATEGORY, category);
+        cv.put(COL_NAME, name);
+        cv.put(COL_DESC, desc);
+        cv.put(COL_PRICE, price);
+        cv.put(COL_CATEGORY, category);
         return db.update(TABLE_MENU, cv, COL_ID + "=?", new String[]{String.valueOf(id)}) > 0;
     }
 
@@ -127,49 +149,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.delete(TABLE_MENU, COL_ID + "=?", new String[]{String.valueOf(id)}) > 0;
     }
 
-    // --- RESERVATION OPS ---
+    // ==================== RESERVATION OPERATIONS ====================
+
     public boolean addReservation(String name, String date, String time, int guests) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(COL_RES_GUEST, name); cv.put(COL_RES_DATE, date); cv.put(COL_RES_TIME, time); cv.put(COL_RES_COUNT, guests);
+        cv.put(COL_RES_GUEST, name);
+        cv.put(COL_RES_DATE, date);
+        cv.put(COL_RES_TIME, time);
+        cv.put(COL_RES_COUNT, guests);
         return db.insert(TABLE_RESERVATION, null, cv) != -1;
     }
 
     public Cursor getAllReservations() {
-        return this.getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_RESERVATION + " ORDER BY " + COL_RES_ID + " DESC", null);
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_RESERVATION + " ORDER BY " + COL_RES_ID + " DESC", null);
     }
 
     public boolean updateReservation(int id, String date, String time, int guests) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(COL_RES_DATE, date); cv.put(COL_RES_TIME, time); cv.put(COL_RES_COUNT, guests);
+        cv.put(COL_RES_DATE, date);
+        cv.put(COL_RES_TIME, time);
+        cv.put(COL_RES_COUNT, guests);
         return db.update(TABLE_RESERVATION, cv, COL_RES_ID + "=?", new String[]{String.valueOf(id)}) > 0;
     }
 
     public boolean deleteReservation(int id) {
-        return this.getWritableDatabase().delete(TABLE_RESERVATION, COL_RES_ID + "=?", new String[]{String.valueOf(id)}) > 0;
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_RESERVATION, COL_RES_ID + "=?", new String[]{String.valueOf(id)}) > 0;
     }
 
-    // --- NOTIFICATION OPS (NEW) ---
-    public void addNotification(String title, String message) {
+    // ==================== NOTIFICATION OPERATIONS ====================
+
+    public void addNotification(String title, String message, String type) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_NOTIF_TITLE, title);
         cv.put(COL_NOTIF_MSG, message);
+        cv.put(COL_NOTIF_TYPE, type);
         cv.put(COL_NOTIF_DATE, String.valueOf(System.currentTimeMillis()));
         cv.put(COL_NOTIF_READ, 0); // 0 = unread
         db.insert(TABLE_NOTIF, null, cv);
+        db.close();
     }
 
-    public Cursor getAllNotifications() {
-        return this.getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_NOTIF + " ORDER BY " + COL_NOTIF_ID + " DESC", null);
-    }
-
-    public int getUnreadCount() {
-        Cursor c = this.getReadableDatabase().rawQuery("SELECT COUNT(*) FROM " + TABLE_NOTIF + " WHERE " + COL_NOTIF_READ + " = 0", null);
-        c.moveToFirst();
-        int count = c.getInt(0);
-        c.close();
+    public int getUnreadNotificationCount() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NOTIF + " WHERE " + COL_NOTIF_READ + " = 0", null);
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
         return count;
     }
 
@@ -177,6 +209,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_NOTIF_READ, 1);
-        db.update(TABLE_NOTIF, cv, null, null);
+        db.update(TABLE_NOTIF, cv, COL_NOTIF_READ + " = 0", null);
+        db.close();
+    }
+
+    public Cursor getAllNotifications() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_NOTIF + " ORDER BY " + COL_NOTIF_DATE + " DESC", null);
     }
 }

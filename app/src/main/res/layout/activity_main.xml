@@ -63,6 +63,17 @@
             android:textSize="16sp"
             android:layout_marginBottom="32dp"/>
 
+        <!-- Signup -->
+        <TextView
+            android:id="@+id/tvSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Don't have an account? Sign Up"
+            android:textColor="#667EEA"
+            android:textSize="14sp"
+            android:layout_marginTop="16dp"/>
+
         <!-- Demo Credentials Box -->
         <LinearLayout
             android:layout_width="match_parent"
