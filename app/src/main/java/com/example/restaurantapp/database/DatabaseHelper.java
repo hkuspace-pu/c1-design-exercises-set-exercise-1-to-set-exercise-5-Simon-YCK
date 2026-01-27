@@ -217,4 +217,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_NOTIF + " ORDER BY " + COL_NOTIF_DATE + " DESC", null);
     }
+
+    public Cursor getReservationsByGuest(String guestName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_RESERVATION +
+                          " WHERE " + COL_RES_GUEST + " = ? " +
+                          " ORDER BY " + COL_RES_ID + " DESC",
+                          new String[]{guestName});
+    }
 }

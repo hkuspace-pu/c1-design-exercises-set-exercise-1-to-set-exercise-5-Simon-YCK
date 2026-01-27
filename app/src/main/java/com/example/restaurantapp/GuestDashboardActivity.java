@@ -87,8 +87,8 @@ public class GuestDashboardActivity extends AppCompatActivity {
     private void loadUpcomingReservations() {
         if (reservationsContainer == null) return;
 
-        reservationsContainer.removeAllViews();
-        Cursor cursor = dbHelper.getAllReservations();
+        String guestName = getIntent().getStringExtra("guestName");
+        Cursor cursor = dbHelper.getReservationsByGuest(guestName);
 
         View emptyState = findViewById(R.id.emptyState);
 
@@ -102,7 +102,7 @@ public class GuestDashboardActivity extends AppCompatActivity {
 
         while (cursor.moveToNext()) {
             int id = cursor.getInt(0);
-            String guestName = cursor.getString(1);
+            String name = cursor.getString(1);
             String date = cursor.getString(2);
             String time = cursor.getString(3);
             int guests = cursor.getInt(4);

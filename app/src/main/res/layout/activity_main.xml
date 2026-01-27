@@ -110,7 +110,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Username: staff"
+                    android:text="Username: staff_sarah"
                     android:textSize="13sp"
                     android:textColor="#718096"
                     android:fontFamily="monospace"/>
@@ -118,7 +118,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Password: staff123"
+                    android:text="Password: test123"
                     android:textSize="13sp"
                     android:textColor="#718096"
                     android:fontFamily="monospace"/>
@@ -142,7 +142,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Username: guest"
+                    android:text="Username: guest_peter"
                     android:textSize="13sp"
                     android:textColor="#718096"
                     android:fontFamily="monospace"/>
@@ -150,7 +150,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Password: guest123"
+                    android:text="Password: test123"
                     android:textSize="13sp"
                     android:textColor="#718096"
                     android:fontFamily="monospace"/>
