@@ -150,7 +150,7 @@
             android:layout_height="60dp"
             android:text="Register"
             android:background="@drawable/bg_button_gradient_pill"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/color_on_primary"
             android:textStyle="bold"
             android:layout_marginBottom="16dp"/>
 
@@ -160,8 +160,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="← Back to Login"
-            android:textColor="#667EEA"
-            android:backgroundTint="#FFFFFF"/>
+            android:textColor="@color/color_primary"
+            android:backgroundTint="@color/color_on_primary"/>
 
     </LinearLayout>
 </ScrollView>

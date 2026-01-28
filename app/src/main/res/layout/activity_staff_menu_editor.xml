@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F7FAFC">
+    android:background="@color/color_background">
 
     <!-- Header Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="24dp"
-        android:background="#FFFFFF"
+        android:background="@color/color_on_error"
         android:elevation="4dp"
         android:orientation="horizontal"
         android:gravity="center_vertical">
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+ Add"
-            android:backgroundTint="#48BB78"
+            android:backgroundTint="@color/color_secondary"
             android:textColor="#FFFFFF"
             android:textStyle="bold"/>
     </LinearLayout>

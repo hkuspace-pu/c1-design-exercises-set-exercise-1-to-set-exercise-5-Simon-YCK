@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F7FAFC"
+    android:background="@color/color_background"
     android:padding="20dp">
 
     <!-- Header: Title + Notification + Settings -->
@@ -68,7 +68,7 @@
                 android:background="@drawable/bg_notification_badge"
                 android:text="3"
                 android:textSize="11sp"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/color_on_error"
                 android:textStyle="bold"
                 android:gravity="center"/>
         </FrameLayout>
@@ -123,14 +123,14 @@
                 android:layout_height="wrap_content"
                 android:text="Manage Menu"
                 android:textSize="22sp"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/color_on_error"
                 android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Edit items &amp; prices"
-                android:textColor="#E2E8F0"/>
+                android:textColor="@color/color_outline"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -140,7 +140,7 @@
         android:layout_width="match_parent"
         android:layout_height="140dp"
         android:background="@drawable/bg_button_gradient_pill"
-        android:backgroundTint="#48BB78"
+        android:backgroundTint="@color/color_secondary"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="24dp"
@@ -165,14 +165,14 @@
                 android:layout_height="wrap_content"
                 android:text="Reservations"
                 android:textSize="22sp"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/color_on_error"
                 android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Check bookings"
-                android:textColor="#E2E8F0"/>
+                android:textColor="@color/color_outline"/>
         </LinearLayout>
     </LinearLayout>
 
