@@ -69,6 +69,7 @@ public class GuestDashboardActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // ✅ SOLUTION 1: Auto-refresh every time we return to this screen
         refreshDashboard();
     }
 
@@ -87,6 +88,9 @@ public class GuestDashboardActivity extends AppCompatActivity {
 
     private void loadUpcomingReservations() {
         if (reservationsContainer == null) return;
+
+        // ✅ FIX 1: Clear existing views before reloading
+        reservationsContainer.removeAllViews();
 
         String guestName = getIntent().getStringExtra("guestName");
         Cursor cursor = dbHelper.getReservationsByGuest(guestName);

@@ -1,24 +1,54 @@
 package com.example.restaurantapp;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.restaurantapp.database.DatabaseHelper;
-import com.example.restaurantapp.model.MenuItem;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class StaffEditMenuItemActivity extends AppCompatActivity {
 
     private EditText nameInput, priceInput, descriptionInput;
-    private TextView imagePreview;
+    private ImageView imagePreview;
     private View uploadImageButton;
     private Button saveButton;
+    private Spinner categorySpinner;
 
     private DatabaseHelper dbHelper;
-    private int menuItemId = -1; // Default to -1 (New Item)
+    private int menuItemId = -1;
+    private String selectedImagePath = null;
+
+    // ✅ Image Picker Launcher
+    private final ActivityResultLauncher<Intent> imagePickerLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Uri imageUri = result.getData().getData();
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                        imagePreview.setImageBitmap(bitmap);
+                        selectedImagePath = saveImageToInternalStorage(bitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,49 +57,85 @@ public class StaffEditMenuItemActivity extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
-        // Initialize views (IDs from activity_staff_edit_menu_item.xml)
         nameInput = findViewById(R.id.nameInput);
         priceInput = findViewById(R.id.priceInput);
         descriptionInput = findViewById(R.id.descriptionInput);
         imagePreview = findViewById(R.id.imagePreview);
         uploadImageButton = findViewById(R.id.uploadImageButton);
         saveButton = findViewById(R.id.saveButton);
+        categorySpinner = findViewById(R.id.categorySpinner);
 
-        // Check if we are Editing or Adding
+        // ✅ Setup Category Spinner
+        String[] categories = {"Appetizers", "Main Course", "Desserts", "Beverages", "Specials"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(adapter);
+
+        // Check if editing existing item
         if (getIntent().hasExtra("menuId")) {
             menuItemId = getIntent().getIntExtra("menuId", -1);
             if (menuItemId != -1) {
-                // We are editing! Pre-fill data.
                 nameInput.setText(getIntent().getStringExtra("name"));
                 descriptionInput.setText(getIntent().getStringExtra("description"));
                 double price = getIntent().getDoubleExtra("price", 0.0);
                 priceInput.setText(String.valueOf(price));
+
+                String category = getIntent().getStringExtra("category");
+                int spinnerPosition = adapter.getPosition(category);
+                categorySpinner.setSelection(spinnerPosition);
+
+                selectedImagePath = getIntent().getStringExtra("imagePath");
+                if (selectedImagePath != null) {
+                    loadImageFromPath(selectedImagePath);
+                }
+
                 saveButton.setText("Update Item");
             }
         }
 
-        // Image Picker Logic (Cycling Emojis)
-        uploadImageButton.setOnClickListener(v -> {
-            String[] emojis = {"🍕", "🍔", "🍗", "🥗", "🍰", "☕", "🍝", "🌮", "🍜", "🥘"};
-            String current = imagePreview.getText().toString();
-            int nextIndex = 0;
-            for (int i = 0; i < emojis.length; i++) {
-                if (emojis[i].equals(current)) {
-                    nextIndex = (i + 1) % emojis.length;
-                    break;
-                }
-            }
-            imagePreview.setText(emojis[nextIndex]);
-        });
+        // ✅ Image Upload Button
+        uploadImageButton.setOnClickListener(v -> openImagePicker());
 
         saveButton.setOnClickListener(v -> saveMenuItem());
+    }
+
+    // ✅ Open Gallery to pick image
+    private void openImagePicker() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        imagePickerLauncher.launch(intent);
+    }
+
+    // ✅ Save image to internal storage (lecture pattern)
+    private String saveImageToInternalStorage(Bitmap bitmap) {
+        File directory = getFilesDir(); // Internal storage
+        String filename = "menu_" + System.currentTimeMillis() + ".jpg";
+        File file = new File(directory, filename);
+
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 85, fos);
+            return file.getAbsolutePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // ✅ Load image from saved path
+    private void loadImageFromPath(String path) {
+        if (path != null && !path.isEmpty()) {
+            File file = new File(path);
+            if (file.exists()) {
+                Bitmap bitmap = android.graphics.BitmapFactory.decodeFile(path);
+                imagePreview.setImageBitmap(bitmap);
+            }
+        }
     }
 
     private void saveMenuItem() {
         String name = nameInput.getText().toString().trim();
         String priceStr = priceInput.getText().toString().trim();
         String desc = descriptionInput.getText().toString().trim();
-        String emoji = imagePreview.getText().toString();
+        String category = categorySpinner.getSelectedItem().toString();
 
         if (name.isEmpty() || priceStr.isEmpty()) {
             Toast.makeText(this, "Name and Price are required", Toast.LENGTH_SHORT).show();
@@ -81,15 +147,15 @@ public class StaffEditMenuItemActivity extends AppCompatActivity {
         boolean success;
         if (menuItemId == -1) {
             // INSERT NEW
-            success = dbHelper.addMenuItem(name, desc, price, "Main"); // 'Main' is default category
+            success = dbHelper.addMenuItem(name, desc, price, category, selectedImagePath);
         } else {
-            // UPDATE EXISTING (We need to add updateMenuItem to DatabaseHelper!)
-            success = dbHelper.updateMenuItem(menuItemId, name, desc, price, "Main");
+            // UPDATE EXISTING
+            success = dbHelper.updateMenuItem(menuItemId, name, desc, price, category, selectedImagePath);
         }
 
         if (success) {
             Toast.makeText(this, "Saved Successfully!", Toast.LENGTH_SHORT).show();
-            finish(); // Go back to list
+            finish();
         } else {
             Toast.makeText(this, "Database Error", Toast.LENGTH_SHORT).show();
         }

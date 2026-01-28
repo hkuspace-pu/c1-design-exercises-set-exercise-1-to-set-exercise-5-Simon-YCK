@@ -316,7 +316,10 @@ public class GuestEditReservationActivity extends AppCompatActivity {
             btnConfirm.setText("Cancel Booking");
             btnConfirm.setOnClickListener(v -> {
                 Log.d(TAG, "Confirm cancel clicked - deleting reservation ID: " + resId);
+
+                // ✅ FIX: Perform all operations BEFORE dismissing dialog
                 boolean success = dbHelper.deleteReservation(resId);
+
                 if (success) {
                     String name = nameInput.getText().toString().trim();
                     NotificationHelper notificationHelper = new NotificationHelper(this, name);
@@ -324,11 +327,18 @@ public class GuestEditReservationActivity extends AppCompatActivity {
 
                     Toast.makeText(this, "Reservation Cancelled", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "Reservation deleted successfully");
+
+                    // ✅ FIX: Dismiss dialog first, then finish activity
                     dialog.dismiss();
-                    finish();
+
+                    // ✅ FIX: Set result and finish properly
+                    setResult(RESULT_OK); // Notify previous activity
+                    finish(); // Return to previous screen
+
                 } else {
                     Toast.makeText(this, "Error cancelling reservation", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Failed to delete reservation");
+                    dialog.dismiss(); // ✅ Still dismiss on error
                 }
             });
         }
@@ -339,6 +349,9 @@ public class GuestEditReservationActivity extends AppCompatActivity {
                 dialog.dismiss();
             });
         }
+
+        // ✅ FIX: Make dialog cancelable with back button
+        builder.setCancelable(true);
 
         dialog.show();
         Log.d(TAG, "Dialog shown");

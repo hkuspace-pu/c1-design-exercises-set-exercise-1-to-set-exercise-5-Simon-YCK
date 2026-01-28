@@ -3,32 +3,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F7FAFC">
+    android:background="#FFFFFF">
 
     <!-- Header -->
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="24dp"
-        android:background="#FFFFFF"
-        android:elevation="4dp">
+        android:padding="16dp"
+        android:background="#667EEA">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Our Menu"
-            android:textSize="24sp"
+            android:layout_centerInParent="true"
+            android:text="Menu"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#2D3748"/>
-    </LinearLayout>
+            android:textColor="#FFFFFF"/>
+    </RelativeLayout>
 
-    <!-- RECYCLERVIEW (Fixes the warning and sync issue) -->
+    <!-- ✅ ADD: Category Tabs -->
+    <include layout="@layout/layout_menu_tabs"/>
+
+    <!-- Menu Items RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewMenuGuest"
+        android:id="@+id/menuRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
-        android:clipToPadding="false"/>
+        android:padding="8dp"/>
 
 </LinearLayout>
+
 

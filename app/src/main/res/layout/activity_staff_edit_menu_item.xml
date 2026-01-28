@@ -35,6 +35,21 @@
             android:paddingStart="16dp"
             android:layout_marginBottom="20dp"/>
 
+        <!-- ✅ ADDED: Category Spinner -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Category"
+            android:textColor="#718096"
+            android:layout_marginBottom="8dp"/>
+        <Spinner
+            android:id="@+id/categorySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_input_rounded"
+            android:padding="12dp"/>
+
         <!-- Image Upload Section -->
         <TextView
             android:layout_width="wrap_content"
@@ -50,14 +65,13 @@
             android:layout_marginBottom="24dp"
             android:background="@drawable/bg_input_rounded">
 
-            <!-- Placeholder Emoji (Large) -->
-            <TextView
+            <!-- ✅ CHANGED: TextView to ImageView for real image preview -->
+            <ImageView
                 android:id="@+id/imagePreview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="📸"
-                android:textSize="80sp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_background"
                 android:alpha="0.3"/>
 
             <!-- Upload Image Button (Bottom Center) -->

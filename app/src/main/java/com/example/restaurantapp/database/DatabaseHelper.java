@@ -13,7 +13,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Restaurant.db";
-    private static final int DATABASE_VERSION = 6; // ✅ Version 5 for special_requests
+    private static final int DATABASE_VERSION = 7; // ✅ Version 5 for special_requests
 
     // --- TABLE: MENU ---
     private static final String TABLE_MENU = "menu_items";
@@ -22,6 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_DESC = "description";
     private static final String COL_PRICE = "price";
     private static final String COL_CATEGORY = "category";
+    private static final String COL_IMAGE = "image_path";
 
     // --- TABLE: RESERVATIONS ---
     private static final String TABLE_RESERVATION = "reservations";
@@ -54,7 +55,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_NAME + " TEXT, " +
                 COL_DESC + " TEXT, " +
                 COL_PRICE + " REAL, " +
-                COL_CATEGORY + " TEXT)";
+                COL_CATEGORY + " TEXT, " +
+                COL_IMAGE + " TEXT)";
         db.execSQL(createMenu);
 
         // ✅ Create Reservation Table WITH special_requests
@@ -101,47 +103,80 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     e.printStackTrace();
                 }
             }
+        
+        if (oldVersion < 7) {
+                try {
+                    db.execSQL("ALTER TABLE " + TABLE_MENU + " ADD COLUMN " + COL_IMAGE + " TEXT");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
     }
 
     // ==================== MENU OPERATIONS ====================
 
-    public boolean addMenuItem(String name, String desc, double price, String category) {
+    public boolean addMenuItem(String name, String desc, double price, String category, String imagePath) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_NAME, name);
         cv.put(COL_DESC, desc);
         cv.put(COL_PRICE, price);
         cv.put(COL_CATEGORY, category);
+        cv.put(COL_IMAGE, imagePath);
         return db.insert(TABLE_MENU, null, cv) != -1;
     }
 
-    public List<MenuItem> getAllMenuItems() {
-        List<MenuItem> list = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MENU, null);
-        if (cursor.moveToFirst()) {
-            do {
-                list.add(new MenuItem(
-                        cursor.getInt(0),
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getDouble(3),
-                        cursor.getString(4)
-                ));
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return list;
-    }
+      public List<MenuItem> getAllMenuItems() {
+          List<MenuItem> list = new ArrayList<>();
+          SQLiteDatabase db = this.getReadableDatabase();
+          Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MENU, null);
 
-    public boolean updateMenuItem(int id, String name, String desc, double price, String category) {
+          if (cursor.moveToFirst()) {
+              do {
+                  int id = cursor.getInt(0);
+                  String name = cursor.getString(1);
+                  String desc = cursor.getString(2);
+                  double price = cursor.getDouble(3);
+                  String category = cursor.getString(4);
+                  String imagePath = cursor.getString(5); // ✅ ADD THIS - get image path from column 5
+
+                  list.add(new MenuItem(id, name, desc, price, category, imagePath)); // ✅ ADD imagePath
+              } while (cursor.moveToNext());
+          }
+          cursor.close();
+          return list;
+      }
+
+    public boolean updateMenuItem(int id, String name, String desc, double price, String category, String imagePath) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_NAME, name);
         cv.put(COL_DESC, desc);
         cv.put(COL_PRICE, price);
         cv.put(COL_CATEGORY, category);
+        cv.put(COL_IMAGE, imagePath);
         return db.update(TABLE_MENU, cv, COL_ID + "=?", new String[]{String.valueOf(id)}) > 0;
+    }
+
+    public Cursor getMenuByCategory(String category) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_MENU + " WHERE " + COL_CATEGORY + " = ?",
+                          new String[]{category});
+    }
+
+    public List<String> getAllCategories() {
+        List<String> categories = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT DISTINCT " + COL_CATEGORY + " FROM " + TABLE_MENU +
+                                   " ORDER BY " + COL_CATEGORY, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                categories.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return categories;
     }
 
     public boolean deleteMenuItem(int id) {
