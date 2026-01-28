@@ -27,8 +27,6 @@ public class NotificationListActivity extends AppCompatActivity {
     private DatabaseHelper dbHelper;
     private ListView listView;
     private Button btnClearAll, btnBack;
-
-    // ✅ ADD THESE TWO FIELDS
     private String currentUsername;
     private boolean isStaff = false;
 
@@ -42,13 +40,13 @@ public class NotificationListActivity extends AppCompatActivity {
         btnClearAll = findViewById(R.id.btnClearAll);
         btnBack = findViewById(R.id.btnBack);
 
-        // ✅ ADD: Get username and role from intent
+        // Get username and role from intent
         currentUsername = getIntent().getStringExtra("username");
         isStaff = getIntent().getBooleanExtra("isStaff", false);
 
         loadNotifications();
 
-        // ✅ CHANGED: Mark as read based on user role
+        // Mark as read based on user role
         if (isStaff) {
             dbHelper.markAllAsRead(); // Staff mark all as read
         } else {
@@ -73,7 +71,7 @@ public class NotificationListActivity extends AppCompatActivity {
         }
     }
 
-    // ✅ UPDATED: Clear based on user role
+    // Clear based on user role
     private void clearAllNotifications() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if (isStaff) {
@@ -83,23 +81,23 @@ public class NotificationListActivity extends AppCompatActivity {
         }
     }
 
-    // ✅ UPDATED: Load based on user role
+    // Load based on user role
     private void loadNotifications() {
         List<NotificationItem> items = new ArrayList<>();
 
-        // ✅ CHANGED: Use filtered query
+        // Use filtered query
         Cursor cursor;
         if (isStaff) {
             cursor = dbHelper.getAllNotifications(); // Staff see all
         } else {
-            cursor = dbHelper.getNotificationsByUser(currentUsername); // ✅ Guest see only theirs
+            cursor = dbHelper.getNotificationsByUser(currentUsername); // Guest see only theirs
         }
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 String title = cursor.getString(1);
                 String msg = cursor.getString(2);
-                String date = cursor.getString(4); // ✅ CHANGED: timestamp is column 4 now (was 3)
+                String date = cursor.getString(4);
                 items.add(new NotificationItem(title, msg, date));
             } while (cursor.moveToNext());
             cursor.close();

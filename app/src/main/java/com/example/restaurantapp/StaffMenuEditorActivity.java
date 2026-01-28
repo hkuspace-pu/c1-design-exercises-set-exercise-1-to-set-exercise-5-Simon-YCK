@@ -29,7 +29,7 @@ public class StaffMenuEditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_staff_menu_editor);
 
-        // 1. Initialize Database Helper (Week 10)
+        // 1. Initialize Database Helper
         dbHelper = new DatabaseHelper(this);
 
         // 2. Initialize Views
@@ -51,7 +51,7 @@ public class StaffMenuEditorActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Reload data every time we return to this screen (e.g., after adding/editing)
+        // Reload data every time we return to this screen (e.g. after adding/editing)
         loadMenuData();
     }
 

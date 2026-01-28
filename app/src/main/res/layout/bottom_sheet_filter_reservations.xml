@@ -13,7 +13,7 @@
         android:text="Filter &amp; Sort Reservations"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="#2D3748"
+        android:textColor="@color/color_text_primary"
         android:layout_marginBottom="20dp"/>
 
     <!-- Sort By Section -->
@@ -23,7 +23,7 @@
         android:text="Sort By"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:textColor="#667EEA"
+        android:textColor="@color/color_primary"
         android:layout_marginBottom="8dp"/>
 
     <RadioGroup
@@ -65,7 +65,7 @@
         android:text="Filter by Date"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:textColor="#667EEA"
+        android:textColor="@color/color_primary"
         android:layout_marginBottom="8dp"/>
 
     <RadioGroup
@@ -112,8 +112,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Reset"
-            android:backgroundTint="#718096"
-            android:textColor="#FFFFFF"
+            android:backgroundTint="@color/color_text_secondary"
+            android:textColor="@color/color_on_primary"
             android:layout_marginEnd="8dp"/>
 
         <Button
@@ -121,7 +121,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Apply"
-            android:backgroundTint="#667EEA"
-            android:textColor="#FFFFFF"/>
+            android:backgroundTint="@color/color_primary"
+            android:textColor="@color/color_on_primary"/>
     </LinearLayout>
 </LinearLayout>

@@ -1,9 +1,75 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <!-- Base application theme (Material 3) -->
     <style name="Base.Theme.RestaurantApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Light theme colors -->
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorOnPrimary">@color/color_on_primary</item>
+        <item name="colorPrimaryContainer">@color/color_primary_tint</item>
+
+        <item name="colorSecondary">@color/color_secondary</item>
+        <item name="colorOnSecondary">@color/color_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/color_secondary_tint</item>
+
+        <item name="android:colorBackground">@color/color_background</item>
+        <item name="colorSurface">@color/color_surface</item>
+        <item name="colorSurfaceVariant">@color/color_surface_variant</item>
+        <item name="colorOnSurface">@color/color_text_primary</item>
+        <item name="colorOutline">@color/color_outline</item>
+
+        <item name="colorError">@color/color_error</item>
+        <item name="colorOnError">@color/color_on_error</item>
+
+        <!-- Default text colors -->
+        <item name="android:textColorPrimary">@color/color_text_primary</item>
+        <item name="android:textColorSecondary">@color/color_text_secondary</item>
+
+        <!-- Default button styling -->
+        <item name="materialButtonStyle">@style/Widget.RestaurantApp.Button.Primary</item>
+
+        <!-- Ripple / touch feedback -->
+        <item name="android:colorControlHighlight">@color/color_primary_tint</item>
+
+        <!-- Shape / corner radius theme-wide -->
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.RestaurantApp.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.RestaurantApp.Large</item>
     </style>
 
     <style name="Theme.RestaurantApp" parent="Base.Theme.RestaurantApp" />
+
+    <!-- Shapes -->
+    <style name="ShapeAppearance.RestaurantApp.Medium" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="ShapeAppearance.RestaurantApp.Large" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <!-- Buttons -->
+    <style name="Widget.RestaurantApp.Button.Primary" parent="Widget.Material3.Button">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="cornerRadius">24dp</item>
+    </style>
+
+    <!-- Typography presets you can optionally apply in layouts -->
+    <style name="TextAppearance.RestaurantApp.Title" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">@color/color_text_primary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.RestaurantApp.Subtitle" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/color_text_secondary</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextAppearance.RestaurantApp.Muted" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/color_text_muted</item>
+    </style>
+
 </resources>

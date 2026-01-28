@@ -33,7 +33,7 @@ public class UserProfileActivity extends AppCompatActivity {
         btnLogout = findViewById(R.id.btnLogout);
         btnBack = findViewById(R.id.btnBack);
 
-        // Get username from Intent (passed from MainActivity)
+        // Get username from Intent
         String guestName = getIntent().getStringExtra("guestName");
 
         // Set Profile Info (Guest)

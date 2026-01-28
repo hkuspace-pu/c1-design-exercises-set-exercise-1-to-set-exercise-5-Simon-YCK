@@ -22,7 +22,7 @@
         android:text="Delete Item?"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="#2D3748"
+        android:textColor="@color/color_text_primary"
         android:layout_marginBottom="8dp"
         android:gravity="center"/>
 
@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="This cannot be undone."
-        android:textColor="#718096"
+        android:textColor="@color/color_text_secondary"
         android:gravity="center"
         android:layout_marginBottom="24dp"/>
 
@@ -47,7 +47,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="Cancel"
-            android:textColor="#718096"
+            android:textColor="@color/color_text_secondary"
             android:background="@android:color/transparent"
             android:layout_marginEnd="8dp"/>
 

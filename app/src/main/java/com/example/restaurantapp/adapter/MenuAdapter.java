@@ -42,11 +42,11 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == 1) {
-            // STAFF LAYOUT (Your file: item_menu_card_staff.xml)
+            // STAFF LAYOUT
             View view = inflater.inflate(R.layout.item_menu_card_staff, parent, false);
             return new StaffViewHolder(view);
         } else {
-            // GUEST LAYOUT (Your file: item_menu_card_guest.xml)
+            // GUEST LAYOUT
             View view = inflater.inflate(R.layout.item_menu_card_guest, parent, false);
             return new GuestViewHolder(view);
         }
@@ -58,7 +58,7 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         if (holder instanceof StaffViewHolder) {
             StaffViewHolder staffHolder = (StaffViewHolder) holder;
-            // Map data to YOUR XML IDs (Check your xml file for exact IDs)
+            // Map data to XML IDs
             staffHolder.tvName.setText(item.getName());
             staffHolder.tvDesc.setText(item.getDescription());
             staffHolder.tvPrice.setText(String.format("$%.2f", item.getPrice()));
@@ -86,7 +86,6 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public StaffViewHolder(@NonNull View itemView) {
             super(itemView);
-            // THESE IDs MUST MATCH YOUR item_menu_card_staff.xml
             tvName = itemView.findViewById(R.id.menuItemName);
             tvDesc = itemView.findViewById(R.id.menuItemDescription);
             tvPrice = itemView.findViewById(R.id.menuItemPrice);
@@ -101,7 +100,6 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public GuestViewHolder(@NonNull View itemView) {
             super(itemView);
-            // THESE IDs MUST MATCH YOUR item_menu_card_guest.xml
             tvName = itemView.findViewById(R.id.menuItemName);
             tvDesc = itemView.findViewById(R.id.menuItemDescription);
             tvPrice = itemView.findViewById(R.id.menuItemPrice);

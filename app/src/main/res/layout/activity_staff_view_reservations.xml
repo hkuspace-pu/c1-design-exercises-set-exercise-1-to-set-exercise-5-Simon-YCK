@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFFFFF">
+    android:background="@color/color_background">
 
     <!-- Header -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:background="#667EEA">
+        android:background="@color/color_primary">
 
         <TextView
             android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
             android:text="All Reservations"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"/>
+            android:textColor="@color/color_on_primary"/>
     </RelativeLayout>
 
     <!-- Search & Filter Bar -->
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="12dp"
-        android:background="#F7FAFC">
+        android:background="@color/color_surface">
 
         <!-- SearchView -->
         <androidx.appcompat.widget.SearchView
@@ -47,8 +47,8 @@
             android:layout_height="wrap_content"
             android:text="🔽 Filter"
             android:textSize="12sp"
-            android:backgroundTint="#667EEA"
-            android:textColor="#FFFFFF"
+            android:backgroundTint="@color/color_primary"
+            android:textColor="@color/color_on_primary"
             android:layout_marginStart="8dp"/>
     </LinearLayout>
 
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:textSize="12sp"
-        android:textColor="#667EEA"
+        android:background="@color/color_primary"
         android:visibility="gone"/>
 
     <!-- RecyclerView -->

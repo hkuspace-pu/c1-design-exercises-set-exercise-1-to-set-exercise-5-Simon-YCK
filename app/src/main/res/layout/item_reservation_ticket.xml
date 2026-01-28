@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:text="Friday, Nov 29"
                 android:textSize="16sp"
-                android:textColor="#2D3748"
+                android:textColor="@color/color_text_primary"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-medium"/>
 
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:text="7:00 PM"
                 android:textSize="14sp"
-                android:textColor="#718096"
+                android:textColor="@color/color_text_secondary"
                 android:layout_marginTop="2dp"/>
 
         </LinearLayout>
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:text="4 guests"
             android:textSize="12sp"
-            android:textColor="#667EEA"
+            android:textColor="@color/color_guest_badge_text"
             android:background="@drawable/bg_guest_badge"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
@@ -75,7 +75,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#E2E8F0"
+        android:background="@color/color_outline"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="12dp"
         android:layerType="software"
@@ -88,15 +88,13 @@
         android:orientation="horizontal"
         android:gravity="end">
 
-        <!-- ✅ REMOVED guestName TextView - guests don't need to see their own name -->
-
         <!-- Edit Arrow Icon -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="✏️ Edit"
             android:textSize="14sp"
-            android:textColor="#667EEA"
+            android:textColor="@color/color_primary"
             android:alpha="0.8"/>
 
     </LinearLayout>

@@ -38,13 +38,13 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
     public void onBindViewHolder(@NonNull ResViewHolder holder, int position) {
         Reservation res = list.get(position);
 
-        // Map data to your XML IDs
+        // Map data to XML IDs
         if(holder.guestName != null) holder.guestName.setText(res.getGuestName());
         if(holder.date != null) holder.date.setText(res.getDate());
         if(holder.time != null) holder.time.setText(res.getTime());
         if(holder.guests != null) holder.guests.setText(res.getGuestCount() + " Guests");
 
-        // ✅ DISPLAY SPECIAL REQUESTS
+        // DISPLAY SPECIAL REQUESTS
         String specialReq = res.getSpecialRequests();
         if (specialReq != null && !specialReq.trim().isEmpty()) {
             holder.specialRequestsSection.setVisibility(View.VISIBLE);
@@ -71,8 +71,8 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
             date = itemView.findViewById(R.id.reservationDate);
             time = itemView.findViewById(R.id.reservationTime);
             guests = itemView.findViewById(R.id.guestCount);
-            specialRequests = itemView.findViewById(R.id.specialRequests); // ✅ ADD
-            specialRequestsSection = itemView.findViewById(R.id.specialRequestsSection); // ✅ ADD
+            specialRequests = itemView.findViewById(R.id.specialRequests);
+            specialRequestsSection = itemView.findViewById(R.id.specialRequestsSection);
             btnCancel = itemView.findViewById(R.id.btnCancelReservation);
         }
     }

@@ -30,7 +30,7 @@ public class GuestDashboardActivity extends AppCompatActivity {
         if (btnBookTable != null) {
             btnBookTable.setOnClickListener(v -> {
                 Intent intent = new Intent(this, GuestReservationActivity.class);
-                intent.putExtra("guestName", getIntent().getStringExtra("guestName")); // ✅ Pass name
+                intent.putExtra("guestName", getIntent().getStringExtra("guestName")); // Pass name
                 startActivity(intent);
             });
         }
@@ -57,7 +57,7 @@ public class GuestDashboardActivity extends AppCompatActivity {
         if (btnBell != null) {
             btnBell.setOnClickListener(v -> {
                 Intent intent = new Intent(this, NotificationListActivity.class);
-                intent.putExtra("username", getIntent().getStringExtra("guestName")); // ✅ Pass username
+                intent.putExtra("username", getIntent().getStringExtra("guestName")); // Pass username
                 intent.putExtra("isStaff", false); // ✅ Pass role
                 startActivityForResult(intent, 100);
             });
@@ -69,7 +69,6 @@ public class GuestDashboardActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // ✅ SOLUTION 1: Auto-refresh every time we return to this screen
         refreshDashboard();
     }
 
@@ -89,7 +88,7 @@ public class GuestDashboardActivity extends AppCompatActivity {
     private void loadUpcomingReservations() {
         if (reservationsContainer == null) return;
 
-        // ✅ FIX 1: Clear existing views before reloading
+        // Clear existing views before reloading
         reservationsContainer.removeAllViews();
 
         String guestName = getIntent().getStringExtra("guestName");
@@ -126,7 +125,7 @@ public class GuestDashboardActivity extends AppCompatActivity {
             ticket.setOnClickListener(v -> {
                 Intent i = new Intent(this, GuestEditReservationActivity.class);
                 i.putExtra("resId", id);
-                i.putExtra("name", guestName); // ✅ Pass name
+                i.putExtra("name", guestName); // Pass name
                 i.putExtra("date", date);
                 i.putExtra("time", time);
                 i.putExtra("guests", guests);

@@ -17,9 +17,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText etUsername, etFirstName, etLastName, etEmail, etContact, etPassword, etPasswordConfirm;
     private Button btnRegister, btnBack;
-
     private static final String STUDENT_ID = "YangChunKit_20177089";
-    // ✅ FIXED: URL does NOT include username - it's only student_id
     private static final String API_BASE_URL = "http://10.240.72.69/comp2000/coursework/create_user/" + STUDENT_ID;
 
     @Override
@@ -77,11 +75,10 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        // ✅ FIXED: URL is just the base URL (student_id only)
         String url = API_BASE_URL;
         Log.d("REGISTER_URL", "URL: " + url);
 
-        // ✅ Username goes in the JSON body
+        // Username goes in the JSON body
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("username", username);

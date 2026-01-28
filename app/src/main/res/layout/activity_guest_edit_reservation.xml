@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@color/color_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                 android:text="Edit Reservation"
                 android:textSize="28sp"
                 android:textStyle="bold"
-                android:textColor="#2D3748"/>
+                android:textColor="@color/color_text_primary"/>
         </RelativeLayout>
 
         <!-- Name Input -->
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Your Name"
-            android:textColor="#718096"
+            android:textColor="@color/color_text_secondary"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Date"
-            android:textColor="#718096"
+            android:textColor="@color/color_text_secondary"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -77,7 +77,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!-- ✅ UPDATED: Time Section with Button -->
+            <!-- Time Section with Button -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -89,20 +89,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Time"
-                    android:textColor="#718096"
+                    android:textColor="@color/color_text_secondary"
                     android:layout_marginBottom="8dp"/>
 
-                <!-- ✅ ADD: Time Picker Button -->
+                <!--  Time Picker Button -->
                 <Button
                     android:id="@+id/btnSelectTime"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:text="Select Time"
                     android:textSize="14sp"
-                    android:backgroundTint="#667EEA"
-                    android:textColor="#FFFFFF"/>
+                    android:background="@drawable/bg_button_gradient_pill"
+                    android:textColor="@color/color_on_primary"/>
 
-                <!-- ✅ ADD: Selected Time Display -->
+                <!-- Selected Time Display -->
                 <TextView
                     android:id="@+id/tvSelectedTime"
                     android:layout_width="match_parent"
@@ -110,7 +110,7 @@
                     android:background="@drawable/bg_input_rounded"
                     android:gravity="center"
                     android:text="--:-- --"
-                    android:textColor="#718096"
+                    android:textColor="@color/color_text_muted"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:layout_marginTop="8dp"/>
@@ -128,7 +128,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Guests"
-                    android:textColor="#718096"
+                    android:textColor="@color/color_text_secondary"
                     android:layout_marginBottom="8dp"/>
 
                 <SeekBar
@@ -144,7 +144,7 @@
                     android:layout_height="wrap_content"
                     android:text="2 People"
                     android:layout_gravity="center"
-                    android:textColor="#667EEA"
+                    android:textColor="@color/color_primary"
                     android:textStyle="bold"
                     android:layout_marginTop="8dp"/>
             </LinearLayout>
@@ -155,7 +155,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Special Requests (Optional)"
-            android:textColor="#718096"
+            android:textColor="@color/color_text_secondary"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"/>
 
@@ -177,7 +177,7 @@
             android:layout_height="60dp"
             android:text="Save Changes"
             android:background="@drawable/bg_button_gradient_pill"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/color_on_primary"
             android:textStyle="bold"/>
 
         <!-- Cancel Booking Button -->
@@ -186,8 +186,8 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:text="Cancel Booking"
-            android:backgroundTint="#E53E3E"
-            android:textColor="#FFFFFF"
+            android:backgroundTint="@color/color_error"
+            android:textColor="@color/color_on_error"
             android:textStyle="bold"
             android:textSize="16sp"
             android:layout_marginTop="16dp"/>

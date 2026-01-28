@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.restaurantapp.database.DatabaseHelper;
-import com.example.restaurantapp.utils.NotificationHelper; // ✅ ADD THIS IMPORT
+import com.example.restaurantapp.utils.NotificationHelper;
 
 public class StaffDashboardActivity extends AppCompatActivity {
 
@@ -44,8 +44,8 @@ public class StaffDashboardActivity extends AppCompatActivity {
         if (btnNotifications != null) {
             btnNotifications.setOnClickListener(v -> {
                 Intent intent = new Intent(this, NotificationListActivity.class);
-                intent.putExtra("username", "staff"); // ✅ Pass "staff"
-                intent.putExtra("isStaff", true); // ✅ Pass role
+                intent.putExtra("username", "staff");
+                intent.putExtra("isStaff", true);
                 startActivityForResult(intent, 100);
             });
         }
@@ -60,7 +60,7 @@ public class StaffDashboardActivity extends AppCompatActivity {
         updateBadgeCount();
     }
 
-    // ✅ Handle return from NotificationListActivity
+    // Handle return from NotificationListActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -71,7 +71,7 @@ public class StaffDashboardActivity extends AppCompatActivity {
     }
 
     private void updateBadgeCount() {
-        // ✅ FIXED: Use NotificationHelper instead of DatabaseHelper
+        // Use NotificationHelper instead of DatabaseHelper
         NotificationHelper notificationHelper = new NotificationHelper(this, "staff");
         int count = notificationHelper.getUnreadCount();
 

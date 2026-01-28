@@ -8,7 +8,7 @@ public class MenuItem {
     private String category;
     private String imagePath;
 
-    // ✅ UPDATE Constructor - add imagePath parameter
+    // UPDATE Constructor - add imagePath parameter
     public MenuItem(int id, String name, String description, double price, String category, String imagePath) {
         this.id = id;
         this.name = name;

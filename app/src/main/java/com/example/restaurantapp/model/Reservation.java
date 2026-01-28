@@ -6,9 +6,9 @@ public class Reservation {
     private String date;
     private String time;
     private int guestCount;
-    private String specialRequests; // ✅ ADD THIS
+    private String specialRequests;
 
-    // ✅ UPDATE constructor
+    // UPDATE constructor
     public Reservation(int id, String guestName, String date, String time, int guestCount, String specialRequests) {
         this.id = id;
         this.guestName = guestName;
@@ -25,6 +25,6 @@ public class Reservation {
     public String getTime() { return time; }
     public int getGuestCount() { return guestCount; }
 
-    // ✅ ADD getter
+    // ADD getter
     public String getSpecialRequests() { return specialRequests; }
 }

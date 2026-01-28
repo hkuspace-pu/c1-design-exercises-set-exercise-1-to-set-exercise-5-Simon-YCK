@@ -4,7 +4,9 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="16dp"
-    android:background="@drawable/bg_input_rounded"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
     android:layout_marginBottom="8dp">
 
     <!-- Icon -->
@@ -29,7 +31,7 @@
             android:layout_height="wrap_content"
             android:text="Booking Confirmed"
             android:textStyle="bold"
-            android:textColor="#2D3748"
+            android:textColor="@color/color_text_primary"
             android:textSize="16sp"/>
 
         <TextView
@@ -37,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Your table for 2 is ready."
-            android:textColor="#718096"
+            android:textColor="@color/color_text_secondary"
             android:textSize="14sp"
             android:layout_marginTop="4dp"/>
 
@@ -47,7 +49,7 @@
             android:layout_height="wrap_content"
             android:text="Just now"
             android:textSize="12sp"
-            android:textColor="#A0AEC0"
+            android:textColor="@color/color_text_muted"
             android:layout_marginTop="8dp"/>
     </LinearLayout>
 </LinearLayout>

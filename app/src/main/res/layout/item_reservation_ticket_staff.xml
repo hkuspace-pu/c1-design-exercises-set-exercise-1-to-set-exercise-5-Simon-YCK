@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@color/color_surface">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +22,7 @@
             android:orientation="horizontal"
             android:layout_marginBottom="12dp">
 
-            <!-- ✅ KEPT: Your existing ID guestName -->
+            <!-- guestName -->
             <TextView
                 android:id="@+id/guestName"
                 android:layout_width="0dp"
@@ -30,9 +31,9 @@
                 android:text="John Doe"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#2D3748"/>
+                android:textColor="@color/color_text_primary"/>
 
-            <!-- Status badge (optional - remove if not needed) -->
+            <!-- Status badge -->
             <TextView
                 android:id="@+id/reservationStatus"
                 android:layout_width="wrap_content"
@@ -40,7 +41,7 @@
                 android:text="ACTIVE"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/color_guest_badge_text"
                 android:background="@drawable/bg_guest_badge"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
@@ -62,7 +63,7 @@
                 android:text="📅 "
                 android:textSize="16sp"/>
 
-            <!-- ✅ KEPT: Your existing ID reservationDate -->
+            <!-- reservationDate -->
             <TextView
                 android:id="@+id/reservationDate"
                 android:layout_width="0dp"
@@ -70,7 +71,7 @@
                 android:layout_weight="1"
                 android:text="Jan 28, 2026"
                 android:textSize="14sp"
-                android:textColor="#4A5568"/>
+                android:textColor="@color/color_text_secondary"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -79,7 +80,7 @@
                 android:textSize="16sp"
                 android:layout_marginStart="16dp"/>
 
-            <!-- ✅ KEPT: Your existing ID reservationTime -->
+            <!-- reservationTime -->
             <TextView
                 android:id="@+id/reservationTime"
                 android:layout_width="wrap_content"
@@ -87,7 +88,7 @@
                 android:text="7:30 PM"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="#667EEA"/>
+                android:textColor="@color/color_primary"/>
         </LinearLayout>
 
         <!-- Guests Count -->
@@ -103,17 +104,17 @@
                 android:text="👥 "
                 android:textSize="16sp"/>
 
-            <!-- ✅ KEPT: Your existing ID guestCount -->
+            <!-- guestCount -->
             <TextView
                 android:id="@+id/guestCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="4 Guests"
                 android:textSize="14sp"
-                android:textColor="#4A5568"/>
+                android:textColor="@color/color_text_secondary"/>
         </LinearLayout>
 
-        <!-- ✅ KEPT: Your existing special requests section -->
+        <!-- special requests section -->
         <LinearLayout
             android:id="@+id/specialRequestsSection"
             android:layout_width="match_parent"
@@ -128,7 +129,7 @@
                 android:text="📝 Special Requests:"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:textColor="#667EEA"
+                android:textColor="@color/color_primary"
                 android:layout_marginBottom="4dp"/>
 
             <TextView
@@ -137,7 +138,7 @@
                 android:layout_height="wrap_content"
                 android:text="Vegetarian menu"
                 android:textSize="13sp"
-                android:textColor="#718096"
+                android:textColor="@color/color_text_secondary"
                 android:textStyle="italic"
                 android:background="@drawable/bg_input_rounded"
                 android:padding="8dp"/>
@@ -150,27 +151,27 @@
             android:orientation="horizontal"
             android:gravity="end">
 
-            <!-- Edit button (optional - add if staff needs to edit) -->
+            <!-- Edit button -->
             <Button
                 android:id="@+id/btnEditReservation"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:text="✏️ Edit"
                 android:textSize="12sp"
-                android:backgroundTint="#667EEA"
-                android:textColor="#FFFFFF"
+                android:backgroundTint="@color/color_primary"
+                android:textColor="@color/color_on_primary"
                 android:layout_marginEnd="8dp"
                 android:visibility="gone"/>
 
-            <!-- ✅ KEPT: Your existing ID btnCancelReservation -->
+            <!-- btnCancelReservation -->
             <Button
                 android:id="@+id/btnCancelReservation"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:text="🗑️ Cancel"
                 android:textSize="12sp"
-                android:backgroundTint="#E53E3E"
-                android:textColor="#FFFFFF"/>
+                android:backgroundTint="@color/color_error"
+                android:textColor="@color/color_on_error"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

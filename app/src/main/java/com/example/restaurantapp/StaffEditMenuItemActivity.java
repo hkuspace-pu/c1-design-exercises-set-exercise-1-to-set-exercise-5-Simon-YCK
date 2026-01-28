@@ -32,7 +32,7 @@ public class StaffEditMenuItemActivity extends AppCompatActivity {
     private int menuItemId = -1;
     private String selectedImagePath = null;
 
-    // ✅ Image Picker Launcher
+    // Image Picker Launcher
     private final ActivityResultLauncher<Intent> imagePickerLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -65,7 +65,7 @@ public class StaffEditMenuItemActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.saveButton);
         categorySpinner = findViewById(R.id.categorySpinner);
 
-        // ✅ Setup Category Spinner
+        // Setup Category Spinner
         String[] categories = {"Appetizers", "Main Course", "Desserts", "Beverages", "Specials"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -93,19 +93,19 @@ public class StaffEditMenuItemActivity extends AppCompatActivity {
             }
         }
 
-        // ✅ Image Upload Button
+        // Image Upload Button
         uploadImageButton.setOnClickListener(v -> openImagePicker());
 
         saveButton.setOnClickListener(v -> saveMenuItem());
     }
 
-    // ✅ Open Gallery to pick image
+    // Open Gallery to pick image
     private void openImagePicker() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         imagePickerLauncher.launch(intent);
     }
 
-    // ✅ Save image to internal storage (lecture pattern)
+    // Save image to internal storage
     private String saveImageToInternalStorage(Bitmap bitmap) {
         File directory = getFilesDir(); // Internal storage
         String filename = "menu_" + System.currentTimeMillis() + ".jpg";
@@ -120,7 +120,7 @@ public class StaffEditMenuItemActivity extends AppCompatActivity {
         }
     }
 
-    // ✅ Load image from saved path
+    // Load image from saved path
     private void loadImageFromPath(String path) {
         if (path != null && !path.isEmpty()) {
             File file = new File(path);

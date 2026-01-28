@@ -2,7 +2,7 @@ package com.example.restaurantapp.model;
 
 public class User {
     private String username;
-    private String password; // hashed in real apps, plain for this assessment
+    private String password;
     private String firstname;
     private String lastname;
     private String email;

@@ -19,7 +19,7 @@ public class StaffProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_profile); // Reuse layout
+        setContentView(R.layout.activity_user_profile);
 
         prefs = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
 

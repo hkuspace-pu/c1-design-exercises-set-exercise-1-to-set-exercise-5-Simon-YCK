@@ -61,7 +61,7 @@ public class GuestReservationActivity extends AppCompatActivity {
         // Time Picker Button
         btnSelectTime.setOnClickListener(v -> showTimePicker());
 
-        // ✅ Pre-fill guest name from login
+        // Pre-fill guest name from login
         String loggedInUser = getIntent().getStringExtra("guestName");
         if (loggedInUser != null && !loggedInUser.isEmpty()) {
             nameInput.setText(loggedInUser);
@@ -182,12 +182,12 @@ public class GuestReservationActivity extends AppCompatActivity {
             return;
         }
 
-        // ✅ FORMAT TIME from selectedHour and selectedMinute
+        // FORMAT TIME from selectedHour and selectedMinute
         String amPm = selectedHour >= 12 ? "PM" : "AM";
         int displayHour = selectedHour > 12 ? selectedHour - 12 : (selectedHour == 0 ? 12 : selectedHour);
         String time = String.format(Locale.getDefault(), "%02d:%02d %s", displayHour, selectedMinute, amPm);
 
-        // ✅ Save to database with special requests
+        // Save to database with special requests
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         boolean success = dbHelper.addReservation(name, selectedDate, time, guestCount, specialReq);
 

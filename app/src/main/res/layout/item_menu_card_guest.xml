@@ -6,7 +6,7 @@
     android:layout_marginBottom="24dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
-    app:cardBackgroundColor="#FFFFFF">
+    app:cardBackgroundColor="@color/color_surface">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="180dp"
-            android:background="#EDF2F7">
+            android:background="@color/color_surface_variant">
 
             <TextView
                 android:id="@+id/menuItemImage"
@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:text="$12.99"
                 android:background="@drawable/bg_button_gradient_pill"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/color_on_primary"
                 android:textStyle="bold"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
@@ -58,14 +58,14 @@
                 android:text="Margherita Pizza"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#2D3748"/>
+                android:textColor="@color/color_text_primary"/>
 
             <TextView
                 android:id="@+id/menuItemDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Classic tomato sauce, mozzarella, and basil."
-                android:textColor="#718096"
+                android:textColor="@color/color_text_secondary"
                 android:layout_marginTop="4dp"/>
         </LinearLayout>
     </LinearLayout>

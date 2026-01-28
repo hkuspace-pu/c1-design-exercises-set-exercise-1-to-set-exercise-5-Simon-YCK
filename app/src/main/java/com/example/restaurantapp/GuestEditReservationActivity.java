@@ -55,7 +55,7 @@ public class GuestEditReservationActivity extends AppCompatActivity {
         cancelBookingButton = findViewById(R.id.cancelBookingButton);
         btnBack = findViewById(R.id.btnBack);
 
-        // ✅ CHECK which views are null
+        // CHECK which views are null
         Log.d(TAG, "nameInput: " + (nameInput != null));
         Log.d(TAG, "dateInput: " + (dateInput != null));
         Log.d(TAG, "specialRequestsInput: " + (specialRequestsInput != null));
@@ -317,7 +317,7 @@ public class GuestEditReservationActivity extends AppCompatActivity {
             btnConfirm.setOnClickListener(v -> {
                 Log.d(TAG, "Confirm cancel clicked - deleting reservation ID: " + resId);
 
-                // ✅ FIX: Perform all operations BEFORE dismissing dialog
+                // Perform all operations BEFORE dismissing dialog
                 boolean success = dbHelper.deleteReservation(resId);
 
                 if (success) {
@@ -328,17 +328,17 @@ public class GuestEditReservationActivity extends AppCompatActivity {
                     Toast.makeText(this, "Reservation Cancelled", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "Reservation deleted successfully");
 
-                    // ✅ FIX: Dismiss dialog first, then finish activity
+                    // Dismiss dialog first, then finish activity
                     dialog.dismiss();
 
-                    // ✅ FIX: Set result and finish properly
+                    // Set result and finish properly
                     setResult(RESULT_OK); // Notify previous activity
                     finish(); // Return to previous screen
 
                 } else {
                     Toast.makeText(this, "Error cancelling reservation", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Failed to delete reservation");
-                    dialog.dismiss(); // ✅ Still dismiss on error
+                    dialog.dismiss(); // Still dismiss on error
                 }
             });
         }
@@ -350,7 +350,7 @@ public class GuestEditReservationActivity extends AppCompatActivity {
             });
         }
 
-        // ✅ FIX: Make dialog cancelable with back button
+        // Make dialog cancelable with back button
         builder.setCancelable(true);
 
         dialog.show();

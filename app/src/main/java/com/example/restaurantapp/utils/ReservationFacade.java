@@ -8,13 +8,13 @@ public class ReservationFacade {
     private DatabaseHelper dbHelper;
     private NotificationHelper notificationHelper;
 
-    // ✅ UPDATED: Accept username parameter
+    // Accept username parameter
     public ReservationFacade(Context context, String username) {
         this.dbHelper = new DatabaseHelper(context);
-        this.notificationHelper = new NotificationHelper(context, username); // ✅ Pass username
+        this.notificationHelper = new NotificationHelper(context, username); // Pass username
     }
 
-    // ✅ UPDATED: Add specialRequests parameter
+    // Add specialRequests parameter
     public boolean placeReservation(String name, String date, String time, int guests, String specialRequests) {
         // 1. Save to DB
         boolean success = dbHelper.addReservation(name, date, time, guests, specialRequests);

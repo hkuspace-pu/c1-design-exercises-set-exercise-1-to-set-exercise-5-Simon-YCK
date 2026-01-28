@@ -1,5 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Base neutrals -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Brand / primary (based on your existing purple/blue) -->
+    <color name="color_primary">#667EEA</color>
+    <color name="color_on_primary">#FFFFFF</color>
+    <color name="color_primary_dark">#4C63D0</color>
+    <color name="color_primary_tint">#E0E7FF</color>
+
+    <!-- Secondary / accent (green already used for status) -->
+    <color name="color_secondary">#48BB78</color>
+    <color name="color_on_secondary">#FFFFFF</color>
+    <color name="color_secondary_tint">#E6FFFA</color>
+
+    <!-- Background / surfaces -->
+    <color name="color_background">#F7FAFC</color>
+    <color name="color_surface">#FFFFFFFF</color>
+    <color name="color_surface_variant">#EDF2F7</color>
+    <color name="color_outline">#E2E8F0</color>
+
+    <!-- Text colors -->
+    <color name="color_text_primary">#1A202C</color>
+    <color name="color_text_secondary">#4A5568</color>
+    <color name="color_text_muted">#A0AEC0</color>
+
+    <!-- Status / feedback -->
+    <color name="color_error">#E53E3E</color>
+    <color name="color_on_error">#FFFFFF</color>
+    <color name="color_success">#38A169</color>
+    <color name="color_warning">#DD6B20</color>
+    <color name="color_info">#3182CE</color>
+
+    <!-- Special UI elements -->
+    <color name="color_badge_background">#E53E3E</color>
+    <color name="color_badge_text">#FFFFFF</color>
+
+    <color name="color_guest_badge_bg">#E6FFFA</color>
+    <color name="color_guest_badge_text">#2C7A7B</color>
+
+    <color name="color_tab_selected_bg">#667EEA</color>
+    <color name="color_tab_selected_text">#FFFFFF</color>
+
 </resources>

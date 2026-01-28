@@ -16,7 +16,7 @@
             android:text="Create Account"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="#2D3748"
+            android:textColor="@color/color_text_primary"
             android:layout_marginBottom="32dp"/>
 
         <!-- Username -->
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Username"
-            android:textColor="#718096"
+            android:textColor="@color/color_text_secondary"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="First Name"
-            android:textColor="#718096"
+            android:textColor="@color/color_text_secondary"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Last Name"
-            android:textColor="#718096"
+            android:textColor="@color/color_text_secondary"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -75,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Email"
-            android:textColor="#718096"
+            android:textColor="@color/color_text_secondary"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -93,7 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Contact Number"
-            android:textColor="#718096"
+            android:textColor="@color/color_text_secondary"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -111,7 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Password"
-            android:textColor="#718096"
+            android:textColor="@color/color_text_secondary"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -129,7 +129,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Confirm Password"
-            android:textColor="#718096"
+            android:textColor="@color/color_text_secondary"
             android:layout_marginBottom="8dp"/>
 
         <EditText

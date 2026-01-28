@@ -73,7 +73,7 @@ public class GuestMenuBrowseActivity extends AppCompatActivity {
 
     private void loadMenuItems(String category) {
         if (category.equals("All")) {
-            menuItems = dbHelper.getAllMenuItems(); // ✅ Already returns List<MenuItem>
+            menuItems = dbHelper.getAllMenuItems(); // Already returns List<MenuItem>
         } else {
             menuItems = new ArrayList<>();
             Cursor cursor = dbHelper.getMenuByCategory(category);

@@ -13,7 +13,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Restaurant.db";
-    private static final int DATABASE_VERSION = 7; // ✅ Version 5 for special_requests
+    private static final int DATABASE_VERSION = 7; // Version 7 for special_requests
 
     // --- TABLE: MENU ---
     private static final String TABLE_MENU = "menu_items";
@@ -31,7 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_RES_DATE = "res_date";
     private static final String COL_RES_TIME = "res_time";
     private static final String COL_RES_COUNT = "guest_count";
-    private static final String COL_RES_SPECIAL = "special_requests"; // ✅ ADD THIS
+    private static final String COL_RES_SPECIAL = "special_requests";
 
     // --- TABLE: NOTIFICATIONS ---
     private static final String TABLE_NOTIF = "notifications";
@@ -59,7 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_IMAGE + " TEXT)";
         db.execSQL(createMenu);
 
-        // ✅ Create Reservation Table WITH special_requests
+        // Create Reservation Table WITH special_requests
         String createRes = "CREATE TABLE " + TABLE_RESERVATION + " (" +
                 COL_RES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_RES_GUEST + " TEXT, " +
@@ -95,7 +95,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL(createNotif);
         }
 
-        // ✅ Add special_requests column if upgrading from version < 5
+        // Add special_requests column if upgrading from version < 6
         if (oldVersion < 6) {
                 try {
                     db.execSQL("ALTER TABLE " + TABLE_NOTIF + " ADD COLUMN " + COL_NOTIF_USER + " TEXT");
@@ -186,7 +186,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // ==================== RESERVATION OPERATIONS ====================
 
-    // ✅ UPDATED: 5 parameters including specialRequests
+    // parameters including specialRequests
     public boolean addReservation(String name, String date, String time, int guests, String specialRequests) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -203,7 +203,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + TABLE_RESERVATION + " ORDER BY " + COL_RES_ID + " DESC", null);
     }
 
-    // ✅ UPDATED: 5 parameters including specialRequests
+    // parameters including specialRequests
     public boolean updateReservation(int id, String date, String time, int guests, String specialRequests) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -233,7 +233,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_NOTIF, null, cv);
     }
 
-    // ✅ ADD: Get notifications by username
+    // Get notifications by username
     public Cursor getNotificationsByUser(String username) {
          SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_NOTIF +
@@ -242,7 +242,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                            new String[]{username});
     }
 
-    // ✅ UPDATE: Get unread count by username
+    // Get unread count by username
     public int getUnreadNotificationCountByUser(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NOTIF +
@@ -257,7 +257,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return count;
     }
 
-    // ✅ ADD this method to DatabaseHelper.java (for staff to mark ALL notifications as read)
+    // ADD this method to DatabaseHelper.java (for staff to mark ALL notifications as read)
     public void markAllAsRead() {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -265,7 +265,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(TABLE_NOTIF, cv, COL_NOTIF_READ + " = 0", null);
     }
 
-    // ✅ UPDATE: Mark all as read for specific user
+    // Mark all as read for specific user
     public void markAllAsReadForUser(String username) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();

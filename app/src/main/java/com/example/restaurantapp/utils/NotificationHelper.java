@@ -13,7 +13,7 @@ public class NotificationHelper {
     private Context context;
     private String currentUsername;
 
-    // ✅ UPDATE constructor to accept username
+    // constructor to accept username
     public NotificationHelper(Context context, String username) {
         this.context = context;
         this.currentUsername = username;
@@ -29,10 +29,10 @@ public class NotificationHelper {
         }
     }
 
-    // ✅ PRIVATE - saves to DB and shows notification
+    // PRIVATE - saves to DB and shows notification
     private void sendNotification(String title, String message, String type) {
         DatabaseHelper db = new DatabaseHelper(context);
-        db.addNotification(title, message, type, currentUsername); // ✅ Pass username
+        db.addNotification(title, message, type, currentUsername); // Pass username
 
         // Show system notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
@@ -48,7 +48,7 @@ public class NotificationHelper {
         }
     }
 
-    // ✅ Get unread count from DATABASE (not SharedPreferences)
+    // Get unread count from DATABASE (not SharedPreferences)
     public int getUnreadCount() {
         DatabaseHelper dbHelper = new DatabaseHelper(context);
         return dbHelper.getUnreadNotificationCountByUser(currentUsername);

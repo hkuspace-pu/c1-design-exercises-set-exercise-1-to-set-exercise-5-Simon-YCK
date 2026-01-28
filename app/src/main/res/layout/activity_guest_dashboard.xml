@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F7FAFC">
+    android:background="@color/color_background">
 
     <!-- ===== TOP BAR: Welcome + Notification + Profile ===== -->
     <RelativeLayout
@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:text="Welcome,"
                 android:textSize="14sp"
-                android:textColor="#718096"
+                android:textColor="@color/color_text_secondary"
                 android:fontFamily="sans-serif-medium"/>
 
             <TextView
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:text="Guest"
                 android:textSize="22sp"
-                android:textColor="#2D3748"
+                android:textColor="@color/color_text_primary"
                 android:fontFamily="sans-serif-medium"
                 android:textStyle="bold"/>
         </LinearLayout>
@@ -146,7 +146,7 @@
                     android:layout_height="wrap_content"
                     android:text="Book a Table"
                     android:textSize="24sp"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/color_on_primary"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium"
                     android:letterSpacing="0.02"/>
@@ -188,7 +188,7 @@
                     android:layout_height="wrap_content"
                     android:text="Browse Menu"
                     android:textSize="18sp"
-                    android:textColor="#667EEA"
+                    android:textColor="@color/color_primary"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium"/>
 
@@ -200,7 +200,7 @@
                 android:layout_height="wrap_content"
                 android:text="My Reservations"
                 android:textSize="20sp"
-                android:textColor="#2D3748"
+                android:textColor="@color/color_text_primary"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-medium"
                 android:layout_marginBottom="16dp"/>

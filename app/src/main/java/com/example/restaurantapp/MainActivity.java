@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         // Login Button Click
         loginButton.setOnClickListener(v -> handleApiLogin());
 
-        // ✅ ENTER KEY LOGIN - ADD THIS
+        // ENTER KEY LOGIN - ADD THIS
         passwordInput.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 handleApiLogin(); // Call your existing login method

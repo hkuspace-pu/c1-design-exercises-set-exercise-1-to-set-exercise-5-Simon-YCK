@@ -5,6 +5,7 @@
     android:orientation="horizontal"
     android:padding="12dp"
     android:background="@drawable/reservation_row_border"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
     android:layout_marginBottom="8dp"
     android:clickable="true"
     android:focusable="true">
@@ -17,7 +18,7 @@
         android:layout_weight="1"
         android:text="2025-11-25"
         android:textSize="14sp"
-        android:textColor="#000000" />
+        android:textColor="@color/color_text_primary" />
 
     <!-- Time Column -->
     <TextView
@@ -27,7 +28,7 @@
         android:layout_weight="1"
         android:text="19:00"
         android:textSize="14sp"
-        android:textColor="#000000" />
+        android:textColor="@color/color_text_primary" />
 
     <!-- Guests Column -->
     <TextView
@@ -37,6 +38,6 @@
         android:layout_weight="1"
         android:text="2 guests"
         android:textSize="14sp"
-        android:textColor="#000000" />
+        android:textColor="@color/color_text_primary" />
 
 </LinearLayout>

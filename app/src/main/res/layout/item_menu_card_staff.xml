@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="24dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="4dp">
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@color/color_surface">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +17,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="160dp"
-            android:background="#EDF2F7">
+            android:background="@color/color_surface_variant">
 
             <TextView
                 android:id="@+id/menuItemImage"
@@ -32,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:text="$15.00"
                 android:background="@drawable/bg_button_gradient_pill"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/color_on_primary"
                 android:padding="8dp"
                 android:layout_gravity="top|end"
                 android:layout_margin="12dp"/>
@@ -59,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:text="Juicy beef patty with cheddar"
                 android:textSize="14sp"
-                android:textColor="#718096"
+                android:textColor="@color/color_text_secondary"
                 android:layout_marginTop="4dp"/>
 
             <!-- Action Buttons Row -->
@@ -77,8 +78,8 @@
                     android:layout_weight="1"
                     android:layout_height="48dp"
                     android:text="Edit"
-                    android:textColor="#FFFFFF"
-                    android:backgroundTint="#667EEA"
+                    android:backgroundTint="@color/color_primary"
+                    android:textColor="@color/color_on_primary"
                     android:textStyle="bold"
                     android:layout_marginEnd="8dp"/>
 
@@ -89,8 +90,8 @@
                     android:layout_weight="1"
                     android:layout_height="48dp"
                     android:text="Delete"
-                    android:textColor="#FFFFFF"
-                    android:backgroundTint="#E53E3E"
+                    android:backgroundTint="@color/color_error"
+                    android:textColor="@color/color_on_error"
                     android:textStyle="bold"
                     android:layout_marginStart="8dp"/>
             </LinearLayout>
