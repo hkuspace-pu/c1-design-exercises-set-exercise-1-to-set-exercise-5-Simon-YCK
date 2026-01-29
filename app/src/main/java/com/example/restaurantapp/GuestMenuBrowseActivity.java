@@ -3,6 +3,7 @@ package com.example.restaurantapp;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,7 @@ public class GuestMenuBrowseActivity extends AppCompatActivity {
     private List<MenuItem> menuItems;
     private LinearLayout tabContainer;
     private String selectedCategory = "All";
+    private View btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +34,14 @@ public class GuestMenuBrowseActivity extends AppCompatActivity {
         dbHelper = new DatabaseHelper(this);
         recyclerView = findViewById(R.id.menuRecyclerView);
         tabContainer = findViewById(R.id.tabContainer);
+        btnBack = findViewById(R.id.btnBack);
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
+        // Back Button
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
 
         setupCategoryTabs();
         loadMenuItems(selectedCategory);

@@ -10,14 +10,15 @@
     android:layout_marginBottom="8dp">
 
     <!-- Icon -->
-    <TextView
+    <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:text="🔔"
-        android:textSize="20sp"
-        android:gravity="center"
         android:background="@drawable/bg_guest_badge"
-        android:layout_marginEnd="16dp"/>
+        android:src="@drawable/ic_notifications_24"
+        android:tint="@color/color_guest_badge_text"
+        android:padding="8dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="Notification" />
 
     <!-- Content -->
     <LinearLayout

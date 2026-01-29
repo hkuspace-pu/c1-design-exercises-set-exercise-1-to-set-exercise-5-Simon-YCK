@@ -13,12 +13,13 @@
         android:padding="32dp">
 
         <!-- Logo Area -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="🍽️"
-            android:textSize="80sp"
-            android:layout_marginBottom="16dp"/>
+        <ImageView
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_restaurant_24"
+            android:tint="@color/color_primary"
+            android:contentDescription="App logo" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -85,7 +86,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="📋 Demo Accounts"
+                android:text="Demo Accounts"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/color_text_secondary"
@@ -101,7 +102,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="👨‍💼 Staff Account"
+                    android:text="Staff Account"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:textColor="@color/color_primary"
@@ -133,7 +134,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="👤 Guest Account"
+                    android:text="Guest Account"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:textColor="@color/color_secondary"

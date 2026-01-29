@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -21,7 +22,8 @@ import java.util.Locale;
 public class GuestReservationActivity extends AppCompatActivity {
 
     private EditText nameInput, dateInput, specialRequestsInput;
-    private Button btnSelectTime, confirmButton, btnBack;
+    private Button btnSelectTime, confirmButton;
+    private View btnBack;
     private TextView tvSelectedTime, guestsLabel;
     private SeekBar guestsSeekBar;
 

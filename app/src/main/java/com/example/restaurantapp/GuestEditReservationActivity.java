@@ -23,7 +23,8 @@ public class GuestEditReservationActivity extends AppCompatActivity {
     private static final String TAG = "GuestEditReservation";
 
     private EditText nameInput, dateInput, specialRequestsInput;
-    private Button btnSelectTime, saveButton, cancelBookingButton, btnBack;
+    private Button btnSelectTime, saveButton, cancelBookingButton;
+    private View btnBack;
     private TextView tvSelectedTime, guestsLabel;
     private SeekBar guestsSeekBar;
     private DatabaseHelper dbHelper;

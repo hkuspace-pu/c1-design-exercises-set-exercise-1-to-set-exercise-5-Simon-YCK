@@ -53,13 +53,14 @@
             android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless">
 
-            <!-- Bell Icon (Emoji) -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <!-- Bell Icon (Vector) -->
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="center"
-                android:text="🔔"
-                android:textSize="24sp"/>
+                android:src="@drawable/ic_notifications_24"
+                android:tint="@color/color_text_secondary"
+                android:contentDescription="Notifications" />
 
             <!-- Badge (Red Dot with Number) -->
             <TextView
@@ -132,14 +133,15 @@
                 android:elevation="8dp"
                 android:padding="24dp">
 
-                <!-- Large Calendar Icon -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="📅"
-                    android:textSize="56sp"
-                    android:alpha="0.9"
-                    android:layout_marginBottom="12dp"/>
+                <!-- Large Calendar Icon (Vector) -->
+                <ImageView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginBottom="12dp"
+                    android:alpha="0.92"
+                    android:src="@drawable/ic_calendar_24"
+                    android:tint="@color/color_on_primary"
+                    android:contentDescription="Book" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -176,12 +178,13 @@
                 android:focusable="true"
                 android:padding="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🍽️"
-                    android:textSize="28sp"
-                    android:layout_marginEnd="12dp"/>
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/ic_restaurant_24"
+                    android:tint="@color/color_primary"
+                    android:contentDescription="Browse menu" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -223,12 +226,14 @@
                 android:padding="40dp"
                 android:visibility="gone">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="📭"
-                    android:textSize="64sp"
-                    android:layout_marginBottom="16dp"/>
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginBottom="16dp"
+                    android:src="@drawable/ic_notifications_24"
+                    android:tint="@color/color_text_muted"
+                    android:alpha="0.6"
+                    android:contentDescription="Empty" />
 
                 <TextView
                     android:layout_width="wrap_content"

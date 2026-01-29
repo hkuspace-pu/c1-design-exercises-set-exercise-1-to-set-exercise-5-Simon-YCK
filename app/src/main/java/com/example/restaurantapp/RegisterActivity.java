@@ -2,6 +2,7 @@ package com.example.restaurantapp;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +17,8 @@ import org.json.JSONObject;
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText etUsername, etFirstName, etLastName, etEmail, etContact, etPassword, etPasswordConfirm;
-    private Button btnRegister, btnBack;
+    private Button btnRegister;
+    private View btnBack;
     private static final String STUDENT_ID = "YangChunKit_20177089";
     private static final String API_BASE_URL = "http://10.240.72.69/comp2000/coursework/create_user/" + STUDENT_ID;
 

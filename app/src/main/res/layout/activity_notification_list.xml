@@ -7,35 +7,37 @@
     android:background="@drawable/bg_app_warm">
 
     <!-- Header Row -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginBottom="16dp"
         android:gravity="center_vertical"
-        android:layout_marginBottom="16dp">
+        android:orientation="horizontal">
 
         <include
             layout="@layout/include_back_button"
             android:layout_marginEnd="12dp" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="185dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="serif"
             android:text="Notifications"
-            android:textSize="24sp"
-            android:textStyle="bold"
+            android:textAlignment="center"
             android:textColor="@color/color_text_primary"
-            android:fontFamily="serif"/>
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnClearAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Clear All"
-            android:textSize="12sp"
             android:backgroundTint="@color/color_error"
-            android:textColor="@color/color_on_error"/>
+            android:text="Clear All"
+            android:textColor="@color/color_on_error"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <ListView

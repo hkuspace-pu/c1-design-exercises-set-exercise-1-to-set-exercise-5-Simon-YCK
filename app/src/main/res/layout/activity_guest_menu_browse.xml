@@ -12,6 +12,11 @@
         android:padding="16dp"
         android:background="@color/color_primary">
 
+        <include
+            layout="@layout/include_back_button"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

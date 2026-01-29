@@ -35,6 +35,7 @@ public class StaffViewReservationsActivity extends AppCompatActivity {
     private List<Reservation> filteredList;    // Filtered/sorted list
     private SearchView searchView;
     private Button btnFilter;
+    private View btnBack;
     private TextView tvActiveFilters;
 
     // Filter states
@@ -49,10 +50,16 @@ public class StaffViewReservationsActivity extends AppCompatActivity {
         dbHelper = new DatabaseHelper(this);
         searchView = findViewById(R.id.searchView);
         btnFilter = findViewById(R.id.btnFilter);
+        btnBack = findViewById(R.id.btnBack);
         tvActiveFilters = findViewById(R.id.tvActiveFilters);
 
         recyclerView = findViewById(R.id.recyclerReservations);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Back Button
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
 
         loadReservations();
         setupSearchView();

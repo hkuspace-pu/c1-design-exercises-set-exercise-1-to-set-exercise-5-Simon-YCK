@@ -26,6 +26,7 @@ public class StaffEditMenuItemActivity extends AppCompatActivity {
     private ImageView imagePreview;
     private View uploadImageButton;
     private Button saveButton;
+    private View btnBack;
     private Spinner categorySpinner;
 
     private DatabaseHelper dbHelper;
@@ -63,6 +64,7 @@ public class StaffEditMenuItemActivity extends AppCompatActivity {
         imagePreview = findViewById(R.id.imagePreview);
         uploadImageButton = findViewById(R.id.uploadImageButton);
         saveButton = findViewById(R.id.saveButton);
+        btnBack = findViewById(R.id.btnBack);
         categorySpinner = findViewById(R.id.categorySpinner);
 
         // Setup Category Spinner
@@ -91,6 +93,11 @@ public class StaffEditMenuItemActivity extends AppCompatActivity {
 
                 saveButton.setText("Update Item");
             }
+        }
+
+        // Back Button
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
         }
 
         // Image Upload Button

@@ -26,7 +26,8 @@ public class NotificationListActivity extends AppCompatActivity {
 
     private DatabaseHelper dbHelper;
     private ListView listView;
-    private Button btnClearAll, btnBack;
+    private Button btnClearAll;
+    private View btnBack;
     private String currentUsername;
     private boolean isStaff = false;
 

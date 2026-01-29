@@ -51,12 +51,13 @@
             android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="center"
-                android:text="🔔"
-                android:textSize="22sp"/>
+                android:src="@drawable/ic_notifications_24"
+                android:tint="@color/color_text_secondary"
+                android:contentDescription="Notifications" />
 
             <TextView
                 android:id="@+id/notificationBadge"
@@ -83,12 +84,13 @@
             android:background="@drawable/bg_profile_avatar"
             android:clickable="true"
             android:focusable="true">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_gravity="center"
-                android:text="⚙️"
-                android:textSize="20sp"/>
+                android:src="@drawable/ic_settings_24"
+                android:tint="@color/color_on_primary"
+                android:contentDescription="Settings" />
         </FrameLayout>
     </RelativeLayout>
 
@@ -106,12 +108,13 @@
         android:clickable="true"
         android:focusable="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="📋"
-            android:textSize="48sp"
-            android:layout_marginEnd="20dp"/>
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_restaurant_24"
+            android:tint="@color/color_on_primary"
+            android:contentDescription="Manage menu" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -148,12 +151,13 @@
         android:clickable="true"
         android:focusable="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="📅"
-            android:textSize="48sp"
-            android:layout_marginEnd="20dp"/>
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_calendar_24"
+            android:tint="@color/color_on_primary"
+            android:contentDescription="Reservations" />
 
         <LinearLayout
             android:layout_width="wrap_content"

@@ -2,6 +2,7 @@ package com.example.restaurantapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ public class StaffMenuEditorActivity extends AppCompatActivity {
     private List<MenuItem> menuList;
     private RecyclerView recyclerView;
     private Button btnAddNew;
+    private View btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,12 @@ public class StaffMenuEditorActivity extends AppCompatActivity {
         // 2. Initialize Views
         recyclerView = findViewById(R.id.recyclerViewMenu);
         btnAddNew = findViewById(R.id.btnAddNew);
+        btnBack = findViewById(R.id.btnBack);
+
+        // Back Button
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
 
         // 3. Setup RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

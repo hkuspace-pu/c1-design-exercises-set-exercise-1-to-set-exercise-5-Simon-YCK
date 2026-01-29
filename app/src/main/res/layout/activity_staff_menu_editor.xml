@@ -6,33 +6,43 @@
     android:background="@drawable/bg_app_warm">
 
     <!-- Header Section -->
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="24dp"
-        android:background="@color/color_on_error"
-        android:elevation="4dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:background="@color/color_surface"
+        android:elevation="4dp">
+
+        <include
+            layout="@layout/include_back_button"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_centerInParent="true"
             android:text="Manage Menu"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="@color/color_text_primary"/>
+            android:textColor="@color/color_text_primary"
+            android:fontFamily="serif"/>
 
         <Button
             android:id="@+id/btnAddNew"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+ Add"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="Add"
+            android:drawableStart="@drawable/ic_add_24"
+            android:drawableTint="@color/color_on_secondary"
+            android:drawablePadding="6dp"
             android:backgroundTint="@color/color_secondary"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/color_on_secondary"
             android:textStyle="bold"/>
-    </LinearLayout>
+    </RelativeLayout>
 
     <!-- RECYCLERVIEW REPLACEMENT -->
     <androidx.recyclerview.widget.RecyclerView
