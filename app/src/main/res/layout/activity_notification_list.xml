@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/color_background">
+    android:background="@drawable/bg_app_warm">
 
     <!-- Header Row -->
     <LinearLayout
@@ -14,6 +14,10 @@
         android:gravity="center_vertical"
         android:layout_marginBottom="16dp">
 
+        <include
+            layout="@layout/include_back_button"
+            android:layout_marginEnd="12dp" />
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -21,7 +25,8 @@
             android:text="Notifications"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="@color/color_text_primary"/>
+            android:textColor="@color/color_text_primary"
+            android:fontFamily="serif"/>
 
         <Button
             android:id="@+id/btnClearAll"
@@ -40,15 +45,5 @@
         android:layout_weight="1"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp"/>
-
-    <!-- Back Button -->
-    <Button
-        android:id="@+id/btnBack"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="← Back"
-        android:textColor="@color/color_primary"
-        android:backgroundTint="@color/color_surface"
-        android:layout_marginTop="16dp"/>
 
 </LinearLayout>

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/color_background">
+    android:background="@drawable/bg_app_warm">
 
     <!-- Header -->
     <RelativeLayout
@@ -19,7 +19,8 @@
             android:text="Menu"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@color/color_on_primary"/>
+            android:textColor="@color/color_on_primary"
+            android:fontFamily="serif"/>
     </RelativeLayout>
 
     <!-- Category Tabs -->

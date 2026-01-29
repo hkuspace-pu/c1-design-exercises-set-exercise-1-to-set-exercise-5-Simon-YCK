@@ -1,26 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/colorControlHighlight">
 
-    <!-- Soft shadow -->
-    <item
-        android:top="2dp"
-        android:left="2dp"
-        android:right="2dp">
+    <!-- Mask keeps ripple within rounded card -->
+    <item android:id="@android:id/mask">
         <shape android:shape="rectangle">
-            <solid android:color="#22000000" />
+            <solid android:color="#FFFFFFFF" />
             <corners android:radius="16dp" />
         </shape>
     </item>
 
-    <!-- Main card -->
-    <item android:bottom="4dp">
-        <shape android:shape="rectangle">
-            <solid android:color="@color/color_surface" />
-            <corners android:radius="16dp" />
-            <stroke
-                android:width="1dp"
-                android:color="@color/color_outline" />
-        </shape>
+    <!-- Content (existing ticket look + shadow) -->
+    <item>
+        <layer-list>
+
+            <!-- Soft shadow -->
+            <item
+                android:top="2dp"
+                android:left="2dp"
+                android:right="2dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="#22000000" />
+                    <corners android:radius="16dp" />
+                </shape>
+            </item>
+
+            <!-- Main card -->
+            <item android:bottom="4dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="?attr/colorSurface" />
+                    <corners android:radius="16dp" />
+                    <stroke
+                        android:width="1dp"
+                        android:color="?attr/colorOutline" />
+                </shape>
+            </item>
+
+        </layer-list>
     </item>
 
-</layer-list>
+</ripple>

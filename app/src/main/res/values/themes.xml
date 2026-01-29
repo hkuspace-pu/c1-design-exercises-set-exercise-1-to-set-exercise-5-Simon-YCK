@@ -2,6 +2,9 @@
 
     <!-- Base application theme (Material 3) -->
     <style name="Base.Theme.RestaurantApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Warm global background (premium dining atmosphere) -->
+        <item name="android:windowBackground">@drawable/bg_app_warm</item>
+
         <!-- Light theme colors -->
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorOnPrimary">@color/color_on_primary</item>
@@ -55,6 +58,28 @@
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:minHeight">48dp</item>
         <item name="cornerRadius">24dp</item>
+    </style>
+
+    <!-- Standard back button (reusable across sub-pages) -->
+    <style name="Widget.RestaurantApp.BackButton" parent="Widget.Material3.Button">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:background">@drawable/bg_back_button</item>
+        <item name="android:textColor">@color/color_primary</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- Premium header typography: serif titles + sans body -->
+    <style name="TextAppearance.RestaurantApp.HeaderSerif" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textColor">@color/color_text_primary</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <!-- Typography presets you can optionally apply in layouts -->

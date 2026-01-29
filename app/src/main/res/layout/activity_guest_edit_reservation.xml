@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_background">
+    android:background="@drawable/bg_app_warm">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,15 +16,10 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp">
 
-            <Button
-                android:id="@+id/btnBack"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+            <include
+                layout="@layout/include_back_button"
                 android:layout_alignParentStart="true"
-                android:text="←"
-                android:textSize="20sp"
-                android:textColor="#667EEA"
-                android:background="?attr/selectableItemBackgroundBorderless"/>
+                android:layout_centerVertical="true" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -33,7 +28,8 @@
                 android:text="Edit Reservation"
                 android:textSize="28sp"
                 android:textStyle="bold"
-                android:textColor="@color/color_text_primary"/>
+                android:textColor="@color/color_text_primary"
+                android:fontFamily="serif"/>
         </RelativeLayout>
 
         <!-- Name Input -->

@@ -1,7 +1,35 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
     <style name="Base.Theme.RestaurantApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Warm global background (dark) -->
+        <item name="android:windowBackground">@drawable/bg_app_warm</item>
+
+        <!-- Dark theme colors -->
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorOnPrimary">@color/color_on_primary</item>
+        <item name="colorPrimaryContainer">#2D3748</item>
+
+        <item name="colorSecondary">@color/color_secondary</item>
+        <item name="colorOnSecondary">@color/color_on_secondary</item>
+        <item name="colorSecondaryContainer">#234E52</item>
+
+        <item name="android:colorBackground">#111827</item>
+        <item name="colorSurface">#1F2933</item>
+        <item name="colorSurfaceVariant">#273549</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="colorOutline">#4B5563</item>
+
+        <item name="colorError">@color/color_error</item>
+        <item name="colorOnError">@color/color_on_error</item>
+
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/color_text_muted</item>
+
+        <item name="materialButtonStyle">@style/Widget.RestaurantApp.Button.Primary</item>
+        <item name="android:colorControlHighlight">#374151</item>
+
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.RestaurantApp.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.RestaurantApp.Large</item>
     </style>
+
 </resources>

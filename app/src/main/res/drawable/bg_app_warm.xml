@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Base warm gradient -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="@color/color_bg_warm_start"
+                android:endColor="@color/color_bg_warm_end"
+                android:angle="90" />
+        </shape>
+    </item>
+
+    <!-- Subtle vignette (adds depth without hurting readability) -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="520dp"
+                android:centerX="0.35"
+                android:centerY="0.2"
+                android:startColor="#00FFFFFF"
+                android:endColor="#12000000" />
+        </shape>
+    </item>
+
+    <!-- Very soft highlight glow (premium feel) -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="420dp"
+                android:centerX="0.85"
+                android:centerY="0.0"
+                android:startColor="#10FFFFFF"
+                android:endColor="#00FFFFFF" />
+        </shape>
+    </item>
+
+</layer-list>

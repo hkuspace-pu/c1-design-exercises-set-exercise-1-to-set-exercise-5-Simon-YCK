@@ -16,8 +16,12 @@
     <color name="color_on_secondary">#FFFFFF</color>
     <color name="color_secondary_tint">#E6FFFA</color>
 
+    <!-- Warm, premium dining atmosphere -->
+    <color name="color_bg_warm_start">#FFF8F0</color> <!-- warm ivory -->
+    <color name="color_bg_warm_end">#F7FAFC</color>   <!-- soft cool lift -->
+
     <!-- Background / surfaces -->
-    <color name="color_background">#F7FAFC</color>
+    <color name="color_background">@color/color_bg_warm_end</color>
     <color name="color_surface">#FFFFFFFF</color>
     <color name="color_surface_variant">#EDF2F7</color>
     <color name="color_outline">#E2E8F0</color>

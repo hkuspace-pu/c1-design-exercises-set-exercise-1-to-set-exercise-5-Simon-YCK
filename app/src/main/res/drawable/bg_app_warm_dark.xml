@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Base dark gradient (still slightly warm, not pure black) -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#0B1220"
+                android:endColor="#111827"
+                android:angle="90" />
+        </shape>
+    </item>
+
+    <!-- Subtle top highlight -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="520dp"
+                android:centerX="0.75"
+                android:centerY="0.1"
+                android:startColor="#18243A"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- Gentle vignette -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="620dp"
+                android:centerX="0.5"
+                android:centerY="0.9"
+                android:startColor="#00000000"
+                android:endColor="#22000000" />
+        </shape>
+    </item>
+
+</layer-list>
