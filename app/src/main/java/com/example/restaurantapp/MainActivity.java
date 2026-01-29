@@ -1,8 +1,10 @@
 package com.example.restaurantapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText usernameInput;
     private EditText passwordInput;
     private Button loginButton;
+    private boolean isLoggingIn = false;
 
     private static final String STUDENT_ID = "YangChunKit_20177089";
     private static final String API_BASE_URL = "http://10.240.72.69/comp2000/coursework/read_user/" + STUDENT_ID + "/";
@@ -41,10 +44,15 @@ public class MainActivity extends AppCompatActivity {
         // Login Button Click
         loginButton.setOnClickListener(v -> handleApiLogin());
 
-        // ENTER KEY LOGIN - ADD THIS
+        // ENTER KEY LOGIN - Hide keyboard and trigger login
         passwordInput.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                handleApiLogin(); // Call your existing login method
+                // Hide keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(passwordInput.getWindowToken(), 0);
+                }
+                handleApiLogin();
                 return true;
             }
             return false;
@@ -60,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleApiLogin() {
+        // Prevent double submission
+        if (isLoggingIn) {
+            return;
+        }
+
         String username = usernameInput.getText().toString().trim();
         String password = passwordInput.getText().toString().trim();
 
@@ -67,6 +80,10 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter username and password", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        // Set flag and disable button
+        isLoggingIn = true;
+        loginButton.setEnabled(false);
 
         // 1. Construct API URL
         String url = API_BASE_URL + username;
@@ -88,13 +105,22 @@ public class MainActivity extends AppCompatActivity {
                                 navigateToDashboard(user.getUsertype(), user.getUsername());
                             } else {
                                 Toast.makeText(this, "Invalid Password", Toast.LENGTH_SHORT).show();
+                                // Reset on error
+                                isLoggingIn = false;
+                                loginButton.setEnabled(true);
                             }
                         } else {
                             Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show();
+                            // Reset on error
+                            isLoggingIn = false;
+                            loginButton.setEnabled(true);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(this, "Parsing Error", Toast.LENGTH_SHORT).show();
+                        // Reset on error
+                        isLoggingIn = false;
+                        loginButton.setEnabled(true);
                     }
                 },
                 error -> {
@@ -104,6 +130,9 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(this, "Connection Error. Check VPN/Wifi.", Toast.LENGTH_SHORT).show();
                     }
+                    // Reset on error
+                    isLoggingIn = false;
+                    loginButton.setEnabled(true);
                 }
         );
 
@@ -128,6 +157,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Login Successful: Guest", Toast.LENGTH_SHORT).show();
         }
         startActivity(intent);
-        finish(); // Close login screen
+        finish(); // Close login screen (no need to reset flag here)
     }
 }

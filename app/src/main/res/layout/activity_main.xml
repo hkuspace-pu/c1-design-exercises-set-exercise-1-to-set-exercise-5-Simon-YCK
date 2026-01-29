@@ -38,6 +38,10 @@
             android:layout_height="56dp"
             android:background="@drawable/bg_input_rounded"
             android:hint="Username"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
             android:paddingStart="20dp"
             android:layout_marginBottom="16dp"/>
 
@@ -48,6 +52,8 @@
             android:background="@drawable/bg_input_rounded"
             android:hint="Password"
             android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true"
             android:imeOptions="actionDone"
             android:paddingStart="20dp"
             android:layout_marginBottom="32dp"/>
