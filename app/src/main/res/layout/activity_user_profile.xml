@@ -14,14 +14,12 @@
         android:elevation="2dp">
 
         <!-- Back Button (Top Left) -->
-
-        <!-- Title -->
-
         <include
             layout="@layout/include_back_button"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true" />
 
+        <!-- Title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -102,94 +100,202 @@
                 android:padding="8dp"
                 android:layout_marginBottom="32dp">
 
-                <!-- 1. Booking Created -->
+                <!-- 1. New Reservation -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="12dp"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="New Reservation"
+                            android:textColor="@color/color_text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+                        <Switch
+                            android:id="@+id/switchBookingCreated"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"/>
+                    </LinearLayout>
+
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Booking Confirmed"
-                        android:textColor="@color/color_text_primary"
-                        android:textSize="15sp"/>
-                    <Switch
-                        android:id="@+id/switchBookingCreated"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"/>
+                        android:text="Get notified when a new booking is confirmed"
+                        android:textSize="12sp"
+                        android:textColor="@color/color_text_secondary"
+                        android:layout_marginTop="4dp"/>
                 </LinearLayout>
 
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/color_outline"/>
 
-                <!-- 2. Booking Updated -->
+                <!-- 2. Reservation Updates -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="12dp"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Reservation Updates"
+                            android:textColor="@color/color_text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+                        <Switch
+                            android:id="@+id/switchBookingUpdated"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"/>
+                    </LinearLayout>
+
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Booking Updates"
-                        android:textColor="@color/color_text_primary"
-                        android:textSize="15sp"/>
-                    <Switch
-                        android:id="@+id/switchBookingUpdated"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"/>
+                        android:text="Get notified when a booking is modified"
+                        android:textSize="12sp"
+                        android:textColor="@color/color_text_secondary"
+                        android:layout_marginTop="4dp"/>
                 </LinearLayout>
 
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/color_outline"/>
 
-                <!-- 3. Booking Cancelled -->
+                <!-- 3. Reservation Cancellations -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="12dp"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Reservation Cancellations"
+                            android:textColor="@color/color_text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+                        <Switch
+                            android:id="@+id/switchBookingCancelled"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"/>
+                    </LinearLayout>
+
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Booking Cancellations"
-                        android:textColor="@color/color_text_primary"
-                        android:textSize="15sp"/>
-                    <Switch
-                        android:id="@+id/switchBookingCancelled"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"/>
+                        android:text="Get notified when a booking is cancelled"
+                        android:textSize="12sp"
+                        android:textColor="@color/color_text_secondary"
+                        android:layout_marginTop="4dp"/>
                 </LinearLayout>
 
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/color_outline"/>
 
-                <!-- 4. Promotions -->
+                <!-- 4. General Updates -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="12dp"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="General Updates"
+                            android:textColor="@color/color_text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+                        <Switch
+                            android:id="@+id/switchGeneralUpdates"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"/>
+                    </LinearLayout>
+
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Special Offers &amp; Menu"
-                        android:textColor="@color/color_text_primary"
-                        android:textSize="15sp"/>
-                    <Switch
-                        android:id="@+id/switchPromoNotif"
-                        android:layout_width="wrap_content"
+                        android:text="Receive important updates and announcements"
+                        android:textSize="12sp"
+                        android:textColor="@color/color_text_secondary"
+                        android:layout_marginTop="4dp"/>
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/color_outline"/>
+
+                <!-- 5. Promotions & Offers -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:checked="false"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Promotions &amp; Offers"
+                            android:textColor="@color/color_text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+                        <Switch
+                            android:id="@+id/switchPromoNotif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Get notified about special deals and new menu items"
+                        android:textSize="12sp"
+                        android:textColor="@color/color_text_secondary"
+                        android:layout_marginTop="4dp"/>
                 </LinearLayout>
             </LinearLayout>
 

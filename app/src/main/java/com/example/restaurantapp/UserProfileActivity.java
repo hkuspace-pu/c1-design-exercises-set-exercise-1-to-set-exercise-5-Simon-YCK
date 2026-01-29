@@ -1,73 +1,80 @@
 package com.example.restaurantapp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.restaurantapp.database.DatabaseHelper;
 
 public class UserProfileActivity extends AppCompatActivity {
 
-    private Switch switchCreated, switchUpdated, switchCancelled, switchPromo;
+    // Updated to match 3-category system
+    private Switch switchBookingNew, switchBookingUpdate, switchBookingCancel, switchGeneralUpdates, switchPromotions;
     private TextView tvName, tvEmail;
     private Button btnLogout;
     private View btnBack;
-    private SharedPreferences prefs;
+
+    private DatabaseHelper dbHelper;
+    private String currentUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        prefs = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        dbHelper = new DatabaseHelper(this);
+
+        // Get username from Intent (works for both guest and staff)
+        currentUsername = getIntent().getStringExtra("guestName");
+        if (currentUsername == null || currentUsername.isEmpty()) {
+            currentUsername = getIntent().getStringExtra("staffName");
+        }
 
         // Initialize Views
         tvName = findViewById(R.id.tvProfileName);
         tvEmail = findViewById(R.id.tvProfileEmail);
-        switchCreated = findViewById(R.id.switchBookingCreated);
-        switchUpdated = findViewById(R.id.switchBookingUpdated);
-        switchCancelled = findViewById(R.id.switchBookingCancelled);
-        switchPromo = findViewById(R.id.switchPromoNotif);
+
+        // Map existing switches to the 5 categories
+        switchBookingNew = findViewById(R.id.switchBookingCreated);
+        switchBookingUpdate = findViewById(R.id.switchBookingUpdated);
+        switchBookingCancel = findViewById(R.id.switchBookingCancelled);
+        switchGeneralUpdates = findViewById(R.id.switchGeneralUpdates);
+        switchPromotions = findViewById(R.id.switchPromoNotif);
+
         btnLogout = findViewById(R.id.btnLogout);
         btnBack = findViewById(R.id.btnBack);
 
-        // Get username from Intent
-        String guestName = getIntent().getStringExtra("guestName");
-
-        // Set Profile Info (Guest)
+        // Set Profile Info
         if (tvName != null) {
-            tvName.setText(guestName != null ? guestName : "Guest User");
+            tvName.setText(currentUsername != null ? currentUsername : "User");
         }
         if (tvEmail != null) {
-            tvEmail.setText(guestName != null ? guestName + "@guest.com" : "guest@restaurant.com");
+            String role = currentUsername != null && currentUsername.toLowerCase().contains("staff") ? "staff" : "guest";
+            tvEmail.setText(currentUsername != null ? currentUsername + "@" + role + ".com" : "user@restaurant.com");
         }
 
-        // Load Saved Preferences
-        if (switchCreated != null) switchCreated.setChecked(prefs.getBoolean("notif_booking_created", true));
-        if (switchUpdated != null) switchUpdated.setChecked(prefs.getBoolean("notif_booking_updated", true));
-        if (switchCancelled != null) switchCancelled.setChecked(prefs.getBoolean("notif_booking_cancelled", true));
-        if (switchPromo != null) switchPromo.setChecked(prefs.getBoolean("notif_promo", false));
+        // Load user-specific preferences from database
+        loadNotificationPreferences();
 
-        // Save Listeners
-        if (switchCreated != null) {
-            switchCreated.setOnCheckedChangeListener((v, isChecked) ->
-                    prefs.edit().putBoolean("notif_booking_created", isChecked).apply());
+        // Save when switches change
+        if (switchBookingNew != null) {
+            switchBookingNew.setOnCheckedChangeListener((v, isChecked) -> saveNotificationPreferences());
         }
-        if (switchUpdated != null) {
-            switchUpdated.setOnCheckedChangeListener((v, isChecked) ->
-                    prefs.edit().putBoolean("notif_booking_updated", isChecked).apply());
+        if (switchBookingUpdate != null) {
+            switchBookingUpdate.setOnCheckedChangeListener((v, isChecked) -> saveNotificationPreferences());
         }
-        if (switchCancelled != null) {
-            switchCancelled.setOnCheckedChangeListener((v, isChecked) ->
-                    prefs.edit().putBoolean("notif_booking_cancelled", isChecked).apply());
+        if (switchBookingCancel != null) {
+            switchBookingCancel.setOnCheckedChangeListener((v, isChecked) -> saveNotificationPreferences());
         }
-        if (switchPromo != null) {
-            switchPromo.setOnCheckedChangeListener((v, isChecked) ->
-                    prefs.edit().putBoolean("notif_promo", isChecked).apply());
+        if (switchGeneralUpdates != null) {
+            switchGeneralUpdates.setOnCheckedChangeListener((v, isChecked) -> saveNotificationPreferences());
+        }
+        if (switchPromotions != null) {
+            switchPromotions.setOnCheckedChangeListener((v, isChecked) -> saveNotificationPreferences());
         }
 
         // Logout Button
@@ -76,12 +83,52 @@ public class UserProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
             });
         }
 
         // Back Button
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());
+        }
+    }
+
+    /**
+     * Load preferences from database for current user
+     */
+    private void loadNotificationPreferences() {
+        if (currentUsername == null) return;
+
+        boolean[] prefs = dbHelper.getNotificationPreferences(currentUsername);
+
+        if (switchBookingNew != null) switchBookingNew.setChecked(prefs[0]);
+        if (switchBookingUpdate != null) switchBookingUpdate.setChecked(prefs[1]);
+        if (switchBookingCancel != null) switchBookingCancel.setChecked(prefs[2]);
+        if (switchGeneralUpdates != null) switchGeneralUpdates.setChecked(prefs[3]);
+        if (switchPromotions != null) switchPromotions.setChecked(prefs[4]);
+    }
+
+    /**
+     * Save preferences to database for current user
+     */
+    private void saveNotificationPreferences() {
+        if (currentUsername == null || currentUsername.isEmpty()) {
+            Toast.makeText(this, "Unable to save preferences", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        boolean bookingNew = switchBookingNew != null && switchBookingNew.isChecked();
+        boolean bookingUpdate = switchBookingUpdate != null && switchBookingUpdate.isChecked();
+        boolean bookingCancel = switchBookingCancel != null && switchBookingCancel.isChecked();
+        boolean updates = switchGeneralUpdates != null && switchGeneralUpdates.isChecked();
+        boolean promotions = switchPromotions != null && switchPromotions.isChecked();
+
+        boolean success = dbHelper.updateNotificationPreferences(currentUsername, bookingNew, bookingUpdate, bookingCancel, updates, promotions);
+
+        if (success) {
+            Toast.makeText(this, "Preferences saved", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Failed to save preferences", Toast.LENGTH_SHORT).show();
         }
     }
 }

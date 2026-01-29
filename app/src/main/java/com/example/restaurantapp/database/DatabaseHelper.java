@@ -13,7 +13,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Restaurant.db";
-    private static final int DATABASE_VERSION = 7; // Version 7 for special_requests
+    private static final int DATABASE_VERSION = 10; //
 
     // --- TABLE: MENU ---
     private static final String TABLE_MENU = "menu_items";
@@ -41,7 +41,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_NOTIF_TYPE = "type";
     private static final String COL_NOTIF_DATE = "timestamp";
     private static final String COL_NOTIF_READ = "is_read";
-    private static final String COL_NOTIF_USER = "username"; 
+    private static final String COL_NOTIF_USER = "username";
+
+    //  NEW TABLE: USER PREFERENCES
+    private static final String TABLE_PREFERENCES = "user_preferences";
+    private static final String COL_PREF_USERNAME = "username";
+    private static final String COL_PREF_BOOKING_NEW = "notif_booking_new";
+    private static final String COL_PREF_BOOKING_UPDATE = "notif_booking_update";
+    private static final String COL_PREF_BOOKING_CANCEL = "notif_booking_cancel";
+    private static final String COL_PREF_UPDATES = "notif_updates";
+    private static final String COL_PREF_PROMOTIONS = "notif_promotions";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -79,6 +88,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_NOTIF_READ + " INTEGER DEFAULT 0, " +
                 COL_NOTIF_USER + " TEXT)";
         db.execSQL(createNotif);
+
+        // Create User Preferences Table
+        String createPreferences = "CREATE TABLE " + TABLE_PREFERENCES + " (" +
+                COL_PREF_USERNAME + " TEXT PRIMARY KEY, " +
+                COL_PREF_BOOKING_NEW + " INTEGER DEFAULT 1, " +
+                COL_PREF_BOOKING_UPDATE + " INTEGER DEFAULT 1, " +
+                COL_PREF_BOOKING_CANCEL + " INTEGER DEFAULT 1, " +
+                COL_PREF_UPDATES + " INTEGER DEFAULT 1, " +
+                COL_PREF_PROMOTIONS + " INTEGER DEFAULT 1)";
+        db.execSQL(createPreferences);
     }
 
     @Override
@@ -97,20 +116,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // Add special_requests column if upgrading from version < 6
         if (oldVersion < 6) {
-                try {
-                    db.execSQL("ALTER TABLE " + TABLE_NOTIF + " ADD COLUMN " + COL_NOTIF_USER + " TEXT");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            try {
+                db.execSQL("ALTER TABLE " + TABLE_NOTIF + " ADD COLUMN " + COL_NOTIF_USER + " TEXT");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        
+        }
+
         if (oldVersion < 7) {
-                try {
-                    db.execSQL("ALTER TABLE " + TABLE_MENU + " ADD COLUMN " + COL_IMAGE + " TEXT");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            try {
+                db.execSQL("ALTER TABLE " + TABLE_MENU + " ADD COLUMN " + COL_IMAGE + " TEXT");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+        }
+
+        // Create user preferences table if upgrading from version < 10
+        if (oldVersion < 10) {
+            try {
+                String createPreferences = "CREATE TABLE IF NOT EXISTS " + TABLE_PREFERENCES + " (" +
+                        COL_PREF_USERNAME + " TEXT PRIMARY KEY, " +
+                        COL_PREF_BOOKING_NEW + " INTEGER DEFAULT 1, " +
+                        COL_PREF_BOOKING_UPDATE + " INTEGER DEFAULT 1, " +
+                        COL_PREF_BOOKING_CANCEL + " INTEGER DEFAULT 1, " +
+                        COL_PREF_UPDATES + " INTEGER DEFAULT 1, " +
+                        COL_PREF_PROMOTIONS + " INTEGER DEFAULT 1)";
+                db.execSQL(createPreferences);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     // ==================== MENU OPERATIONS ====================
@@ -126,26 +161,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.insert(TABLE_MENU, null, cv) != -1;
     }
 
-      public List<MenuItem> getAllMenuItems() {
-          List<MenuItem> list = new ArrayList<>();
-          SQLiteDatabase db = this.getReadableDatabase();
-          Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MENU, null);
+    public List<MenuItem> getAllMenuItems() {
+        List<MenuItem> list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MENU, null);
 
-          if (cursor.moveToFirst()) {
-              do {
-                  int id = cursor.getInt(0);
-                  String name = cursor.getString(1);
-                  String desc = cursor.getString(2);
-                  double price = cursor.getDouble(3);
-                  String category = cursor.getString(4);
-                  String imagePath = cursor.getString(5); // ✅ ADD THIS - get image path from column 5
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(0);
+                String name = cursor.getString(1);
+                String desc = cursor.getString(2);
+                double price = cursor.getDouble(3);
+                String category = cursor.getString(4);
+                String imagePath = cursor.getString(5);
 
-                  list.add(new MenuItem(id, name, desc, price, category, imagePath)); // ✅ ADD imagePath
-              } while (cursor.moveToNext());
-          }
-          cursor.close();
-          return list;
-      }
+                list.add(new MenuItem(id, name, desc, price, category, imagePath));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return list;
+    }
 
     public boolean updateMenuItem(int id, String name, String desc, double price, String category, String imagePath) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -161,14 +196,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getMenuByCategory(String category) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_MENU + " WHERE " + COL_CATEGORY + " = ?",
-                          new String[]{category});
+                new String[]{category});
     }
 
     public List<String> getAllCategories() {
         List<String> categories = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT DISTINCT " + COL_CATEGORY + " FROM " + TABLE_MENU +
-                                   " ORDER BY " + COL_CATEGORY, null);
+                " ORDER BY " + COL_CATEGORY, null);
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -186,7 +221,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // ==================== RESERVATION OPERATIONS ====================
 
-    // parameters including specialRequests
     public boolean addReservation(String name, String date, String time, int guests, String specialRequests) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -203,7 +237,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + TABLE_RESERVATION + " ORDER BY " + COL_RES_ID + " DESC", null);
     }
 
-    // parameters including specialRequests
     public boolean updateReservation(int id, String date, String time, int guests, String specialRequests) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -217,6 +250,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean deleteReservation(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_RESERVATION, COL_RES_ID + "=?", new String[]{String.valueOf(id)}) > 0;
+    }
+
+    public Cursor getReservationsByGuest(String guestName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_RESERVATION +
+                        " WHERE " + COL_RES_GUEST + " = ? " +
+                        " ORDER BY " + COL_RES_ID + " DESC",
+                new String[]{guestName});
     }
 
     // ==================== NOTIFICATION OPERATIONS ====================
@@ -233,22 +274,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_NOTIF, null, cv);
     }
 
-    // Get notifications by username
     public Cursor getNotificationsByUser(String username) {
-         SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_NOTIF +
-                           " WHERE " + COL_NOTIF_USER + " = ? " +
-                           " ORDER BY " + COL_NOTIF_DATE + " DESC",
-                           new String[]{username});
+                        " WHERE " + COL_NOTIF_USER + " = ? " +
+                        " ORDER BY " + COL_NOTIF_DATE + " DESC",
+                new String[]{username});
     }
 
-    // Get unread count by username
     public int getUnreadNotificationCountByUser(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NOTIF +
-                                   " WHERE " + COL_NOTIF_READ + " = 0 AND " +
-                                   COL_NOTIF_USER + " = ?",
-                                   new String[]{username});
+                        " WHERE " + COL_NOTIF_READ + " = 0 AND " +
+                        COL_NOTIF_USER + " = ?",
+                new String[]{username});
         int count = 0;
         if (cursor.moveToFirst()) {
             count = cursor.getInt(0);
@@ -257,7 +296,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return count;
     }
 
-    // ADD this method to DatabaseHelper.java (for staff to mark ALL notifications as read)
     public void markAllAsRead() {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -265,13 +303,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(TABLE_NOTIF, cv, COL_NOTIF_READ + " = 0", null);
     }
 
-    // Mark all as read for specific user
     public void markAllAsReadForUser(String username) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_NOTIF_READ, 1);
         db.update(TABLE_NOTIF, cv, COL_NOTIF_READ + " = 0 AND " + COL_NOTIF_USER + " = ?",
-                 new String[]{username});
+                new String[]{username});
     }
 
     public Cursor getAllNotifications() {
@@ -279,11 +316,60 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + TABLE_NOTIF + " ORDER BY " + COL_NOTIF_DATE + " DESC", null);
     }
 
-    public Cursor getReservationsByGuest(String guestName) {
+    // ==================== NOTIFICATION PREFERENCES OPERATIONS ====================
+
+    /**
+     * Update notification preferences for a user
+     * @param username The username
+     * @param booking Enable/disable booking notifications
+     * @param updates Enable/disable update notifications
+     * @param promotions Enable/disable promotion notifications
+     * @return true if successful
+     */
+    public boolean updateNotificationPreferences(String username, boolean bookingNew,
+                                                 boolean bookingUpdate, boolean bookingCancel,
+                                                 boolean updates, boolean promotions) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_PREF_USERNAME, username);
+        cv.put(COL_PREF_BOOKING_NEW, bookingNew ? 1 : 0);
+        cv.put(COL_PREF_BOOKING_UPDATE, bookingUpdate ? 1 : 0);
+        cv.put(COL_PREF_BOOKING_CANCEL, bookingCancel ? 1 : 0);
+        cv.put(COL_PREF_UPDATES, updates ? 1 : 0);
+        cv.put(COL_PREF_PROMOTIONS, promotions ? 1 : 0);
+
+        // Use REPLACE to insert or update
+        long result = db.replace(TABLE_PREFERENCES, null, cv);
+        return result != -1;
+    }
+
+    /**
+     * Get notification preferences for a user
+     * @param username The username
+     * @return boolean array [booking, updates, promotions], defaults to all true
+     */
+    public boolean[] getNotificationPreferences(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_RESERVATION +
-                          " WHERE " + COL_RES_GUEST + " = ? " +
-                          " ORDER BY " + COL_RES_ID + " DESC",
-                          new String[]{guestName});
+        Cursor cursor = db.rawQuery("SELECT " +
+                COL_PREF_BOOKING_NEW + ", " +
+                COL_PREF_BOOKING_UPDATE + ", " +
+                COL_PREF_BOOKING_CANCEL + ", " +
+                COL_PREF_UPDATES + ", " +
+                COL_PREF_PROMOTIONS +
+                " FROM " + TABLE_PREFERENCES +
+                " WHERE " + COL_PREF_USERNAME + " = ?", new String[]{username});
+
+        boolean[] prefs = {true, true, true, true, true}; // Default all ON
+
+        if (cursor != null && cursor.moveToFirst()) {
+            prefs[0] = cursor.getInt(0) == 1; // Booking NEW
+            prefs[1] = cursor.getInt(1) == 1; // Booking UPDATE
+            prefs[2] = cursor.getInt(2) == 1; // Booking CANCEL
+            prefs[3] = cursor.getInt(3) == 1; // General Updates
+            prefs[4] = cursor.getInt(4) == 1; // Promotions
+            cursor.close();
+        }
+
+        return prefs;
     }
 }
