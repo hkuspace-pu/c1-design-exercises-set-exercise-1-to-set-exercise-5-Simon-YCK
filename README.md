@@ -46,25 +46,25 @@ The application is built using the **MVC (Model-View-Controller)** architecture 
 
 ## 📂 Project Structure
 
-# app/src/main/
-# ├── java/com/example/restaurantapp/
-# │   ├── adapter/
-# │   │   ├── MenuAdapter.java          # Handles both Staff (Edit) and Guest (View) layouts
-# │   │   └── ReservationAdapter.java
-# │   ├── database/
-# │   │   └── DatabaseHelper.java       # Centralized SQLite Logic (Facade Pattern)
-# │   ├── model/
-# │   │   ├── MenuItem.java
-# │   │   └── Reservation.java
-# │   ├── utils/
-# │   │   └── NotificationHelper.java   # Notification logic with Preference checks
-# │   ├── GuestDashboardActivity.java
-# │   └── StaffDashboardActivity.java
-# │
-# └── res/layout/
-#    ├── activity_guest_dashboard.xml  # Primary Guest Interface
-#    ├── activity_staff_menu_editor.xml # Staff Management Interface
-#    ├── item_menu_card_staff.xml      # CardView with Edit/Delete controls
-#    ├── item_menu_card_guest.xml      # CardView optimized for viewing
-#    ├── dialog_delete_confirm.xml     # Custom Warning Dialog
-#    └── ... (other layout files)
+* app/src/main/
+* ├── java/com/example/restaurantapp/
+* │   ├── adapter/
+* │   │   ├── MenuAdapter.java          # Handles both Staff (Edit) and Guest (View) layouts
+* │   │   └── ReservationAdapter.java
+* │   ├── database/
+* │   │   └── DatabaseHelper.java       # Centralized SQLite Logic (Facade Pattern)
+* │   ├── model/
+* │   │   ├── MenuItem.java
+* │   │   └── Reservation.java
+* │   ├── utils/
+* │   │   └── NotificationHelper.java   # Notification logic with Preference checks
+* │   ├── GuestDashboardActivity.java
+* │   └── StaffDashboardActivity.java
+* │
+* └── res/layout/
+*    ├── activity_guest_dashboard.xml  # Primary Guest Interface
+*    ├── activity_staff_menu_editor.xml # Staff Management Interface
+*    ├── item_menu_card_staff.xml      # CardView with Edit/Delete controls
+*    ├── item_menu_card_guest.xml      # CardView optimized for viewing
+*    ├── dialog_delete_confirm.xml     # Custom Warning Dialog
+*    └── ... (other layout files)
