@@ -19,13 +19,13 @@
             android:layout_height="160dp"
             android:background="@color/color_surface_variant">
 
-            <TextView
+            <ImageView
                 android:id="@+id/menuItemImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:text="🍔"
-                android:textSize="50sp"/>
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_restaurant_24" />
 
             <TextView
                 android:id="@+id/menuItemPrice"
@@ -36,7 +36,7 @@
                 android:textColor="@color/color_on_primary"
                 android:padding="8dp"
                 android:layout_gravity="top|end"
-                android:layout_margin="12dp"/>
+                android:layout_margin="12dp" />
         </FrameLayout>
 
         <!-- Info -->
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:text="Cheeseburger"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/menuItemDescription"
@@ -61,7 +61,16 @@
                 android:text="Juicy beef patty with cheddar"
                 android:textSize="14sp"
                 android:textColor="@color/color_text_secondary"
-                android:layout_marginTop="4dp"/>
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/menuItemCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Category"
+                android:textSize="12sp"
+                android:textColor="@color/color_text_secondary"
+                android:layout_marginTop="4dp" />
 
             <!-- Action Buttons Row -->
             <LinearLayout
@@ -81,7 +90,7 @@
                     android:backgroundTint="@color/color_primary"
                     android:textColor="@color/color_on_primary"
                     android:textStyle="bold"
-                    android:layout_marginEnd="8dp"/>
+                    android:layout_marginEnd="8dp" />
 
                 <!-- Delete Button -->
                 <Button
@@ -93,7 +102,7 @@
                     android:backgroundTint="@color/color_error"
                     android:textColor="@color/color_on_error"
                     android:textStyle="bold"
-                    android:layout_marginStart="8dp"/>
+                    android:layout_marginStart="8dp" />
             </LinearLayout>
 
         </LinearLayout>

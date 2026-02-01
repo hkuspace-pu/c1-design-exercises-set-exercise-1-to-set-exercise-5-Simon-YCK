@@ -85,6 +85,8 @@ public class StaffMenuEditorActivity extends AppCompatActivity {
                 intent.putExtra("name", item.getName());
                 intent.putExtra("description", item.getDescription());
                 intent.putExtra("price", item.getPrice());
+                intent.putExtra("category", item.getCategory());
+                intent.putExtra("imagePath", item.getImagePath());
                 startActivity(intent);
             }
         });

@@ -321,7 +321,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Update notification preferences for a user
      * @param username The username
-     * @param booking Enable/disable booking notifications
+     * @param *booking Enable/disable booking notifications
      * @param updates Enable/disable update notifications
      * @param promotions Enable/disable promotion notifications
      * @return true if successful
