@@ -149,6 +149,11 @@ public class StaffEditMenuItemActivity extends AppCompatActivity {
             return;
         }
 
+        if (selectedImagePath == null || selectedImagePath.isEmpty()) {
+            Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show();
+            return; // Stop the function here
+        }
+
         double price = Double.parseDouble(priceStr);
 
         boolean success;

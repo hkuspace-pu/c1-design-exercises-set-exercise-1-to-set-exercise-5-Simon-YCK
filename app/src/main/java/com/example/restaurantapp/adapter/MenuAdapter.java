@@ -34,7 +34,7 @@ public class MenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        return isStaff ? 1 : 0;
+        return isStaff ? 1 : 0; //1 = Staff Layout, 0 = Guest Layout
     }
 
     @NonNull
