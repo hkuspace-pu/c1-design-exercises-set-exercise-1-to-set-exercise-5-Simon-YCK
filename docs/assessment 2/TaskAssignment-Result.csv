@@ -1,0 +1,5 @@
+"ID","Participant Role","Task Assignment","Result","Visual Observation / Comments","Action Taken"
+"01","Staff (Manager)","""Add a new 'Truffle Pasta' item with a photo.""","❌FAIL","User filled in price and name, then clicked 'Save' immediately.User forgot to upload image.App created an item with a broken icon.","Code Fix:Added input validation. Now showsToast(""Please select image"")if path is null."
+"02","Staff (Manager)","""Delete the 'Old Burger' item.""","✅PASS","User found the 'Delete' button instantly. Hesitated briefly to read the confirmation dialog.","No Change:Confirmation dialog is working as intended to prevent accidental deletes."
+"03","Guest (Student)","""Turn off ads but keep booking alerts.""","✅PASS","User navigated to Profile -> Settings. Said:""Oh cool, I can pick and choose.""Toggled 'Promotions' off.","Validated:Granular notification logic is intuitive. Kept current design."
+"04","Guest (Student)","""Book a table for 2 people.""","⚠️ISSUE","Booking worked, but user asked""Did it go through?""after clicking submit.","UI Fix:Added a 'Booking Confirmed' success dialog popup."
